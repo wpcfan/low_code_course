@@ -3,9 +3,7 @@ import 'package:models/models.dart';
 
 class ImageRowWidget extends StatelessWidget {
   final ImageData imageData;
-  final double paddingHorizontal;
-  final double paddingVertical;
-  final double height;
+  final BlockConfig blockConfig;
   final double baselineScreenWidth;
 
   final Function(MyLink)? onTap;
@@ -13,9 +11,7 @@ class ImageRowWidget extends StatelessWidget {
   const ImageRowWidget({
     super.key,
     required this.imageData,
-    this.paddingHorizontal = 16.0,
-    this.paddingVertical = 8.0,
-    this.height = 200.0,
+    required this.blockConfig,
     this.baselineScreenWidth = 375.0,
     this.onTap,
   });
@@ -24,10 +20,12 @@ class ImageRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final scaleFactor = screenWidth / baselineScreenWidth;
-    final scaledPaddingHorizontal = paddingHorizontal * scaleFactor;
-    final scaledPaddingVertical = paddingVertical * scaleFactor;
+    final scaledPaddingHorizontal =
+        (blockConfig.horizontalPadding ?? 0) * scaleFactor;
+    final scaledPaddingVertical =
+        (blockConfig.verticalPadding ?? 0) * scaleFactor;
     final scaledImageWidth = screenWidth - (2 * scaledPaddingHorizontal);
-    final scaledImageHeight = height * scaleFactor;
+    final scaledImageHeight = (blockConfig.blockHeight ?? 0) * scaleFactor;
     return GestureDetector(
       onTap: () => onTap?.call(imageData.link),
       child: Padding(
