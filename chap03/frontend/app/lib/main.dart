@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:page_block_widgets/page_block_widgets.dart';
 
 void main() {
@@ -48,7 +49,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ImageRowWidget(
-        onTap: () => debugPrint('Image tapped!'),
+        imageData: const ImageData(
+          imageUrl: 'https://picsum.photos/seed/1/200/300',
+          link: MyLink(
+            type: LinkType.url,
+            value: 'https://www.google.com',
+          ),
+        ),
+        onTap: (link) => debugPrint(link.value),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,

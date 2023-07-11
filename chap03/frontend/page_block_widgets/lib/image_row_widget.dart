@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 class ImageRowWidget extends StatelessWidget {
-  final String imageUrl;
+  final ImageData imageData;
   final double paddingHorizontal;
   final double paddingVertical;
   final double height;
   final double baselineScreenWidth;
-  final VoidCallback? onTap;
+
+  final Function(MyLink)? onTap;
 
   const ImageRowWidget({
     super.key,
-    this.imageUrl = 'https://picsum.photos/200/300',
+    required this.imageData,
     this.paddingHorizontal = 16.0,
     this.paddingVertical = 8.0,
     this.height = 200.0,
@@ -27,13 +29,13 @@ class ImageRowWidget extends StatelessWidget {
     final scaledImageWidth = screenWidth - (2 * scaledPaddingHorizontal);
     final scaledImageHeight = height * scaleFactor;
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap?.call(imageData.link),
       child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: scaledPaddingHorizontal,
             vertical: scaledPaddingVertical),
         child: Image.network(
-          imageUrl,
+          imageData.imageUrl,
           width: scaledImageWidth,
           height: scaledImageHeight,
           fit: BoxFit.cover,
