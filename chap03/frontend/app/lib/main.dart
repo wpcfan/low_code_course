@@ -41,23 +41,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const imageUrl = 'https://picsum.photos/200/300';
+    const paddingHorizontal = 16.0;
+    const paddingVertical = 8.0;
+
+    const imageHeight = 300.0;
+    const baselineScreenWidth = 500.0;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final scaleFactor = screenWidth / baselineScreenWidth;
+    final scaledPaddingHorizontal = paddingHorizontal * scaleFactor;
+    final scaledPaddingVertical = paddingVertical * scaleFactor;
+    final scaledImageWidth = screenWidth - (2 * scaledPaddingHorizontal);
+
+    final scaledImageHeight = imageHeight * scaleFactor;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: scaledPaddingHorizontal,
+            vertical: scaledPaddingVertical),
+        child: Image.network(
+          imageUrl,
+          width: scaledImageWidth,
+          height: scaledImageHeight,
+          fit: BoxFit.cover,
         ),
       ),
       floatingActionButton: FloatingActionButton(
