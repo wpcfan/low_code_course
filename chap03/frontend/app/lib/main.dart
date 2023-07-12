@@ -63,6 +63,13 @@ class _MyHomePageState extends State<MyHomePage> {
               'value': 'https://www.bing.com',
               'type': 'url',
             },
+          }),
+          ImageData.fromJson({
+            'imageUrl': 'https://picsum.photos/seed/3/200/300',
+            'link': {
+              'value': 'https://www.baidu.com',
+              'type': 'url',
+            },
           })
         ],
         blockConfig: BlockConfig.fromJson({
