@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -26,19 +27,18 @@ class ImageRowWidget extends StatelessWidget {
         (blockConfig.verticalPadding ?? 0) * scaleFactor;
     final scaledImageWidth = screenWidth - (2 * scaledPaddingHorizontal);
     final scaledImageHeight = (blockConfig.blockHeight ?? 0) * scaleFactor;
-    return GestureDetector(
-      onTap: () => onTap?.call(imageData.link),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: scaledPaddingHorizontal,
-            vertical: scaledPaddingVertical),
-        child: Image.network(
-          imageData.imageUrl,
-          width: scaledImageWidth,
-          height: scaledImageHeight,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+    return Image.network(
+      imageData.imageUrl,
+      width: scaledImageWidth,
+      height: scaledImageHeight,
+      fit: BoxFit.cover,
+    )
+        .padding(
+          horizontal: scaledPaddingHorizontal,
+          vertical: scaledPaddingVertical,
+        )
+        .gestures(
+          onTap: () => onTap?.call(imageData.link),
+        );
   }
 }
