@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ImageRowWidget(
         imageData: ImageData.fromJson({
-          'imageUrl': 'https://picsum.photos/seed/1/200/300',
+          'imageUrl': 'https://picsum.photos/seed',
           'link': {
             'value': 'https://www.google.com',
             'type': 'url',

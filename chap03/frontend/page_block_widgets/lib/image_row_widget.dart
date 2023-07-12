@@ -27,12 +27,32 @@ class ImageRowWidget extends StatelessWidget {
         (blockConfig.verticalPadding ?? 0) * scaleFactor;
     final scaledImageWidth = screenWidth - (2 * scaledPaddingHorizontal);
     final scaledImageHeight = (blockConfig.blockHeight ?? 0) * scaleFactor;
-    return Image.network(
-      imageData.imageUrl,
-      width: scaledImageWidth,
-      height: scaledImageHeight,
-      fit: BoxFit.cover,
-    )
+    return Image.network(imageData.imageUrl,
+            width: scaledImageWidth,
+            height: scaledImageHeight,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+              ).center().constrained(
+                    width: scaledImageWidth,
+                    height: scaledImageHeight,
+                  );
+            },
+            errorBuilder: (context, error, stackTrace) => Center(
+                    child: Placeholder(
+                  fallbackHeight: scaledImageHeight,
+                  fallbackWidth: scaledImageWidth,
+                )))
+        .center()
+        .constrained(
+          width: scaledImageWidth,
+          height: scaledImageHeight,
+        )
         .padding(
           horizontal: scaledPaddingHorizontal,
           vertical: scaledPaddingVertical,
