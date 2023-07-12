@@ -49,17 +49,27 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ImageRowWidget(
-        imageData: ImageData.fromJson({
-          'imageUrl': 'https://picsum.photos/seed',
-          'link': {
-            'value': 'https://www.google.com',
-            'type': 'url',
-          },
-        }),
+        items: [
+          ImageData.fromJson({
+            'imageUrl': 'https://picsum.photos/seed/1/200/300',
+            'link': {
+              'value': 'https://www.google.com',
+              'type': 'url',
+            },
+          }),
+          ImageData.fromJson({
+            'imageUrl': 'https://picsum.photos/seed/2/200/300',
+            'link': {
+              'value': 'https://www.bing.com',
+              'type': 'url',
+            },
+          })
+        ],
         blockConfig: BlockConfig.fromJson({
           'blockHeight': 200.0,
           'horizontalPadding': 16.0,
           'verticalPadding': 8.0,
+          'horozontalSpacing': 8.0,
         }),
         onTap: (link) => debugPrint(link.value),
       ),
