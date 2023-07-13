@@ -1,4 +1,5 @@
-import 'package:models/models.dart';
+import 'block_config.dart';
+import 'image_data.dart';
 
 class PageBlock {
   final BlockConfig config;
