@@ -27,8 +27,9 @@ class ImageRowWidget extends StatelessWidget {
         (blockConfig.verticalPadding ?? 0) * scaleFactor;
     // 实际设备上的区块宽度
     final scaledBlockWidth = screenWidth - (2 * scaledPaddingHorizontal);
-    final scaledImageWidth = scaledBlockWidth -
-        (items.length - 1) * (blockConfig.horozontalSpacing ?? 0);
+    final scaledImageWidth = (scaledBlockWidth -
+            (items.length - 1) * (blockConfig.horozontalSpacing ?? 0)) /
+        items.length;
     final scaledImageHeight = (blockConfig.blockHeight ?? 0) * scaleFactor;
     if (items.length == 1) {
       return Image.network(items.first.imageUrl,
