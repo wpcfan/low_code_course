@@ -43,6 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const baseScreenWidth = 375.0;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final ratio = screenWidth / baseScreenWidth;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -79,12 +82,13 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           })
         ],
-        blockConfig: BlockConfig.fromJson({
+        config: BlockConfig.fromJson({
           'blockHeight': 200.0,
           'horizontalPadding': 16.0,
           'verticalPadding': 8.0,
           'horozontalSpacing': 8.0,
-        }),
+          'blockWidth': baseScreenWidth,
+        }).withRatio(ratio),
         onTap: (link) => debugPrint(link.value),
         numDisplayed: 3,
         fracDisplayed: 0.3,

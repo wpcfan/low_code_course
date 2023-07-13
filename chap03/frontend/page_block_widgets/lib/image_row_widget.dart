@@ -13,9 +13,7 @@ class ImageRowWidget extends StatelessWidget {
   // 图片列表
   final List<ImageData> items;
   // 区块配置
-  final BlockConfig blockConfig;
-  // 设计稿的屏幕宽度
-  final double baselineScreenWidth;
+  final BlockConfig config;
   // 一行最多完整显示几张图
   final int numDisplayed;
   // 需要露出一部分的图的比例
@@ -26,8 +24,7 @@ class ImageRowWidget extends StatelessWidget {
   const ImageRowWidget({
     super.key,
     required this.items,
-    required this.blockConfig,
-    this.baselineScreenWidth = 375.0,
+    required this.config,
     this.numDisplayed = 3,
     this.fracDisplayed = 0,
     this.onTap,
@@ -35,17 +32,13 @@ class ImageRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final scaleFactor = screenWidth / baselineScreenWidth;
-    final scaledPaddingHorizontal =
-        (blockConfig.horizontalPadding ?? 0) * scaleFactor;
-    final scaledPaddingVertical =
-        (blockConfig.verticalPadding ?? 0) * scaleFactor;
-    final scaledHorozontalSpacing =
-        (blockConfig.horozontalSpacing ?? 0) * scaleFactor;
+    final horizontalSpacing = config.horozontalSpacing ?? 0;
+    final verticalPadding = config.verticalPadding ?? 0;
+    final horizontalPadding = config.horizontalPadding ?? 0;
+    final blockWidth = config.blockWidth ?? 0;
     // 实际设备上的区块内宽度
-    final scaledBlockWidth = screenWidth - (2 * scaledPaddingHorizontal);
-    final scaledBlockHeight = (blockConfig.blockHeight ?? 0) * scaleFactor;
+    final innerBlockWidth = blockWidth - 2 * horizontalPadding;
+    final blockHeight = config.blockHeight ?? 0;
     // 间距的数量
     // 如果 fracDisplayed > 0，那么最后一张图会露出一部分，所以需要多一个间距
     final numOfSpacing = fracDisplayed > 0 && items.length > numDisplayed
@@ -56,25 +49,22 @@ class ImageRowWidget extends StatelessWidget {
     final double numOfImages = fracDisplayed > 0 && items.length > numDisplayed
         ? numDisplayed + fracDisplayed
         : items.length.toDouble();
-    final scaledImageWidth =
-        (scaledBlockWidth - numOfSpacing * scaledHorozontalSpacing) /
-            numOfImages;
-    final scaledImageHeight = scaledBlockHeight - (2 * scaledPaddingVertical);
+    final imageWidth =
+        (innerBlockWidth - numOfSpacing * horizontalSpacing) / numOfImages;
+    final imageHeight = blockHeight - 2 * verticalPadding;
 
     /// 构建外层容器，未来会包含背景色、边框、内边距
     /// 用于控制整个组件的大小
     /// 注意这是一个函数，一般我们构建完内层组件后，会调用它来构建外层组件
     /// 使用上，内层如果是 child，那么可以通过 child.parent(page) 来构建外层
     page({required Widget child}) => child
-        .padding(
-            horizontal: scaledPaddingHorizontal,
-            vertical: scaledPaddingVertical)
-        .constrained(width: screenWidth, height: scaledBlockHeight);
+        .padding(horizontal: horizontalPadding, vertical: verticalPadding)
+        .constrained(width: blockWidth, height: blockHeight);
     // 构建图片组件，减少重复代码
     Widget buildImageWidget(ImageData imageData) => ImageWidget(
           imageUrl: imageData.imageUrl,
-          width: scaledImageWidth,
-          height: scaledImageHeight,
+          width: imageWidth,
+          height: imageHeight,
         ).gestures(onTap: () => onTap?.call(imageData.link));
 
     // 一行一张图
@@ -89,7 +79,7 @@ class ImageRowWidget extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (context, index) => buildImageWidget(items[index]),
         separatorBuilder: (BuildContext context, int index) =>
-            SizedBox(width: scaledHorozontalSpacing),
+            SizedBox(width: horizontalSpacing),
       ).parent(page);
     }
     // 一行二，三张图
@@ -98,7 +88,7 @@ class ImageRowWidget extends StatelessWidget {
         .toList()
         .toRow(
           separator: SizedBox(
-            width: scaledHorozontalSpacing,
+            width: horizontalSpacing,
           ),
         )
         .parent(page);
