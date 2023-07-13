@@ -70,6 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
               'value': 'https://www.baidu.com',
               'type': 'url',
             },
+          }),
+          ImageData.fromJson({
+            'imageUrl': 'https://picsum.photos/seed/4/200/300',
+            'link': {
+              'value': 'https://www.baidu.com',
+              'type': 'url',
+            },
           })
         ],
         blockConfig: BlockConfig.fromJson({
@@ -79,6 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
           'horozontalSpacing': 8.0,
         }),
         onTap: (link) => debugPrint(link.value),
+        numDisplayed: 3,
+        fracDisplayed: 0.3,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
