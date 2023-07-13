@@ -46,49 +46,61 @@ class _MyHomePageState extends State<MyHomePage> {
     const baseScreenWidth = 375.0;
     final screenWidth = MediaQuery.of(context).size.width;
     final ratio = screenWidth / baseScreenWidth;
+    final pageLayout = PageLayout.fromJson({
+      'config': {
+        'baseScreenWidth': baseScreenWidth,
+      },
+      'blocks': [
+        {
+          'config': {
+            'blockHeight': 200.0,
+            'horizontalPadding': 16.0,
+            'verticalPadding': 8.0,
+            'horozontalSpacing': 8.0,
+            'blockWidth': baseScreenWidth,
+          },
+          'data': [
+            {
+              'imageUrl': 'https://picsum.photos/seed/1/200/300',
+              'link': {
+                'value': 'https://www.google.com',
+                'type': 'url',
+              },
+            },
+            {
+              'imageUrl': 'https://picsum.photos/seed/2/200/300',
+              'link': {
+                'value': 'https://www.bing.com',
+                'type': 'url',
+              },
+            },
+            {
+              'imageUrl': 'https://picsum.photos/seed/3/200/300',
+              'link': {
+                'value': 'https://www.baidu.com',
+                'type': 'url',
+              },
+            },
+            {
+              'imageUrl': 'https://picsum.photos/seed/4/200/300',
+              'link': {
+                'value': 'https://www.baidu.com',
+                'type': 'url',
+              },
+            }
+          ],
+        },
+      ]
+    });
+    final pageBlock = pageLayout.blocks.first;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: ImageRowWidget(
-        items: [
-          ImageData.fromJson({
-            'imageUrl': 'https://picsum.photos/seed/1/200/300',
-            'link': {
-              'value': 'https://www.google.com',
-              'type': 'url',
-            },
-          }),
-          ImageData.fromJson({
-            'imageUrl': 'https://picsum.photos/seed/2/200/300',
-            'link': {
-              'value': 'https://www.bing.com',
-              'type': 'url',
-            },
-          }),
-          ImageData.fromJson({
-            'imageUrl': 'https://picsum.photos/seed/3/200/300',
-            'link': {
-              'value': 'https://www.baidu.com',
-              'type': 'url',
-            },
-          }),
-          ImageData.fromJson({
-            'imageUrl': 'https://picsum.photos/seed/4/200/300',
-            'link': {
-              'value': 'https://www.baidu.com',
-              'type': 'url',
-            },
-          })
-        ],
-        config: BlockConfig.fromJson({
-          'blockHeight': 200.0,
-          'horizontalPadding': 16.0,
-          'verticalPadding': 8.0,
-          'horozontalSpacing': 8.0,
-          'blockWidth': baseScreenWidth,
-        }).withRatio(ratio),
+        items: pageBlock.data,
+        config: pageBlock.config.withRatio(ratio),
         onTap: (link) => debugPrint(link.value),
         numDisplayed: 3,
         fracDisplayed: 0.3,
