@@ -1,4 +1,4 @@
-import 'package:models/models.dart';
+import 'my_link.dart';
 
 class ImageData {
   final String imageUrl;
