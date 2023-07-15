@@ -1,0 +1,9 @@
+linux/
+windows/
+macos/
+android/
+ios/
+local.properties
+**/.flutter-plugins-dependencies
+**/.flutter-plugins
+ephemeral/
