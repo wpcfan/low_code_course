@@ -1,3 +1,4 @@
 library page_block_widgets;
 
-export './image_row_widget.dart';
+export 'banner_widget.dart';
+export 'image_row_widget.dart';

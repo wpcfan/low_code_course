@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:page_block_widgets/page_block_widgets.dart';
@@ -52,6 +53,47 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       'blocks': [
         {
+          'type': 'banner',
+          'config': {
+            'blockHeight': 120.0,
+            'horizontalPadding': 8.0,
+            'verticalPadding': 8.0,
+            'horozontalSpacing': 8.0,
+            'blockWidth': baseScreenWidth,
+          },
+          'data': [
+            {
+              'imageUrl': 'https://picsum.photos/seed/1/200/300',
+              'link': {
+                'value': 'https://www.google.com',
+                'type': 'url',
+              },
+            },
+            {
+              'imageUrl': 'https://picsum.photos/seed/2/200/300',
+              'link': {
+                'value': 'https://www.bing.com',
+                'type': 'url',
+              },
+            },
+            {
+              'imageUrl': 'https://picsum.photos/seed/3/200/300',
+              'link': {
+                'value': 'https://www.baidu.com',
+                'type': 'url',
+              },
+            },
+            {
+              'imageUrl': 'https://picsum.photos/seed/4/200/300',
+              'link': {
+                'value': 'https://www.baidu.com',
+                'type': 'url',
+              },
+            }
+          ],
+        },
+        {
+          'type': 'image_row',
           'config': {
             'blockHeight': 200.0,
             'horizontalPadding': 16.0,
@@ -92,19 +134,41 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ]
     });
-    final pageBlock = pageLayout.blocks.first;
+    final blocks = pageLayout.blocks;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: ImageRowWidget(
-        items: pageBlock.data,
-        config: pageBlock.config.withRatio(ratio),
-        onTap: (link) => debugPrint(link.value),
-        numDisplayed: 3,
-        fracDisplayed: 0.3,
-      ),
+      body: blocks
+          .map((e) {
+            if (e.type == PageBlockType.imageRow) {
+              return ImageRowWidget(
+                items: e.data,
+                config: e.config.withRatio(ratio),
+                onTap: (value) {
+                  print(value);
+                },
+              );
+            } else if (e.type == PageBlockType.banner) {
+              return BannerWidget(
+                items: e.data,
+                config: e.config.withRatio(ratio),
+                onTap: (value) {
+                  print(value);
+                },
+              );
+            } else {
+              return Container();
+            }
+          })
+          .toList()
+          .toColumn(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+          )
+          .scrollable(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
