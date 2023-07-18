@@ -49,13 +49,7 @@ class ProductOneRowOneWidget extends StatelessWidget {
       ),
     );
 
-    final price = Text(
-      product.price ?? '',
-      style: const TextStyle(
-        fontSize: 16,
-        color: Colors.red,
-      ),
-    );
+    final price = (product.price ?? '').toPriceWithDecimalSize();
     const buttonSize = 24.0;
     final cartBtn = const Icon(
       Icons.add_shopping_cart,
