@@ -38,10 +38,6 @@ dependencies:
 
   home:
     path: ../home
-  page_block_widgets:
-    path: ../page_block_widgets
-  models:
-    path: ../models
 
 dev_dependencies:
   flutter_test:

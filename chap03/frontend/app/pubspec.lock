@@ -207,7 +207,7 @@ packages:
     source: hosted
     version: "1.9.1"
   models:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "../models"
       relative: true
@@ -229,7 +229,7 @@ packages:
     source: path
     version: "0.0.1"
   page_block_widgets:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "../page_block_widgets"
       relative: true
