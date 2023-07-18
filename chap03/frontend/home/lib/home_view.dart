@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
             'imageUrl': 'https://picsum.photos/seed/1/200/300',
           }),
           config: BlockConfig.fromJson({
-            'blockHeight': 200.0,
+            'blockHeight': 120.0,
             'horizontalPadding': 16.0,
             'verticalPadding': 8.0,
             'horozontalSpacing': 8.0,
