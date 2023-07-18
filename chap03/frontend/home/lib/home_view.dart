@@ -148,6 +148,7 @@ class _HomeViewState extends State<HomeView> {
             'name': 'Product 1',
             'description': 'Product 1 description',
             'price': '¥100.00',
+            'originalPrice': '¥200.00',
             'imageUrl': 'https://picsum.photos/seed/1/200/300',
           }),
           config: BlockConfig.fromJson({
