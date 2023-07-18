@@ -1,4 +1,6 @@
-class Product {
+import 'block_data.dart';
+
+class Product implements BlockData {
   final int? id;
   final String? sku;
   final String? name;
