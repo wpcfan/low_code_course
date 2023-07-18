@@ -155,6 +155,7 @@ class _HomeViewState extends State<HomeView> {
             'horizontalPadding': 16.0,
             'verticalPadding': 8.0,
             'horozontalSpacing': 8.0,
+            'verticalSpacing': 4.0,
             'blockWidth': baseScreenWidth,
           }).withRatio(ratio),
         )

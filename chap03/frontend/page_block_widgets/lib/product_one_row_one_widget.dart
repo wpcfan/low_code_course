@@ -16,6 +16,7 @@ class ProductOneRowOneWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalSpacing = config.horozontalSpacing ?? 0;
+    final verticalSpacing = config.verticalSpacing ?? 0;
     final verticalPadding = config.verticalPadding ?? 0;
     final horizontalPadding = config.horizontalPadding ?? 0;
     final blockWidth = config.blockWidth ?? 0;
@@ -38,7 +39,7 @@ class ProductOneRowOneWidget extends StatelessWidget {
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
-    );
+    ).padding(bottom: verticalSpacing);
 
     final desciption = Text(
       product.description ?? '',
@@ -55,18 +56,21 @@ class ProductOneRowOneWidget extends StatelessWidget {
         color: Colors.red,
       ),
     );
-
-    const cartBtn = Icon(
+    const buttonSize = 24.0;
+    final cartBtn = const Icon(
       Icons.add_shopping_cart,
-      color: Colors.red,
-    );
+      color: Colors.white,
+    )
+        .rounded(size: buttonSize, color: Colors.red)
+        .padding(left: horizontalSpacing);
 
     final thirdRow = [
       price,
       cartBtn,
     ].toRow(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
       mainAxisAlignment: MainAxisAlignment.end,
+      textBaseline: TextBaseline.alphabetic,
     );
 
     final nameAndDescColumn = [
