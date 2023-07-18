@@ -160,6 +160,12 @@ class _HomeViewState extends State<HomeView> {
             'verticalSpacing': 4.0,
             'blockWidth': baseScreenWidth,
           }).withRatio(ratio),
+          onTap: (value) {
+            debugPrint('ProductOneRowOneWidget onTap: $value');
+          },
+          addToCart: (value) {
+            debugPrint('ProductOneRowOneWidget addToCart: $value');
+          },
         )
       ]
           .toColumn(

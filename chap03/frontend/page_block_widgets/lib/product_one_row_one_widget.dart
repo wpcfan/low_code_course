@@ -6,11 +6,15 @@ import 'package:page_block_widgets/image_widget.dart';
 class ProductOneRowOneWidget extends StatelessWidget {
   final Product product;
   final BlockConfig config;
+  final void Function(Product)? addToCart;
+  final void Function(Product)? onTap;
 
   const ProductOneRowOneWidget({
     super.key,
     required this.product,
     required this.config,
+    this.addToCart,
+    this.onTap,
   });
 
   @override
@@ -62,6 +66,7 @@ class ProductOneRowOneWidget extends StatelessWidget {
       color: Colors.white,
     )
         .rounded(size: buttonSize, color: Colors.red)
+        .gestures(onTap: () => addToCart?.call(product))
         .padding(left: horizontalSpacing);
 
     final thirdRow = [
@@ -94,6 +99,6 @@ class ProductOneRowOneWidget extends StatelessWidget {
     return [
       left,
       right,
-    ].toRow().parent(page);
+    ].toRow().inkWell(onTap: () => onTap?.call(product)).parent(page);
   }
 }
