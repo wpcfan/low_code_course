@@ -39,6 +39,9 @@ class ProductOneRowOneWidget extends StatelessWidget {
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
+      softWrap: true,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
     ).padding(bottom: verticalSpacing);
 
     final desciption = Text(
@@ -47,6 +50,9 @@ class ProductOneRowOneWidget extends StatelessWidget {
         fontSize: 14,
         color: Colors.grey,
       ),
+      softWrap: false,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
 
     final price = (product.price ?? '').toPriceWithDecimalSize();

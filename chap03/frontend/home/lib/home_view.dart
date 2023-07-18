@@ -145,8 +145,10 @@ class _HomeViewState extends State<HomeView> {
         ProductOneRowOneWidget(
           product: Product.fromJson({
             'id': 1,
-            'name': 'Product 1',
-            'description': 'Product 1 description',
+            'name':
+                'Product 1 very very very very very very very very very very long',
+            'description':
+                'Product 1 description very very very very very very very very very very long',
             'price': '¥100.00',
             'imageUrl': 'https://picsum.photos/seed/1/200/300',
           }),
