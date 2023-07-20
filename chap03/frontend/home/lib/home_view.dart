@@ -188,22 +188,23 @@ class _HomeViewState extends State<HomeView> {
         return Container();
       }
     }).toList();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: widgets
-          .toColumn(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-          )
-          .scrollable(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    //     title: Text(widget.title),
+    //   ),
+    //   body: widgets
+    //       .toColumn(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         mainAxisSize: MainAxisSize.min,
+    //       )
+    //       .scrollable(),
+    //   floatingActionButton: FloatingActionButton(
+    //     onPressed: _incrementCounter,
+    //     tooltip: 'Increment',
+    //     child: const Icon(Icons.add),
+    //   ),
+    // );
+    return const MyCustomScrollView().material();
   }
 }
