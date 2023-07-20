@@ -125,6 +125,35 @@ class _HomeViewState extends State<HomeView> {
               'imageUrl': 'https://picsum.photos/seed/1/200/300',
             }
           ]
+        },
+        {
+          'type': 'product_row',
+          'config': {
+            'blockHeight': 300.0,
+            'horizontalPadding': 16.0,
+            'verticalPadding': 8.0,
+            'horozontalSpacing': 8.0,
+            'verticalSpacing': 4.0,
+            'blockWidth': baseScreenWidth,
+          },
+          'data': [
+            {
+              'id': 1,
+              'name':
+                  'Product 1 very very very very very very very very very very long',
+              'description':
+                  'Product 1 description very very very very very very very very very very long',
+              'price': '¥100.00',
+              'imageUrl': 'https://picsum.photos/seed/1/200/300',
+            },
+            {
+              'id': 2,
+              'name': 'Product 2',
+              'description': 'Product 2 description',
+              'price': '¥100.00',
+              'imageUrl': 'https://picsum.photos/seed/2/200/300',
+            },
+          ]
         }
       ]
     });
@@ -135,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
           items: e.data.map((e) => e as ImageData).toList(),
           config: e.config.withRatio(ratio),
           onTap: (value) {
-            print(value);
+            debugPrint('onTap: $value');
           },
         );
       } else if (e.type == PageBlockType.banner) {
@@ -143,16 +172,17 @@ class _HomeViewState extends State<HomeView> {
           items: e.data.map((e) => e as ImageData).toList(),
           config: e.config.withRatio(ratio),
           onTap: (value) {
-            print(value);
+            debugPrint('onTap: $value');
           },
         );
       } else if (e.type == PageBlockType.productRow) {
-        return ProductOneRowOneWidget(
-          product: e.data.map((e) => e as Product).first,
+        return ProductRowWidget(
+          items: e.data.map((e) => e as Product).toList(),
           config: e.config.withRatio(ratio),
           onTap: (value) {
-            print(value);
+            debugPrint('onTap: $value');
           },
+          addToCart: (value) => debugPrint('addToCart: $value'),
         );
       } else {
         return Container();

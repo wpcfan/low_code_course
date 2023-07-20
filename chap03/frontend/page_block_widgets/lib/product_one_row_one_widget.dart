@@ -5,43 +5,37 @@ import 'package:page_block_widgets/image_widget.dart';
 
 class ProductOneRowOneWidget extends StatelessWidget {
   final Product product;
-  final BlockConfig config;
+  final double height;
+  final double horizontalSpacing;
+  final double verticalSpacing;
   final void Function(Product)? addToCart;
   final void Function(Product)? onTap;
 
   const ProductOneRowOneWidget({
     super.key,
     required this.product,
-    required this.config,
+    required this.height,
+    this.horizontalSpacing = 0,
+    this.verticalSpacing = 0,
     this.addToCart,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final horizontalSpacing = config.horozontalSpacing ?? 0;
-    final verticalSpacing = config.verticalSpacing ?? 0;
-    final verticalPadding = config.verticalPadding ?? 0;
-    final horizontalPadding = config.horizontalPadding ?? 0;
-    final blockWidth = config.blockWidth ?? 0;
-    final blockHeight = config.blockHeight ?? 0;
-    final innerBlockWidth = blockWidth - 2 * horizontalPadding;
-    final innerBlockHeight = blockHeight - 2 * verticalPadding;
-    page({required Widget child}) => child
-        .padding(horizontal: horizontalPadding, vertical: verticalPadding)
-        .constrained(width: blockWidth, height: blockHeight);
     // 左边是图片，图片是正方形，所以边长是 innerBlockHeight
     final left = ImageWidget(
       imageUrl: product.imageUrl ?? '',
-      width: innerBlockHeight,
-      height: innerBlockHeight,
+      width: height,
+      height: height,
     ).padding(right: horizontalSpacing);
 
     final name = Text(
       product.name ?? '',
       style: const TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
+        color: Colors.black87,
       ),
       softWrap: true,
       maxLines: 2,
@@ -51,8 +45,8 @@ class ProductOneRowOneWidget extends StatelessWidget {
     final desciption = Text(
       product.description ?? '',
       style: const TextStyle(
-        fontSize: 14,
-        color: Colors.grey,
+        fontSize: 12,
+        color: Colors.black54,
       ),
       softWrap: false,
       maxLines: 1,
@@ -115,6 +109,6 @@ class ProductOneRowOneWidget extends StatelessWidget {
     return [
       left,
       right,
-    ].toRow().inkWell(onTap: () => onTap?.call(product)).parent(page);
+    ].toRow().inkWell(onTap: () => onTap?.call(product));
   }
 }
