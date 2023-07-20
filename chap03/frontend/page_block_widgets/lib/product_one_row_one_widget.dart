@@ -55,7 +55,15 @@ class ProductOneRowOneWidget extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
     );
 
-    final price = (product.price ?? '').toPriceWithDecimalSize();
+    // 商品原价：划线价
+    final productOriginalPrice = product.originalPrice != null
+        ? product.originalPrice!.lineThru().alignment(Alignment.centerRight)
+        : null;
+    // 商品价格
+    final price = (product.price ?? '')
+        .toPriceWithDecimalSize()
+        .padding(left: horizontalSpacing);
+    // 购物车按钮
     const buttonSize = 24.0;
     final cartBtn = const Icon(
       Icons.add_shopping_cart,
@@ -65,13 +73,21 @@ class ProductOneRowOneWidget extends StatelessWidget {
         .padding(left: horizontalSpacing);
 
     final thirdRow = [
+      productOriginalPrice,
       price,
       cartBtn,
-    ].toRow(
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      mainAxisAlignment: MainAxisAlignment.end,
-      textBaseline: TextBaseline.alphabetic,
-    );
+    ]
+
+        /// 过滤掉null, whereType<T>()返回的是一个Iterable<T>
+        /// toList()将Iterable<T>转换为List<T>
+        /// toRow()将List<T>转换为Row
+        .whereType<Widget>()
+        .toList()
+        .toRow(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          mainAxisAlignment: MainAxisAlignment.end,
+          textBaseline: TextBaseline.alphabetic,
+        );
 
     final nameAndDescColumn = [
       name,

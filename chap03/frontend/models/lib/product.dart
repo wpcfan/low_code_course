@@ -5,6 +5,7 @@ class Product {
   final String? description;
   final String? imageUrl;
   final String? price;
+  final String? originalPrice;
 
   const Product({
     this.id,
@@ -13,6 +14,7 @@ class Product {
     this.description,
     this.imageUrl,
     this.price,
+    this.originalPrice,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Product {
       description: json['description'] as String?,
       imageUrl: json['imageUrl'] as String?,
       price: json['price'] as String?,
+      originalPrice: json['originalPrice'] as String?,
     );
   }
 }
