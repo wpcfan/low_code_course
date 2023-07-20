@@ -205,6 +205,13 @@ class _HomeViewState extends State<HomeView> {
     //     child: const Icon(Icons.add),
     //   ),
     // );
-    return const MyCustomScrollView().material();
+    return MyCustomScrollView(
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(
+          widgets,
+        ),
+      ),
+      onRefresh: () => Future.delayed(const Duration(seconds: 1)),
+    ).material();
   }
 }
