@@ -49,4 +49,19 @@ extension StringExtension on String {
       ],
     );
   }
+
+  /// 划线价格
+  Text lineThru({
+    double fontSize = 12.0,
+    FontWeight fontWeight = FontWeight.w600,
+    Color fontColor = Colors.grey,
+  }) {
+    return Text(this,
+        style: TextStyle(
+          fontWeight: fontWeight,
+          fontSize: fontSize,
+          color: fontColor,
+          decoration: TextDecoration.lineThrough,
+        ));
+  }
 }
