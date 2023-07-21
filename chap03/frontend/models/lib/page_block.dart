@@ -1,5 +1,6 @@
 import 'block_config.dart';
 import 'block_data.dart';
+import 'category.dart';
 import 'image_data.dart';
 import 'product.dart';
 
@@ -37,8 +38,11 @@ class PageBlock<T extends BlockData> {
         if (json['type'] == 'image_row' || json['type'] == 'banner') {
           return ImageData.fromJson(e as Map<String, dynamic>) as T;
         }
-        if (json['type'] == 'product_row' || json['type'] == 'waterfall') {
+        if (json['type'] == 'product_row') {
           return Product.fromJson(e as Map<String, dynamic>) as T;
+        }
+        if (json['type'] == 'waterfall') {
+          return Category.fromJson(e as Map<String, dynamic>) as T;
         }
         throw Exception('Unknown block type: ${json['type']}');
       }).toList(),

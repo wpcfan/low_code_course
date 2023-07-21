@@ -193,34 +193,10 @@ class _HomeViewState extends State<HomeView> {
           'data': [
             {
               'id': 1,
-              'name':
-                  'Product 1 very very very very very very very very very very long',
-              'description':
-                  'Product 1 description very very very very very very very very very very long',
-              'price': '¥100.00',
-              'imageUrl': 'https://picsum.photos/seed/1/200/300',
+              'name': 'Category 1',
+              'code': 'cat_1',
+              'children': [],
             },
-            {
-              'id': 2,
-              'name': 'Product 2',
-              'description': 'Product 2 description',
-              'price': '¥100.00',
-              'imageUrl': 'https://picsum.photos/seed/2/200/300',
-            },
-            {
-              'id': 3,
-              'name': 'Product 3',
-              'description': 'Product 3 description',
-              'price': '¥100.00',
-              'imageUrl': 'https://picsum.photos/seed/3/200/300',
-            },
-            {
-              'id': 4,
-              'name': 'Product 4',
-              'description': 'Product 4 description',
-              'price': '¥100.00',
-              'imageUrl': 'https://picsum.photos/seed/4/200/300',
-            }
           ]
         }
       ]
