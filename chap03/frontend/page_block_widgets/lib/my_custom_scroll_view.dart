@@ -12,7 +12,7 @@ class MyCustomScrollView extends StatelessWidget {
   final BoxDecoration decoration;
   final SliverAppBar sliverAppBar;
   final Widget sliver;
-  final Widget loadMoreWidget;
+  final Widget? loadMoreWidget;
   const MyCustomScrollView({
     super.key,
     required this.onRefresh,
