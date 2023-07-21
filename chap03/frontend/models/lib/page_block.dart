@@ -37,7 +37,7 @@ class PageBlock<T extends BlockData> {
         if (json['type'] == 'image_row' || json['type'] == 'banner') {
           return ImageData.fromJson(e as Map<String, dynamic>) as T;
         }
-        if (json['type'] == 'product_row') {
+        if (json['type'] == 'product_row' || json['type'] == 'waterfall') {
           return Product.fromJson(e as Map<String, dynamic>) as T;
         }
         throw Exception('Unknown block type: ${json['type']}');
