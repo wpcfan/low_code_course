@@ -2,6 +2,7 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:page_block_widgets/page_block_widgets.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key, required this.title});
@@ -203,29 +204,35 @@ class _HomeViewState extends State<HomeView> {
     final blocks = pageLayout.blocks;
     final widgets = blocks.map((e) {
       if (e.type == PageBlockType.imageRow) {
-        return ImageRowWidget(
-          items: e.data.map((e) => e as ImageData).toList(),
-          config: e.config.withRatio(ratio),
-          onTap: (value) {
-            debugPrint('onTap: $value');
-          },
+        return SliverToBoxAdapter(
+          child: ImageRowWidget(
+            items: e.data.map((e) => e as ImageData).toList(),
+            config: e.config.withRatio(ratio),
+            onTap: (value) {
+              debugPrint('onTap: $value');
+            },
+          ),
         );
       } else if (e.type == PageBlockType.banner) {
-        return BannerWidget(
-          items: e.data.map((e) => e as ImageData).toList(),
-          config: e.config.withRatio(ratio),
-          onTap: (value) {
-            debugPrint('onTap: $value');
-          },
+        return SliverToBoxAdapter(
+          child: BannerWidget(
+            items: e.data.map((e) => e as ImageData).toList(),
+            config: e.config.withRatio(ratio),
+            onTap: (value) {
+              debugPrint('onTap: $value');
+            },
+          ),
         );
       } else if (e.type == PageBlockType.productRow) {
-        return ProductRowWidget(
-          items: e.data.map((e) => e as Product).toList(),
-          config: e.config.withRatio(ratio),
-          onTap: (value) {
-            debugPrint('onTap: $value');
-          },
-          addToCart: (value) => debugPrint('addToCart: $value'),
+        return SliverToBoxAdapter(
+          child: ProductRowWidget(
+            items: e.data.map((e) => e as Product).toList(),
+            config: e.config.withRatio(ratio),
+            onTap: (value) {
+              debugPrint('onTap: $value');
+            },
+            addToCart: (value) => debugPrint('addToCart: $value'),
+          ),
         );
       } else if (e.type == PageBlockType.waterfall) {
         return WaterfallWidget(
@@ -258,10 +265,8 @@ class _HomeViewState extends State<HomeView> {
     //   ),
     // );
     return MyCustomScrollView(
-      sliver: SliverList(
-        delegate: SliverChildListDelegate(
-          widgets,
-        ),
+      sliver: MultiSliver(
+        children: widgets,
       ),
       onRefresh: () => Future.delayed(const Duration(seconds: 1)),
     ).material();

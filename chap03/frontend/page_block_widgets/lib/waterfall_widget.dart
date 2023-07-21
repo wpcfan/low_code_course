@@ -1,4 +1,3 @@
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:models/models.dart';
@@ -29,16 +28,16 @@ class WaterfallWidget extends StatelessWidget {
     final innerBlockWidth = blockWidth - 2 * horizontalPadding;
     final innerBlockHeight = blockHeight - 2 * verticalPadding;
 
-    return Padding(
+    return SliverPadding(
       padding: EdgeInsets.symmetric(
         horizontal: horizontalPadding,
         vertical: verticalPadding,
       ),
-      child: MasonryGridView.count(
+      sliver: SliverMasonryGrid.count(
         crossAxisCount: 2,
         crossAxisSpacing: horizontalSpacing,
         mainAxisSpacing: verticalSpacing,
-        itemCount: items.length,
+        childCount: items.length,
         itemBuilder: (context, index) {
           final product = items[index];
           return ProductOneRowTwoWidget(
@@ -51,8 +50,6 @@ class WaterfallWidget extends StatelessWidget {
             addToCart: addToCart,
           );
         },
-      ).constrained(
-        maxHeight: blockHeight * (items.length / 2).ceil(),
       ),
     );
   }
