@@ -114,35 +114,60 @@ class _HomeViewState extends State<HomeView> {
       ]
     });
     final blocks = pageLayout.blocks;
-
+    final widgets = blocks.map((e) {
+      if (e.type == PageBlockType.imageRow) {
+        return ImageRowWidget(
+          items: e.data,
+          config: e.config.withRatio(ratio),
+          onTap: (value) {
+            print(value);
+          },
+        );
+      } else if (e.type == PageBlockType.banner) {
+        return BannerWidget(
+          items: e.data,
+          config: e.config.withRatio(ratio),
+          onTap: (value) {
+            print(value);
+          },
+        );
+      } else {
+        return Container();
+      }
+    }).toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: blocks
-          .map((e) {
-            if (e.type == PageBlockType.imageRow) {
-              return ImageRowWidget(
-                items: e.data,
-                config: e.config.withRatio(ratio),
-                onTap: (value) {
-                  print(value);
-                },
-              );
-            } else if (e.type == PageBlockType.banner) {
-              return BannerWidget(
-                items: e.data,
-                config: e.config.withRatio(ratio),
-                onTap: (value) {
-                  print(value);
-                },
-              );
-            } else {
-              return Container();
-            }
-          })
-          .toList()
+      body: [
+        ...widgets,
+        ProductOneRowOneWidget(
+          product: Product.fromJson({
+            'id': 1,
+            'name':
+                'Product 1 very very very very very very very very very very long',
+            'description':
+                'Product 1 description very very very very very very very very very very long',
+            'price': '¥100.00',
+            'imageUrl': 'https://picsum.photos/seed/1/200/300',
+          }),
+          config: BlockConfig.fromJson({
+            'blockHeight': 120.0,
+            'horizontalPadding': 16.0,
+            'verticalPadding': 8.0,
+            'horozontalSpacing': 8.0,
+            'verticalSpacing': 4.0,
+            'blockWidth': baseScreenWidth,
+          }).withRatio(ratio),
+          onTap: (value) {
+            debugPrint('ProductOneRowOneWidget onTap: $value');
+          },
+          addToCart: (value) {
+            debugPrint('ProductOneRowOneWidget addToCart: $value');
+          },
+        )
+      ]
           .toColumn(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
