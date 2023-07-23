@@ -1,7 +1,3 @@
 library networking;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'app_client.dart';
