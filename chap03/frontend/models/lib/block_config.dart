@@ -3,7 +3,6 @@ class BlockConfig {
   final double? verticalPadding;
   final double? blockHeight;
   final double? horozontalSpacing;
-  final double? verticalSpacing;
   final double? blockWidth;
 
   const BlockConfig({
@@ -11,7 +10,6 @@ class BlockConfig {
     this.verticalPadding,
     this.blockHeight,
     this.horozontalSpacing,
-    this.verticalSpacing,
     this.blockWidth,
   });
 
@@ -21,7 +19,6 @@ class BlockConfig {
       verticalPadding: json['verticalPadding'] as double?,
       blockHeight: json['blockHeight'] as double?,
       horozontalSpacing: json['horozontalSpacing'] as double?,
-      verticalSpacing: json['verticalSpacing'] as double?,
       blockWidth: json['blockWidth'] as double?,
     );
   }
@@ -32,7 +29,6 @@ class BlockConfig {
       verticalPadding: (verticalPadding ?? 0) * ratio,
       blockHeight: (blockHeight ?? 0) * ratio,
       horozontalSpacing: (horozontalSpacing ?? 0) * ratio,
-      verticalSpacing: (verticalSpacing ?? 0) * ratio,
       blockWidth: (blockWidth ?? 0) * ratio,
     );
   }
