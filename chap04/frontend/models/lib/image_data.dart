@@ -1,6 +1,7 @@
+import 'block_data.dart';
 import 'my_link.dart';
 
-class ImageData {
+class ImageData implements BlockData {
   final String imageUrl;
   final MyLink link;
 
