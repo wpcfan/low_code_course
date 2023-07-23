@@ -92,10 +92,10 @@ packages:
     dependency: transitive
     description:
       name: easy_rich_text
-      sha256: e4d7b9ec419b03042022f574d9f649163cc745845103caa6b49eb1247b4025d8
+      sha256: "08a4e76253df21835c652413ff0db3ca3e116067e7b71def4a59fc481a950514"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "2.0.0"
   equatable:
     dependency: transitive
     description:
@@ -291,10 +291,10 @@ packages:
     dependency: transitive
     description:
       name: sliver_tools
-      sha256: ccdc502098a8bfa07b3ec582c282620031481300035584e1bb3aca296a505e8c
+      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.10"
+    version: "0.2.12"
   source_span:
     dependency: transitive
     description:
