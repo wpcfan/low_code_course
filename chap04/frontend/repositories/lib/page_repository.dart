@@ -9,7 +9,7 @@ class PageRepository {
   PageRepository({Dio? client, this.path = '/pages'})
       : client = client ?? AppClient();
 
-  Future<PageLayout> getPageLayout(String pageId) async {
+  Future<PageLayout> getPageLayout(int pageId) async {
     final response = await client.get('$path/$pageId');
     return PageLayout.fromJson(response.data);
   }
