@@ -30,6 +30,7 @@ class MyCustomScrollView extends StatelessWidget {
     this.sliverAppBar = const SliverAppBar(
       title: Text('SliverAppBar'),
       floating: true,
+      snap: true,
       flexibleSpace: Placeholder(),
       expandedHeight: 200,
     ),
@@ -61,6 +62,9 @@ class MyCustomScrollView extends StatelessWidget {
           return true;
         },
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           slivers: <Widget>[
             sliverAppBar,
             CupertinoSliverRefreshControl(
