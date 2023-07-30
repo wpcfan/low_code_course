@@ -85,6 +85,7 @@ class _HomeViewState extends State<HomeView> {
                 return const Center(child: CircularProgressIndicator());
               default:
                 final blocks = state.blocks;
+                final waterfallItems = state.waterfallItems;
                 final widgets = blocks.map((e) {
                   if (e.type == PageBlockType.imageRow) {
                     return SliverToBoxAdapter(
@@ -119,8 +120,7 @@ class _HomeViewState extends State<HomeView> {
                     );
                   } else if (e.type == PageBlockType.waterfall) {
                     return WaterfallWidget(
-                      // items: e.data.map((e) => e as Product).toList(),
-                      items: _products,
+                      items: waterfallItems,
                       config: e.config.withRatio(ratio),
                       onTap: (value) {
                         debugPrint('onTap: $value');
