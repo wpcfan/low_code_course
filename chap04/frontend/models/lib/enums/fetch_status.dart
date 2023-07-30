@@ -5,4 +5,6 @@ enum FetchStatus {
   failure,
   refreshing,
   refreshFailure,
+  loadingMore,
+  loadMoreFailure,
 }

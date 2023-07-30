@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       : super(const HomeState(status: FetchStatus.initial)) {
     on<HomeLoadEvent>(_onHomeLoadEvent);
     on<HomeRefreshEvent>(_onHomeRefreshEvent);
+    on<HomeLoadMoreEvent>(_onHomeLoadMoreEvent);
   }
 
   Future<void> _onHomeLoadEvent(
@@ -32,7 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               await productRepository.getProductsByCategoryId(
             categoryId: category.id!,
             pageNum: 1,
-            pageSize: 10,
+            pageSize: 4,
           );
           emit(state.copyWith(
             status: FetchStatus.success,
@@ -60,6 +61,34 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       emit(state.copyWith(
         status: FetchStatus.refreshFailure,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onHomeLoadMoreEvent(
+      HomeLoadMoreEvent event, Emitter<HomeState> emit) async {
+    if (state.waterfallBlock == null) return;
+    emit(state.copyWith(status: FetchStatus.loadingMore));
+    try {
+      final waterfallData =
+          state.waterfallBlock!.data.map((e) => e as Category).toList();
+
+      final category = waterfallData.first;
+
+      final waterfallItems = await productRepository.getProductsByCategoryId(
+        categoryId: category.id!,
+        pageNum: state.page + 1,
+        pageSize: 4,
+      );
+      emit(state.copyWith(
+        status: FetchStatus.success,
+        waterfallItems: [...state.waterfallItems, ...waterfallItems],
+        page: state.page + 1,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: FetchStatus.loadMoreFailure,
         error: e.toString(),
       ));
     }

@@ -9,47 +9,8 @@ import 'package:sliver_tools/sliver_tools.dart';
 
 import 'blocs/blocs.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  bool _isLoading = false;
-  final List<Product> _products = [
-    const Product(
-      id: 1,
-      name: 'Product 1',
-      description: 'Product 1 description',
-      price: '¥100.00',
-      imageUrl: 'https://picsum.photos/seed/1/200/300',
-    ),
-    const Product(
-      id: 2,
-      name: 'Product 2',
-      description: 'Product 2 description',
-      price: '¥100.00',
-      imageUrl: 'https://picsum.photos/seed/2/200/300',
-    ),
-    const Product(
-      id: 3,
-      name: 'Product 3',
-      description: 'Product 3 description',
-      price: '¥100.00',
-      imageUrl: 'https://picsum.photos/seed/3/200/300',
-    ),
-    const Product(
-      id: 4,
-      name: 'Product 4',
-      description: 'Product 4 description',
-      price: '¥100.00',
-      imageUrl: 'https://picsum.photos/seed/4/200/300',
-    ),
-  ];
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -132,8 +93,9 @@ class _HomeViewState extends State<HomeView> {
                   }
                 }).toList();
                 return MyCustomScrollView(
-                  loadMoreWidget:
-                      _isLoading ? const CupertinoActivityIndicator() : null,
+                  loadMoreWidget: state.isLoadingMore
+                      ? const CupertinoActivityIndicator()
+                      : null,
                   sliver: MultiSliver(
                     children: widgets,
                   ),
@@ -141,47 +103,13 @@ class _HomeViewState extends State<HomeView> {
                     context.read<HomeBloc>().add(const HomeRefreshEvent());
                     await context.read<HomeBloc>().stream.firstWhere((state) =>
                         state.status == FetchStatus.success ||
-                        state.status == FetchStatus.failure ||
                         state.status == FetchStatus.refreshFailure);
                   },
                   onLoadMore: () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    await Future.delayed(const Duration(seconds: 4));
-                    setState(() {
-                      _products.addAll([
-                        const Product(
-                          id: 5,
-                          name: 'Product 5',
-                          description: 'Product 5 description',
-                          price: '¥100.00',
-                          imageUrl: 'https://picsum.photos/seed/5/200/300',
-                        ),
-                        const Product(
-                          id: 6,
-                          name: 'Product 6',
-                          description: 'Product 6 description',
-                          price: '¥100.00',
-                          imageUrl: 'https://picsum.photos/seed/6/200/300',
-                        ),
-                        const Product(
-                          id: 7,
-                          name: 'Product 7',
-                          description: 'Product 7 description',
-                          price: '¥100.00',
-                          imageUrl: 'https://picsum.photos/seed/7/200/300',
-                        ),
-                        const Product(
-                          id: 8,
-                          name: 'Product 8',
-                          description: 'Product 8 description',
-                          price: '¥100.00',
-                          imageUrl: 'https://picsum.photos/seed/8/200/300',
-                        ),
-                      ]);
-                      _isLoading = false;
-                    });
+                    context.read<HomeBloc>().add(const HomeLoadMoreEvent());
+                    await context.read<HomeBloc>().stream.firstWhere((state) =>
+                        state.status == FetchStatus.success ||
+                        state.status == FetchStatus.loadMoreFailure);
                   },
                 );
             }
