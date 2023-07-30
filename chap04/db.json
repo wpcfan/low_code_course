@@ -1,6 +1,7 @@
 {
   "layouts": [
     {
+      "id": 1,
       "config": {
         "baseScreenWidth": 375.0
       },

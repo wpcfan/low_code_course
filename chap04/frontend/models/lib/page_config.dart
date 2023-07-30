@@ -7,7 +7,9 @@ class PageConfig {
 
   factory PageConfig.fromJson(Map<String, dynamic> json) {
     return PageConfig(
-      baseScreenWidth: json['baseScreenWidth'] as double?,
+      baseScreenWidth: json['baseScreenWidth'] != null
+          ? double.tryParse(json['baseScreenWidth'].toString())
+          : null,
     );
   }
 }

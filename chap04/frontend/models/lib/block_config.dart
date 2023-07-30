@@ -17,12 +17,24 @@ class BlockConfig {
 
   factory BlockConfig.fromJson(Map<String, dynamic> json) {
     return BlockConfig(
-      horizontalPadding: json['horizontalPadding'] as double?,
-      verticalPadding: json['verticalPadding'] as double?,
-      blockHeight: json['blockHeight'] as double?,
-      horozontalSpacing: json['horozontalSpacing'] as double?,
-      verticalSpacing: json['verticalSpacing'] as double?,
-      blockWidth: json['blockWidth'] as double?,
+      horizontalPadding: json['horizontalPadding'] != null
+          ? double.tryParse(json['horizontalPadding'].toString())
+          : null,
+      verticalPadding: json['verticalPadding'] != null
+          ? double.tryParse(json['verticalPadding'].toString())
+          : null,
+      blockHeight: json['blockHeight'] != null
+          ? double.tryParse(json['blockHeight'].toString())
+          : null,
+      horozontalSpacing: json['horozontalSpacing'] != null
+          ? double.tryParse(json['horozontalSpacing'].toString())
+          : null,
+      verticalSpacing: json['verticalSpacing'] != null
+          ? double.tryParse(json['verticalSpacing'].toString())
+          : null,
+      blockWidth: json['blockWidth'] != null
+          ? double.tryParse(json['blockWidth'].toString())
+          : null,
     );
   }
 
