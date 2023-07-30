@@ -10,6 +10,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.pageRepository, required this.productRepository})
       : super(const HomeInitialState()) {
     on<HomeLoadEvent>(_onHomeLoadEvent);
+    on<HomeRefreshEvent>(_onHomeRefreshEvent);
   }
 
   Future<void> _onHomeLoadEvent(
@@ -25,6 +26,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoadedState(data));
     } catch (e) {
       emit(HomeErrorState(e.toString()));
+    }
+  }
+
+  Future<void> _onHomeRefreshEvent(
+      HomeRefreshEvent event, Emitter<HomeState> emit) async {
+    try {
+      throw Exception('Error');
+      // final page = await pageRepository.getPageLayout(1);
+      // final data = page.blocks;
+      // if (data.isEmpty) {
+      //   emit(const HomeEmptyState());
+      //   return;
+      // }
+      // emit(HomeLoadedState(data));
+    } catch (e) {
+      emit(HomeRefreshErrorState(e.toString()));
     }
   }
 }
