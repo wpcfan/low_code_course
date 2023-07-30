@@ -61,6 +61,9 @@ class MyCustomScrollView extends StatelessWidget {
           return true;
         },
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           slivers: <Widget>[
             sliverAppBar,
             CupertinoSliverRefreshControl(
