@@ -1,78 +1,39 @@
 import 'package:equatable/equatable.dart';
 import 'package:models/models.dart';
 
-abstract class HomeState extends Equatable {
-  const HomeState();
-}
+class HomeState extends Equatable {
+  final PageLayout? layout;
+  final FetchStatus? status;
+  final String? error;
+  const HomeState({
+    this.layout,
+    this.status,
+    this.error,
+  });
 
-class HomeInitialState extends HomeState {
-  const HomeInitialState();
   @override
-  List<Object> get props => [];
-}
+  List<Object?> get props => [layout, status, error];
 
-class HomeLoadingState extends HomeState {
-  const HomeLoadingState();
-  @override
-  List<Object> get props => [];
-}
+  HomeState copyWith({
+    PageLayout? layout,
+    FetchStatus? status,
+    String? error,
+  }) {
+    return HomeState(
+      layout: layout ?? this.layout,
+      status: status ?? this.status,
+      error: error ?? this.error,
+    );
+  }
 
-class HomeLoadedState extends HomeState {
-  final List<PageBlock> data;
-  const HomeLoadedState(this.data);
-  @override
-  List<Object> get props => [data];
-}
+  bool get hasError => error != null;
+  bool get hasLayout => layout != null;
+  bool get isInitial => status == FetchStatus.initial;
+  bool get isLoading => status == FetchStatus.loading;
+  bool get isLoaded => status == FetchStatus.success;
+  bool get isFailed => status == FetchStatus.failure;
 
-class HomeErrorState extends HomeState {
-  final String message;
-  const HomeErrorState(this.message);
-  @override
-  List<Object> get props => [message];
-}
-
-class HomeEmptyState extends HomeState {
-  const HomeEmptyState();
-  @override
-  List<Object> get props => [];
-}
-
-class HomeRefreshingState extends HomeState {
-  const HomeRefreshingState();
-  @override
-  List<Object> get props => [];
-}
-
-class HomeRefreshedState extends HomeState {
-  final List<PageBlock> data;
-  const HomeRefreshedState(this.data);
-  @override
-  List<Object> get props => [data];
-}
-
-class HomeRefreshErrorState extends HomeState {
-  final String message;
-  const HomeRefreshErrorState(this.message);
-  @override
-  List<Object> get props => [message];
-}
-
-class HomeLoadingMoreState extends HomeState {
-  const HomeLoadingMoreState();
-  @override
-  List<Object> get props => [];
-}
-
-class HomeLoadedMoreState extends HomeState {
-  final List<Product> data;
-  const HomeLoadedMoreState(this.data);
-  @override
-  List<Object> get props => [data];
-}
-
-class HomeLoadMoreErrorState extends HomeState {
-  final String message;
-  const HomeLoadMoreErrorState(this.message);
-  @override
-  List<Object> get props => [message];
+  List<PageBlock> get blocks => layout?.blocks ?? [];
+  bool get isEmpty => blocks.isEmpty;
+  PageConfig? get config => layout?.config;
 }
