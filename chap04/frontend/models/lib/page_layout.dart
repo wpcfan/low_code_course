@@ -1,7 +1,9 @@
+import 'package:equatable/equatable.dart';
+
 import 'page_block.dart';
 import 'page_config.dart';
 
-class PageLayout {
+class PageLayout extends Equatable {
   final int? id;
   final List<PageBlock> blocks;
   final PageConfig config;
@@ -21,4 +23,7 @@ class PageLayout {
       config: PageConfig.fromJson(json['config'] as Map<String, dynamic>),
     );
   }
+
+  @override
+  List<Object?> get props => [id, blocks, config];
 }

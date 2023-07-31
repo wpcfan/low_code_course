@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 enum LinkType {
   url('url'),
   route('route'),
@@ -7,7 +9,7 @@ enum LinkType {
   const LinkType(this.value);
 }
 
-class MyLink {
+class MyLink extends Equatable {
   final LinkType type;
   final String value;
 
@@ -15,6 +17,9 @@ class MyLink {
     required this.type,
     required this.value,
   });
+
+  @override
+  List<Object?> get props => [type, value];
 
   factory MyLink.fromJson(Map<String, dynamic> json) {
     return MyLink(

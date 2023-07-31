@@ -13,6 +13,17 @@ class Category implements BlockData {
     this.children = const [],
   });
 
+  @override
+  List<Object?> get props => [id, name, code, children];
+
+  @override
+  String toString() {
+    return 'Category{id: $id, name: $name, code: $code, children: $children}';
+  }
+
+  @override
+  bool? get stringify => true;
+
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'] as int?,

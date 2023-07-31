@@ -10,6 +10,17 @@ class ImageData implements BlockData {
     required this.link,
   });
 
+  @override
+  List<Object?> get props => [imageUrl, link];
+
+  @override
+  String toString() {
+    return 'ImageData{imageUrl: $imageUrl, link: $link}';
+  }
+
+  @override
+  bool? get stringify => true;
+
   factory ImageData.fromJson(Map<String, dynamic> json) {
     return ImageData(
       imageUrl: json['imageUrl'] as String,

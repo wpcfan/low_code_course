@@ -1,4 +1,6 @@
-class BlockConfig {
+import 'package:equatable/equatable.dart';
+
+class BlockConfig extends Equatable {
   final double? horizontalPadding;
   final double? verticalPadding;
   final double? blockHeight;
@@ -14,6 +16,21 @@ class BlockConfig {
     this.verticalSpacing,
     this.blockWidth,
   });
+
+  @override
+  List<Object?> get props => [
+        horizontalPadding,
+        verticalPadding,
+        blockHeight,
+        horozontalSpacing,
+        verticalSpacing,
+        blockWidth,
+      ];
+
+  @override
+  String toString() {
+    return 'BlockConfig{horizontalPadding: $horizontalPadding, verticalPadding: $verticalPadding, blockHeight: $blockHeight, horozontalSpacing: $horozontalSpacing, verticalSpacing: $verticalSpacing, blockWidth: $blockWidth}';
+  }
 
   factory BlockConfig.fromJson(Map<String, dynamic> json) {
     return BlockConfig(

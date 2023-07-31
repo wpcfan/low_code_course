@@ -19,6 +19,25 @@ class Product implements BlockData {
     this.originalPrice,
   });
 
+  @override
+  List<Object?> get props => [
+        id,
+        sku,
+        name,
+        description,
+        imageUrl,
+        price,
+        originalPrice,
+      ];
+
+  @override
+  String toString() {
+    return 'Product{id: $id, sku: $sku, name: $name, description: $description, imageUrl: $imageUrl, price: $price, originalPrice: $originalPrice}';
+  }
+
+  @override
+  bool? get stringify => true;
+
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'] as int?,

@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import 'block_config.dart';
 import 'block_data.dart';
 import 'category.dart';
@@ -5,7 +7,7 @@ import 'enums/enums.dart';
 import 'image_data.dart';
 import 'product.dart';
 
-class PageBlock<T extends BlockData> {
+class PageBlock<T extends BlockData> extends Equatable {
   final BlockConfig config;
   final List<T> data;
   final PageBlockType type;
@@ -15,6 +17,14 @@ class PageBlock<T extends BlockData> {
     required this.data,
     this.type = PageBlockType.unknown,
   });
+
+  @override
+  List<Object?> get props => [config, data, type];
+
+  @override
+  String toString() {
+    return 'PageBlock{config: $config, data: $data, type: $type}';
+  }
 
   factory PageBlock.fromJson(Map<String, dynamic> json) {
     return PageBlock(
