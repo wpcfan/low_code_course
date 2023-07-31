@@ -1,12 +1,12 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:home/widgets/widgets.dart';
 import 'package:models/models.dart';
 import 'package:page_block_widgets/page_block_widgets.dart';
 import 'package:repositories/repositories.dart';
 
 import 'blocs/blocs.dart';
+import 'widgets/widgets.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
