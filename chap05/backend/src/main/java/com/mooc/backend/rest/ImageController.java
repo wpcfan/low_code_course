@@ -19,16 +19,44 @@ public class ImageController {
 
     @GetMapping("/{width}")
     public ResponseEntity<byte[]> generateImage(@PathVariable int width) throws IOException {
-        return buildImage(width);
+        return buildImage(width, width, width + "x" + width, Color.WHITE, Color.BLACK);
     }
 
-    private ResponseEntity<byte[]> buildImage(int width) throws IOException {
-        BufferedImage image = new BufferedImage(width, width, BufferedImage.TYPE_INT_RGB);
+    @GetMapping("/{width}/{height}")
+    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height) throws IOException {
+        return buildImage(width, height, width + "x" + height, Color.WHITE, Color.BLACK);
+    }
+
+    @GetMapping("/{width}/{height}/{text}")
+    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text) throws IOException {
+        return buildImage(width, height, text, Color.WHITE, Color.BLACK);
+    }
+
+    @GetMapping("/{width}/{height}/{text}/{backgroundColor}")
+    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text, @PathVariable String backgroundColor) throws IOException {
+        return buildImage(width, height, text, parseHexToColor(backgroundColor), Color.BLACK);
+    }
+
+    @GetMapping("/{width}/{height}/{text}/{backgroundColor}/{foregroundColor}")
+    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text, @PathVariable String backgroundColor, @PathVariable String foregroundColor) throws IOException {
+        return buildImage(width, height, text, parseHexToColor(backgroundColor), parseHexToColor(foregroundColor));
+    }
+
+    private Color parseHexToColor(String hex) {
+        return new Color(Integer.parseInt(hex, 16));
+    }
+
+    private ResponseEntity<byte[]> buildImage(int width, int height, String text, Color backgroundColor, Color foregroundColor) throws IOException {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(0, 0, width, width);
-        graphics.setColor(Color.BLACK);
-        graphics.drawString("Hello World!", 10, 10);
+        graphics.setColor(backgroundColor);
+        graphics.fillRect(0, 0, width, height);
+        graphics.setColor(foregroundColor);
+        graphics.setFont(new Font("Arial", Font.BOLD, 16));
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+        int x = (width - fontMetrics.stringWidth(text)) / 2;
+        int y = (height - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
+        graphics.drawString(text, x, y);
         graphics.dispose();
         // 创建一个字节数组输出流
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
