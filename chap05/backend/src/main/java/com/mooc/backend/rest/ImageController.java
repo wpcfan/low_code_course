@@ -1,7 +1,9 @@
 package com.mooc.backend.rest;
 
+import jakarta.validation.constraints.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,27 +15,28 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/image")
 public class ImageController {
 
     @GetMapping("/{width}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width) throws IOException {
+    public ResponseEntity<byte[]> generateImage(@PathVariable @Min(12) @Max(1920) int width) throws IOException {
         return buildImage(width, width, width + "x" + width, Color.WHITE, Color.BLACK);
     }
 
     @GetMapping("/{width}/{height}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height) throws IOException {
+    public ResponseEntity<byte[]> generateImage(@PathVariable @Min(12) @Max(1920) int width, @PathVariable @Min(12) @Max(1920) int height) throws IOException {
         return buildImage(width, height, width + "x" + height, Color.WHITE, Color.BLACK);
     }
 
     @GetMapping("/{width}/{height}/{text}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text) throws IOException {
+    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable @Size(min = 2, max = 10) String text) throws IOException {
         return buildImage(width, height, text, Color.WHITE, Color.BLACK);
     }
 
     @GetMapping("/{width}/{height}/{text}/{backgroundColor}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text, @PathVariable String backgroundColor) throws IOException {
+    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text, @PathVariable @Pattern(regexp = "^[0-9a-fA-F]{6}$") String backgroundColor) throws IOException {
         return buildImage(width, height, text, parseHexToColor(backgroundColor), Color.BLACK);
     }
 
