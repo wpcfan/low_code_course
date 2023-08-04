@@ -4,10 +4,7 @@ import jakarta.validation.constraints.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,41 +18,73 @@ import java.io.IOException;
 public class ImageController {
 
     @GetMapping("/{width}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable @Min(12) @Max(1920) int width) throws IOException {
-        return buildImage(width, width, width + "x" + width, Color.WHITE, Color.BLACK);
+    public ResponseEntity<byte[]> generateImage(
+            @PathVariable @Min(12) @Max(1920) int width,
+            @RequestParam(required = false, defaultValue = "Arial") @Size(min = 3, max = 20) String fontName
+            ) throws IOException {
+        return buildImage(width, width, width + "x" + width, Color.WHITE, Color.BLACK, fontName);
     }
 
     @GetMapping("/{width}/{height}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable @Min(12) @Max(1920) int width, @PathVariable @Min(12) @Max(1920) int height) throws IOException {
-        return buildImage(width, height, width + "x" + height, Color.WHITE, Color.BLACK);
+    public ResponseEntity<byte[]> generateImage(
+            @PathVariable @Min(12) @Max(1920) int width,
+            @PathVariable @Min(12) @Max(1920) int height,
+            @RequestParam(required = false, defaultValue = "Arial") String fontName
+    ) throws IOException {
+        return buildImage(width, height, width + "x" + height, Color.WHITE, Color.BLACK, fontName);
     }
 
     @GetMapping("/{width}/{height}/{text}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable @Size(min = 2, max = 10) String text) throws IOException {
-        return buildImage(width, height, text, Color.WHITE, Color.BLACK);
+    public ResponseEntity<byte[]> generateImage(
+            @PathVariable int width,
+            @PathVariable int height,
+            @PathVariable @Size(min = 2, max = 10) String text,
+            @RequestParam(required = false, defaultValue = "Arial") String fontName
+            ) throws IOException {
+        return buildImage(width, height, text, Color.WHITE, Color.BLACK, fontName);
     }
 
     @GetMapping("/{width}/{height}/{text}/{backgroundColor}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text, @PathVariable @Pattern(regexp = "^[0-9a-fA-F]{6}$") String backgroundColor) throws IOException {
-        return buildImage(width, height, text, parseHexToColor(backgroundColor), Color.BLACK);
+    public ResponseEntity<byte[]> generateImage(
+            @PathVariable int width,
+            @PathVariable int height,
+            @PathVariable String text,
+            @PathVariable @Pattern(regexp = "^[0-9a-fA-F]{6}$") String backgroundColor,
+            @RequestParam(required = false, defaultValue = "Arial") String fontName
+            ) throws IOException {
+        return buildImage(width, height, text, parseHexToColor(backgroundColor), Color.BLACK, fontName);
     }
 
     @GetMapping("/{width}/{height}/{text}/{backgroundColor}/{foregroundColor}")
-    public ResponseEntity<byte[]> generateImage(@PathVariable int width, @PathVariable int height, @PathVariable String text, @PathVariable String backgroundColor, @PathVariable String foregroundColor) throws IOException {
-        return buildImage(width, height, text, parseHexToColor(backgroundColor), parseHexToColor(foregroundColor));
+    public ResponseEntity<byte[]> generateImage(
+            @PathVariable int width,
+            @PathVariable int height,
+            @PathVariable String text,
+            @PathVariable String backgroundColor,
+            @PathVariable String foregroundColor,
+            @RequestParam(required = false, defaultValue = "Arial") String fontName
+            ) throws IOException {
+        return buildImage(width, height, text, parseHexToColor(backgroundColor), parseHexToColor(foregroundColor), fontName);
     }
 
     private Color parseHexToColor(String hex) {
         return new Color(Integer.parseInt(hex, 16));
     }
 
-    private ResponseEntity<byte[]> buildImage(int width, int height, String text, Color backgroundColor, Color foregroundColor) throws IOException {
+    private ResponseEntity<byte[]> buildImage(
+            int width,
+            int height,
+            String text,
+            Color backgroundColor,
+            Color foregroundColor,
+            String fontName
+            ) throws IOException {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, width, height);
         graphics.setColor(foregroundColor);
-        graphics.setFont(new Font("Arial", Font.BOLD, 16));
+        graphics.setFont(new Font(fontName, Font.BOLD, 16));
         FontMetrics fontMetrics = graphics.getFontMetrics();
         int x = (width - fontMetrics.stringWidth(text)) / 2;
         int y = (height - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
