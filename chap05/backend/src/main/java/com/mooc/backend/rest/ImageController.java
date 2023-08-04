@@ -10,6 +10,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +28,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+@Tag(name = "ImageController", description = "图片生成接口")
 @Validated
 @RestController
 @RequestMapping("/api/v1/image")
@@ -75,13 +80,26 @@ public class ImageController {
         }
     }
 
+    @Operation(summary = "生成图片", description = "根据指定的宽度生成图片，默认是正方形")
     @GetMapping("/{width}")
     public ResponseEntity<byte[]> generateImage(
-            @PathVariable @Min(MIN_WIDTH) @Max(MAX_WIDTH) int width,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME) @Pattern(regexp = FONT_NAME_REGEX) String fontName,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE) FontStyle fontStyle,
-            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE
-                    + "") @Min(MIN_FONT_SIZE) @Max(MAX_FONT_SIZE) int fontSize)
+            @Parameter(description = "图片宽度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_WIDTH)
+            @Max(MAX_WIDTH)
+            int width,
+            @Parameter(description = "字体名称，可选值为 Arial、Hei、Courier New", example = "Arial")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME)
+            @Pattern(regexp = FONT_NAME_REGEX)
+            String fontName,
+            @Parameter(description = "字体样式，可选值为 PLAIN、BOLD、ITALIC", example = "PLAIN")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE)
+            FontStyle fontStyle,
+            @Parameter(description = "字体大小，最小值为 12，最大值为 72", example = "12")
+            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE + "")
+            @Min(MIN_FONT_SIZE)
+            @Max(MAX_FONT_SIZE)
+            int fontSize)
             throws IOException {
         return buildImage(width, width, width + "x" + width, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(),
                 fontSize);
