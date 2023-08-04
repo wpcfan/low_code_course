@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +81,29 @@ public class ImageController {
         }
     }
 
-    @Operation(summary = "生成图片", description = "根据指定的宽度生成图片，默认是正方形")
+    @Operation(
+            summary = "根据指定的宽度生成图片",
+            description = "根据指定的宽度生成图片，默认是正方形",
+            responses = {
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "200",
+                        description = "图片生成成功",
+                        content = @io.swagger.v3.oas.annotations.media.Content(
+                                mediaType = MediaType.IMAGE_PNG_VALUE)),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "400",
+                        description = "请求参数错误",
+                        content = @io.swagger.v3.oas.annotations.media.Content(
+                                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                        implementation = ErrorResponse.class))
+                ),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
+            },
+            servers = {
+                @io.swagger.v3.oas.annotations.servers.Server(url = "http://localhost:8080", description = "本地服务器"),
+                @io.swagger.v3.oas.annotations.servers.Server(url = "https://mooc.com", description = "线上服务器")
+            })
     @GetMapping("/{width}")
     public ResponseEntity<byte[]> generateImage(
             @Parameter(description = "图片宽度，最小值为 12，最大值为 1920", example = "200")
@@ -105,58 +128,144 @@ public class ImageController {
                 fontSize);
     }
 
+    @Operation(summary = "根据指定的宽度和高度生成图片", description = "根据指定的宽度和高度生成图片")
     @GetMapping("/{width}/{height}")
     public ResponseEntity<byte[]> generateImage(
-            @PathVariable @Min(MIN_WIDTH) @Max(MAX_WIDTH) int width,
-            @PathVariable @Min(MIN_HEIGHT) @Max(MAX_HEIGHT) int height,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME) @Pattern(regexp = FONT_NAME_REGEX) String fontName,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE) FontStyle fontStyle,
-            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE
-                    + "") @Min(MIN_FONT_SIZE) @Max(MAX_FONT_SIZE) int fontSize)
+            @Parameter(description = "图片宽度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_WIDTH)
+            @Max(MAX_WIDTH)
+            int width,
+            @Parameter(description = "图片高度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_HEIGHT)
+            @Max(MAX_HEIGHT)
+            int height,
+            @Parameter(description = "字体名称，可选值为 Arial、Hei、Courier New", example = "Arial")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME)
+            @Pattern(regexp = FONT_NAME_REGEX)
+            String fontName,
+            @Parameter(description = "字体样式，可选值为 PLAIN、BOLD、ITALIC", example = "PLAIN")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE)
+            FontStyle fontStyle,
+            @Parameter(description = "字体大小，最小值为 12，最大值为 72", example = "12")
+            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE + "")
+            @Min(MIN_FONT_SIZE)
+            @Max(MAX_FONT_SIZE)
+            int fontSize)
             throws IOException {
         return buildImage(width, height, width + "x" + height, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(),
                 fontSize);
     }
 
+    @Operation(summary = "根据指定的宽度、高度和文字生成图片", description = "根据指定的宽度、高度和文字生成图片")
     @GetMapping("/{width}/{height}/{text}")
     public ResponseEntity<byte[]> generateImage(
-            @PathVariable @Min(MIN_WIDTH) @Max(MAX_WIDTH) int width,
-            @PathVariable @Min(MIN_HEIGHT) @Max(MAX_HEIGHT) int height,
-            @PathVariable @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH) String text,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME) @Pattern(regexp = FONT_NAME_REGEX) String fontName,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE) FontStyle fontStyle,
-            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE
-                    + "") @Min(MIN_FONT_SIZE) @Max(MAX_FONT_SIZE) int fontSize)
+            @Parameter(description = "图片宽度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_WIDTH)
+            @Max(MAX_WIDTH)
+            int width,
+            @Parameter(description = "图片高度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_HEIGHT)
+            @Max(MAX_HEIGHT)
+            int height,
+            @Parameter(description = "图片文字，最小长度为 2，最大长度为 10", example = "Hello")
+            @PathVariable
+            @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH)
+            String text,
+            @Parameter(description = "字体名称，可选值为 Arial、Hei、Courier New", example = "Arial")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME)
+            @Pattern(regexp = FONT_NAME_REGEX)
+            String fontName,
+            @Parameter(description = "字体样式，可选值为 PLAIN、BOLD、ITALIC", example = "PLAIN")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE)
+            FontStyle fontStyle,
+            @Parameter(description = "字体大小，最小值为 12，最大值为 72", example = "12")
+            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE + "")
+            @Min(MIN_FONT_SIZE)
+            @Max(MAX_FONT_SIZE)
+            int fontSize)
             throws IOException {
         return buildImage(width, height, text, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(), fontSize);
     }
 
+    @Operation(summary = "根据指定的宽度、高度、文字和背景颜色生成图片", description = "根据指定的宽度、高度、文字和背景颜色生成图片")
     @GetMapping("/{width}/{height}/{text}/{backgroundColor}")
     public ResponseEntity<byte[]> generateImage(
-            @PathVariable @Min(MIN_WIDTH) @Max(MAX_WIDTH) int width,
-            @PathVariable @Min(MIN_HEIGHT) @Max(MAX_HEIGHT) int height,
-            @PathVariable @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH) String text,
-            @PathVariable @Pattern(regexp = HEX_COLOR_REGEX) String backgroundColor,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME) @Pattern(regexp = FONT_NAME_REGEX) String fontName,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE) FontStyle fontStyle,
-            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE
-                    + "") @Min(MIN_FONT_SIZE) @Max(MAX_FONT_SIZE) int fontSize)
+            @Parameter(description = "图片宽度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_WIDTH)
+            @Max(MAX_WIDTH)
+            int width,
+            @Parameter(description = "图片高度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_HEIGHT)
+            @Max(MAX_HEIGHT)
+            int height,
+            @Parameter(description = "图片文字，最小长度为 2，最大长度为 10", example = "Hello")
+            @PathVariable
+            @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH)
+            String text,
+            @Parameter(description = "图片背景颜色，16 进制颜色值，如 FFFFFF，注意字符串前面不需要写 #", example = "FFFFFF")
+            @PathVariable
+            @Pattern(regexp = HEX_COLOR_REGEX)
+            String backgroundColor,
+            @Parameter(description = "字体名称，可选值为 Arial、Hei、Courier New", example = "Arial")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME)
+            @Pattern(regexp = FONT_NAME_REGEX)
+            String fontName,
+            @Parameter(description = "字体样式，可选值为 PLAIN、BOLD、ITALIC", example = "PLAIN")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE)
+            FontStyle fontStyle,
+            @Parameter(description = "字体大小，最小值为 12，最大值为 72", example = "12")
+            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE + "")
+            @Min(MIN_FONT_SIZE)
+            @Max(MAX_FONT_SIZE)
+            int fontSize)
             throws IOException {
         return buildImage(width, height, text, parseHexToColor(backgroundColor), parseHexToColor(DEFAULT_TEXT_COLOR), fontName,
                 fontStyle.getValue(), fontSize);
     }
 
+    @Operation(summary = "根据指定的宽度、高度、文字、背景颜色和文字颜色生成图片", description = "根据指定的宽度、高度、文字、背景颜色和文字颜色生成图片")
     @GetMapping("/{width}/{height}/{text}/{backgroundColor}/{textColor}")
     public ResponseEntity<byte[]> generateImage(
-            @PathVariable @Min(MIN_WIDTH) @Max(MAX_WIDTH) int width,
-            @PathVariable @Min(MIN_HEIGHT) @Max(MAX_HEIGHT) int height,
-            @PathVariable @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH) String text,
-            @PathVariable @Pattern(regexp = HEX_COLOR_REGEX) String backgroundColor,
-            @PathVariable @Pattern(regexp = HEX_COLOR_REGEX) String textColor,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME) @Pattern(regexp = FONT_NAME_REGEX) String fontName,
-            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE) FontStyle fontStyle,
-            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE
-                    + "") @Min(MIN_FONT_SIZE) @Max(MAX_FONT_SIZE) int fontSize)
+            @Parameter(description = "图片宽度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_WIDTH)
+            @Max(MAX_WIDTH)
+            int width,
+            @Parameter(description = "图片高度，最小值为 12，最大值为 1920", example = "200")
+            @PathVariable
+            @Min(MIN_HEIGHT)
+            @Max(MAX_HEIGHT)
+            int height,
+            @Parameter(description = "图片文字，最小长度为 2，最大长度为 10", example = "Hello")
+            @PathVariable
+            @Size(min = MIN_TEXT_LENGTH, max = MAX_TEXT_LENGTH)
+            String text,
+            @Parameter(description = "图片背景颜色，16 进制颜色值，如 FFFFFF，注意字符串前面不需要写 #", example = "FFFFFF")
+            @PathVariable
+            @Pattern(regexp = HEX_COLOR_REGEX)
+            String backgroundColor,
+            @Parameter(description = "图片文字颜色，16 进制颜色值，如 FFFFFF，注意字符串前面不需要写 #", example = "FFFFFF")
+            @PathVariable
+            @Pattern(regexp = HEX_COLOR_REGEX)
+            String textColor,
+            @Parameter(description = "字体名称，可选值为 Arial、Hei、Courier New", example = "Arial")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_NAME)
+            @Pattern(regexp = FONT_NAME_REGEX)
+            String fontName,
+            @Parameter(description = "字体样式，可选值为 PLAIN、BOLD、ITALIC", example = "PLAIN")
+            @RequestParam(required = false, defaultValue = DEFAULT_FONT_STYLE)
+            FontStyle fontStyle,
+            @Parameter(description = "字体大小，最小值为 12，最大值为 72", example = "12")
+            @RequestParam(required = false, defaultValue = MIN_FONT_SIZE  + "")
+            @Min(MIN_FONT_SIZE)
+            @Max(MAX_FONT_SIZE)
+            int fontSize)
             throws IOException {
         return buildImage(width, height, text, parseHexToColor(backgroundColor), parseHexToColor(textColor),
                 fontName, fontStyle.getValue(), fontSize);
