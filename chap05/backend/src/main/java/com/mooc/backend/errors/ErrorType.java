@@ -1,7 +1,7 @@
 package com.mooc.backend.errors;
 
 public enum ErrorType {
-    ConstraintViolationException(40001),
+    FileUploadToQiniuException(40001),
     MethodArgumentTypeMismatchException(40002),
     CustomException(40003),
     ;
