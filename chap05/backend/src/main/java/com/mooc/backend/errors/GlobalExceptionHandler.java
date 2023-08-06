@@ -66,6 +66,23 @@ public class GlobalExceptionHandler {
         return body;
     }
 
+    @ExceptionHandler(CustomException.class)
+    public ProblemDetail handleCustomException(
+            CustomException e,
+            WebRequest request
+    ) {
+        ProblemDetail body = ProblemDetail
+                .forStatusAndDetail(HttpStatusCode.valueOf(500), e.getMessage());
+        body.setType(URI.create(hostname + "/errors/custom-exception"));
+        body.setTitle(e.getMessage());
+        body.setDetail(e.getDetail());
+        body.setProperty("code", e.getCode().getValue());
+        body.setProperty("hostname", hostname);
+        body.setProperty("user-agent", request.getHeader("User-Agent"));
+        body.setProperty("locale", request.getLocale().toString());
+        return body;
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleException(
             Exception e,

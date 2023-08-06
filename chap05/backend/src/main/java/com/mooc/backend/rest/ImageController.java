@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.mooc.backend.errors.CustomException;
+import com.mooc.backend.errors.ErrorType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -124,8 +126,9 @@ public class ImageController {
             @Max(MAX_FONT_SIZE)
             int fontSize)
             throws IOException {
-        return buildImage(width, width, width + "x" + width, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(),
-                fontSize);
+        throw new CustomException("自定义异常", "自定义异常", ErrorType.CustomException);
+//        return buildImage(width, width, width + "x" + width, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(),
+//                fontSize);
     }
 
     @Operation(summary = "根据指定的宽度和高度生成图片", description = "根据指定的宽度和高度生成图片")
