@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     /**
+     * 用于处理 ConstraintViolationException 异常
      * ProblemDetail 是遵循 RFC7807 规范的错误响应体
      *
-     * @param e
-     * @return
+     * @param e ConstraintViolationException 是 Jakarta Validation 的异常
+     * @return ProblemDetail
      */
     @ExceptionHandler
     public ProblemDetail handleConstraintViolationException(ConstraintViolationException e) {
