@@ -1,4 +1,4 @@
-package com.mooc.backend.rest;
+package com.mooc.backend.rest.app;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -34,7 +34,7 @@ import jakarta.validation.constraints.Size;
 @Tag(name = "ImageController", description = "图片生成接口")
 @Validated
 @RestController
-@RequestMapping("/api/v1/image")
+@RequestMapping("/api/v1/app/image")
 public class ImageController {
 
     private final static String FONT_NAME_REGEX = "(?i)^(Arial|Hei|Courier New)$";
@@ -126,9 +126,8 @@ public class ImageController {
             @Max(MAX_FONT_SIZE)
             int fontSize)
             throws IOException {
-        throw new CustomException("自定义异常", "自定义异常", ErrorType.CustomException);
-//        return buildImage(width, width, width + "x" + width, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(),
-//                fontSize);
+        return buildImage(width, width, width + "x" + width, parseHexToColor(DEFAULT_BACKGROUND_COLOR), parseHexToColor(DEFAULT_TEXT_COLOR), fontName, fontStyle.getValue(),
+                fontSize);
     }
 
     @Operation(summary = "根据指定的宽度和高度生成图片", description = "根据指定的宽度和高度生成图片")
