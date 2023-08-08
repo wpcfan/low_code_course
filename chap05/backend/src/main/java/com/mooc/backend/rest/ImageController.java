@@ -94,7 +94,9 @@ public class ImageController {
                         responseCode = "400",
                         description = "请求参数错误",
                         content = @io.swagger.v3.oas.annotations.media.Content(
-                                mediaType = MediaType.TEXT_PLAIN_VALUE)
+                                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                        implementation = ErrorResponse.class))
                 ),
                 @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
             },
