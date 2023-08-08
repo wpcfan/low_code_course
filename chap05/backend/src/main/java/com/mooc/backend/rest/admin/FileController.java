@@ -4,6 +4,7 @@ import com.mooc.backend.config.QiniuProperties;
 import com.mooc.backend.services.QiniuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -30,6 +31,28 @@ public class FileController {
     public record FileVM(String key, String url) {}
 
     @Operation(summary = "上传一个文件")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "上传成功",
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = FileVM.class),
+                            examples = {
+                                    @io.swagger.v3.oas.annotations.media.ExampleObject(
+                                            name = "上传成功示例",
+                                            value = """
+                                            {
+                                                "key": "123.png",
+                                                "url": "https://mooc.com/123.png"
+                                            }
+                                            """
+                                    )
+                            }
+                    )
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "上传失败")
+    })
     @PostMapping(value = "/file", consumes = "multipart/form-data")
     public FileVM upload(
             @Parameter(description = "文件", required = true)
