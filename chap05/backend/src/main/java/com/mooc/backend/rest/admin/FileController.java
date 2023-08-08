@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ProblemDetail;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,7 +52,28 @@ public class FileController {
                             }
                     )
             ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "上传失败")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "400",
+                    description = "上传失败",
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ProblemDetail.class),
+                            examples = {
+                                    @io.swagger.v3.oas.annotations.media.ExampleObject(
+                                            name = "上传失败示例",
+                                            value = """
+                                            {
+                                                "status": 400,
+                                                "title": "上传文件失败",
+                                                "detail": "上传文件失败",
+                                                "timestamp": "2021-07-01T09:00:00.000+00:00",
+                                                "fieldErrors": []
+                                            }
+                                            """
+                                    )
+                            }
+                    )
+            ),
     })
     @PostMapping(value = "/file", consumes = "multipart/form-data")
     public FileVM upload(
