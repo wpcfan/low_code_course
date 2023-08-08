@@ -35,7 +35,7 @@ import jakarta.validation.constraints.Size;
 @RequestMapping("/api/v1/image")
 public class ImageController {
 
-    private final static String FONT_NAME_REGEX = "(?i)^(Arial|Hei|Courier New)$";
+    private final static String FONT_NAME_REGEX = "^(Arial|Hei|Courier New)$";
     private final static String DEFAULT_FONT_NAME = "Arial";
     private final static String HEX_COLOR_REGEX = "^[0-9a-fA-F]{6}$";
     private final static int MAX_WIDTH = 1920;
@@ -94,9 +94,7 @@ public class ImageController {
                         responseCode = "400",
                         description = "请求参数错误",
                         content = @io.swagger.v3.oas.annotations.media.Content(
-                                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                schema = @io.swagger.v3.oas.annotations.media.Schema(
-                                        implementation = ErrorResponse.class))
+                                mediaType = MediaType.TEXT_PLAIN_VALUE)
                 ),
                 @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
             },
