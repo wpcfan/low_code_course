@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'constants.dart';
+import 'custom_exception_interceptor.dart';
 
 class FileUploadClient with DioMixin implements Dio {
   static final FileUploadClient _singleton = FileUploadClient._();
@@ -16,6 +17,7 @@ class FileUploadClient with DioMixin implements Dio {
         'Accept': 'application/json',
       }),
     );
+    interceptors.add(CustomExceptionInterceptor());
     interceptors.add(PrettyDioLogger());
     httpClientAdapter = HttpClientAdapter();
   }

@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:networking/constants.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import 'custom_exception_interceptor.dart';
+
 /// 自定义的 Dio 实例，用于访问 APP 接口
 /// 该实例会自动添加日志拦截器, 缓存拦截器和错误拦截器
 /// 该实例会自动添加 Content-Type 和 Accept 头
@@ -23,6 +25,7 @@ class AppClient with DioMixin implements Dio {
         'Accept': 'application/json',
       }),
     );
+    interceptors.add(CustomExceptionInterceptor());
     interceptors.add(PrettyDioLogger());
     httpClientAdapter = HttpClientAdapter();
   }
