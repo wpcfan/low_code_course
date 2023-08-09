@@ -11,7 +11,7 @@ class AdminClient with DioMixin implements Dio {
 
   AdminClient._() {
     options = BaseOptions(
-      baseUrl: '${Constants.lowCodeBaseUrl}/app',
+      baseUrl: '${Constants.lowCodeBaseUrl}/admin',
       headers: Map.from({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
