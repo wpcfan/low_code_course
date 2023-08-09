@@ -63,4 +63,15 @@ public class QiniuService {
             throw new CustomException("删除文件失败", e.getMessage(), ErrorType.QiniuFileDeleteException);
         }
     }
+
+    public void delete(List<String> keys) {
+        try {
+            var bucket = properties.getBucket();
+            var ops = new BucketManager.BatchOperations();
+            ops.addDeleteOp(bucket, keys.toArray(new String[0]));
+            bucketManager.batch(ops);
+        } catch (Exception e) {
+            throw new CustomException("删除文件失败", e.getMessage(), ErrorType.QiniuFileDeleteException);
+        }
+    }
 }

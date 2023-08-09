@@ -1,6 +1,8 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.config.QiniuProperties;
+import com.mooc.backend.errors.CustomException;
+import com.mooc.backend.errors.ErrorType;
 import com.mooc.backend.services.QiniuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * 文件管理
@@ -78,11 +81,25 @@ public class FileController {
     @PostMapping(value = "/file", consumes = "multipart/form-data")
     public FileVM upload(
             @Parameter(description = "文件", required = true)
-            @RequestParam
-            MultipartFile file) throws IOException {
+            @RequestPart
+            MultipartFile file) {
         var key = buildFileKey(file.getOriginalFilename());
-        var json = qiniuService.upload(file.getBytes(), key);
-        return new FileVM(json.key, properties.getDomain() + "/" + json.key);
+        try {
+            var json = qiniuService.upload(file.getBytes(), key);
+            return new FileVM(json.key, properties.getDomain() + "/" + json.key);
+        } catch (IOException e) {
+            throw new CustomException("文件上传失败", e.getMessage(), ErrorType.FileUploadIOException);
+        }
+    }
+
+    @Operation(summary = "批量上传文件")
+    @PostMapping(value = "/files", consumes = "multipart/form-data")
+    public List<FileVM> upload(
+            @RequestPart
+            MultipartFile[] files) {
+        return Stream.of(files)
+                .map(this::upload)
+                .toList();
     }
 
     @Operation(summary = "文件列表")
@@ -108,6 +125,16 @@ public class FileController {
             @PathVariable
             String key) {
         qiniuService.delete(key);
+    }
+
+    @Operation(summary = "批量删除文件")
+    @PostMapping("/files/batch-delete")
+    public void delete(
+            @Parameter(description = "文件的唯一标识列表")
+            @RequestBody
+            List<String> keys) {
+        // Http 对于 query 类型的查询是有长度限制的，所以这里使用 post 请求
+        qiniuService.delete(keys);
     }
 
     private static String buildFileKey(String fileName) {
