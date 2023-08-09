@@ -17,7 +17,7 @@ class AppClient with DioMixin implements Dio {
 
   AppClient._() {
     options = BaseOptions(
-      baseUrl: Constants.lowCodeBaseUrl,
+      baseUrl: '${Constants.lowCodeBaseUrl}/app',
       headers: Map.from({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
