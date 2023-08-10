@@ -59,9 +59,9 @@ class ImageExplorer extends StatelessWidget {
     );
 
     return [
-      titleWidget.expanded(),
+      titleWidget,
       gridWidget.expanded(),
-      bottomWidget.expanded(),
+      bottomWidget,
     ].toColumn();
   }
 }
