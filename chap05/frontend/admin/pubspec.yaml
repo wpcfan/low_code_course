@@ -46,6 +46,8 @@ dependencies:
     path: ../canvas
   pages:
     path: ../pages
+  files:
+    path: ../files
 
 dev_dependencies:
   flutter_test:
