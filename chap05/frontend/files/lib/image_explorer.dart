@@ -14,6 +14,7 @@ class ImageExplorer extends StatelessWidget {
     // 如果设置为缩略图不可选择，那么点击任何一张图片，会触发一个事件，将当前图片的路径传递给外部
     final titleWidget = [
       const Text('图片浏览器'),
+      const Spacer(),
       Checkbox(
         value: false,
         onChanged: (value) {},
@@ -25,14 +26,15 @@ class ImageExplorer extends StatelessWidget {
       Image.network(
         'http://localhost:8080/api/v1/app/image/200',
         fit: BoxFit.cover,
-      ),
+      ).expanded(),
       const Text('图片1'),
     ].toColumn();
 
     final gridWidget = GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.8,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 230,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
       ),
       itemBuilder: (context, index) {
         return thumbnailWidget;
@@ -52,7 +54,9 @@ class ImageExplorer extends StatelessWidget {
         onPressed: () {},
         child: const Text('取消'),
       ),
-    ].toRow();
+    ].toRow(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    );
 
     return [
       titleWidget.expanded(),
