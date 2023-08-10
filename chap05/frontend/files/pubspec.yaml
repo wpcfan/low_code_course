@@ -17,12 +17,14 @@ dependencies:
   # 对象比较
   equatable: ^2.0.5
   # 图片选择器
-  image_picker: ^0.8.7+4
-  image_picker_for_web: ^2.1.12
+  image_picker: ^1.0.2
+  image_picker_for_web: ^3.0.0
   nested: ^1.0.0
 
   common:
     path: ../common
+  models:
+    path: ../models
   repositories:
     path: ../repositories
 
@@ -30,6 +32,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  mocktail: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

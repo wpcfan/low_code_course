@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
+import 'package:networking/networking.dart';
 
 class FileUploadRepository {
   final Dio client;
 
-  FileUploadRepository({Dio? client}) : client = client ?? Dio();
+  FileUploadRepository({Dio? client}) : client = client ?? FileUploadClient();
 
   Future<FileVM> uploadFile(UploadFile file) async {
     final formData = FormData.fromMap({

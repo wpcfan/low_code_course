@@ -89,7 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: const ImageExplorer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () async {
+          await showDialog(
+            context: context,
+            builder: (context) => const ImageExplorerDialog(),
+          );
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
