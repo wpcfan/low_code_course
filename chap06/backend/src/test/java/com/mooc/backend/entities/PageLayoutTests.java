@@ -3,20 +3,29 @@ package com.mooc.backend.entities;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@TestPropertySource(
+    properties = {
+        "hostname=localhost"
+    }
+)
+@SpringBootTest
 public class PageLayoutTests {
 
     @Autowired
-    private TestEntityManager entityManager;
+    private EntityManager entityManager;
 
+    @Transactional
     @Test
     public void givenPageLayout_whenPersist_thenGetIsOk() {
         PageLayout pageLayout = new PageLayout();
@@ -28,6 +37,8 @@ public class PageLayoutTests {
         entityManager.flush();
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
+        assertNotNull(found.getCreatedAt());
+        assertNotNull(found.getUpdatedAt());
 
         PageLayout pageLayout1 = new PageLayout();
         pageLayout.setConfig(new PageConfig());
