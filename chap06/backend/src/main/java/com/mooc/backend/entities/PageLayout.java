@@ -41,7 +41,7 @@ public class PageLayout {
     @Column(name = "page_type", nullable = false, length = 20)
     private PageType pageType = PageType.Home;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private Platform platform = Platform.APP;
 }
