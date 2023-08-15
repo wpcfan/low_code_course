@@ -7,9 +7,7 @@ import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -43,7 +41,7 @@ public class PageLayout {
     @Column(name = "page_type", nullable = false, length = 20)
     private PageType pageType = PageType.Home;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private Platform platform = Platform.APP;
 }
