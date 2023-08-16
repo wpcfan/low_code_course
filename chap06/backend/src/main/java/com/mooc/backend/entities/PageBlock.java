@@ -28,4 +28,9 @@ public class PageBlock {
     @Column(nullable = false, columnDefinition = "json")
     @ToString.Exclude
     private BlockConfig config;
+
+    @ManyToOne
+    @JoinColumn(name = "page_layout_id")
+    private PageLayout pageLayout;
+
 }

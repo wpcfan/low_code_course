@@ -10,6 +10,8 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,4 +41,8 @@ public class PageLayout extends Auditable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Platform platform = Platform.APP;
+
+    @OneToMany(mappedBy = "pageLayout", orphanRemoval = true)
+    private Set<PageBlock> pageBlocks = new LinkedHashSet<>();
+
 }

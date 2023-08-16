@@ -1,20 +1,18 @@
 package com.mooc.backend.entities;
 
+import com.mooc.backend.enumerations.BlockType;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ActiveProfiles("test")
 @DataJpaTest
@@ -43,5 +41,35 @@ public class PageLayoutTests {
         pageLayout1.setStatus(PageStatus.ARCHIVED);
 
         assertNotEquals(found, pageLayout1);
+    }
+
+    @Transactional
+    @Test
+    public void givenPageLayoutAndPageBlocks_whenPersist_thenGetIsOk() {
+        PageLayout pageLayout = new PageLayout();
+        pageLayout.setConfig(new PageConfig());
+        pageLayout.setPageType(PageType.Home);
+        pageLayout.setPlatform(Platform.APP);
+        pageLayout.setStatus(PageStatus.DRAFT);
+
+        PageBlock pageBlock1 = new PageBlock();
+        pageBlock1.setType(BlockType.Banner);
+        pageBlock1.setConfig(new BlockConfig());
+        pageBlock1.setPageLayout(pageLayout);
+        pageLayout.getPageBlocks().add(pageBlock1);
+
+        PageBlock pageBlock2 = new PageBlock();
+        pageBlock2.setType(BlockType.ImageRow);
+        pageBlock2.setConfig(new BlockConfig());
+        pageBlock2.setPageLayout(pageLayout);
+        pageLayout.getPageBlocks().add(pageBlock2);
+
+        entityManager.persist(pageLayout);
+        entityManager.flush();
+        PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
+        assertEquals(pageLayout, found);
+        assertEquals(2, found.getPageBlocks().size());
+        assertEquals(pageBlock1, found.getPageBlocks().stream().findFirst().get());
+        assertEquals(pageBlock2, found.getPageBlocks().stream().skip(1).findFirst().get());
     }
 }
