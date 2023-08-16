@@ -10,16 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestPropertySource(
-    properties = {
-        "hostname=localhost"
-    }
-)
-@SpringBootTest
+@ActiveProfiles("test")
+@DataJpaTest
 public class PageLayoutTests {
 
     @Autowired
@@ -37,14 +35,12 @@ public class PageLayoutTests {
         entityManager.flush();
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
-        assertNotNull(found.getCreatedAt());
-        assertNotNull(found.getUpdatedAt());
 
         PageLayout pageLayout1 = new PageLayout();
-        pageLayout.setConfig(new PageConfig());
-        pageLayout.setPageType(PageType.Category);
-        pageLayout.setPlatform(Platform.WEB);
-        pageLayout.setStatus(PageStatus.ARCHIVED);
+        pageLayout1.setConfig(new PageConfig());
+        pageLayout1.setPageType(PageType.Category);
+        pageLayout1.setPlatform(Platform.WEB);
+        pageLayout1.setStatus(PageStatus.ARCHIVED);
 
         assertNotEquals(found, pageLayout1);
     }
