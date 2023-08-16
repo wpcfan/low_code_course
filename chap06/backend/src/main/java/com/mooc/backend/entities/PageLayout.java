@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "page_layout")
+@Table(name = "mooc_page_layouts")
 public class PageLayout extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
