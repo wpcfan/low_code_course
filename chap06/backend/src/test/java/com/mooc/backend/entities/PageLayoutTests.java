@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PageLayoutTests {
 
     @Autowired
-    private EntityManager entityManager;
+    private TestEntityManager entityManager;
 
     @Transactional
     @Test
