@@ -51,7 +51,7 @@ public class PageLayoutAdminController {
 
     @Operation(summary = "更新页面布局")
     @PutMapping("/{id}")
-    public PageLayoutAdminVM updatePageLayout(@PathVariable Long id, @RequestBody CreateOrUpdatePageLayoutVM pageLayoutVM) {
+    public PageLayoutAdminVM updatePageLayout(@PathVariable Long id, @RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
         PageLayout oldPageLayout = pageLayoutService.getPageLayout(id);
         oldPageLayout.setTitle(pageLayoutVM.title());
         oldPageLayout.setConfig(pageLayoutVM.config());
