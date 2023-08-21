@@ -1,5 +1,6 @@
 package com.mooc.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mooc.backend.enumerations.BlockType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
@@ -36,6 +37,7 @@ public class PageBlock implements Comparable<PageBlock> {
 
     @ManyToOne
     @JoinColumn(name = "page_layout_id")
+    @JsonIgnore
     private PageLayout pageLayout;
 
     @OneToMany(mappedBy = "pageBlock", orphanRemoval = true, cascade = {CascadeType.ALL})

@@ -16,11 +16,18 @@ public class PageLayoutService {
         return pageLayoutRepository.findById(id).orElseThrow();
     }
 
+
     public List<PageLayout> getPageLayouts() {
         return pageLayoutRepository.findAll();
     }
 
     public PageLayout savePageLayout(PageLayout pageLayout) {
+        pageLayout.getPageBlocks().forEach(pageBlock -> {
+            pageBlock.setPageLayout(pageLayout);
+            pageBlock.getData().forEach(pageBlockItem -> {
+                pageBlockItem.setPageBlock(pageBlock);
+            });
+        });
         return pageLayoutRepository.save(pageLayout);
     }
 
