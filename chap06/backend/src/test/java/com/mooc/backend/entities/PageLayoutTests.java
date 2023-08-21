@@ -72,4 +72,35 @@ public class PageLayoutTests {
         assertEquals(pageBlock1, found.getPageBlocks().stream().findFirst().get());
         assertEquals(pageBlock2, found.getPageBlocks().stream().skip(1).findFirst().get());
     }
+
+    @Test
+    public void givenPageBlocksWithDifferentSort_whenPersist_thenGetIsOk() {
+        PageLayout pageLayout = new PageLayout();
+        pageLayout.setConfig(new PageConfig());
+        pageLayout.setPageType(PageType.Home);
+        pageLayout.setPlatform(Platform.APP);
+        pageLayout.setStatus(PageStatus.DRAFT);
+
+        PageBlock pageBlock1 = new PageBlock();
+        pageBlock1.setType(BlockType.Banner);
+        pageBlock1.setConfig(new BlockConfig());
+        pageBlock1.setSort(2);
+        pageBlock1.setPageLayout(pageLayout);
+        pageLayout.addPageBlock(pageBlock1);
+
+        PageBlock pageBlock2 = new PageBlock();
+        pageBlock2.setType(BlockType.ImageRow);
+        pageBlock2.setConfig(new BlockConfig());
+        pageBlock2.setSort(1);
+        pageBlock2.setPageLayout(pageLayout);
+        pageLayout.addPageBlock(pageBlock2);
+
+        entityManager.persist(pageLayout);
+        entityManager.flush();
+        PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
+        assertEquals(pageLayout, found);
+        assertEquals(2, found.getPageBlocks().size());
+        assertEquals(pageBlock2, found.getPageBlocks().stream().findFirst().get());
+        assertEquals(pageBlock1, found.getPageBlocks().stream().skip(1).findFirst().get());
+    }
 }

@@ -9,7 +9,7 @@ import org.hibernate.annotations.Type;
 @Getter
 @Setter
 @Entity
-public class PageBlockData {
+public class PageBlockData implements Comparable<PageBlockData> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +25,8 @@ public class PageBlockData {
     @JoinColumn(name = "page_block_id")
     private PageBlock pageBlock;
 
+    @Override
+    public int compareTo(PageBlockData o) {
+        return this.sort.compareTo(o.sort);
+    }
 }

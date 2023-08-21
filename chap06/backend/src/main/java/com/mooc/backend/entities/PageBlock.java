@@ -8,14 +8,14 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "mooc_page_blocks")
-public class PageBlock {
+public class PageBlock implements Comparable<PageBlock> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,10 +37,15 @@ public class PageBlock {
     private PageLayout pageLayout;
 
     @OneToMany(mappedBy = "pageBlock", orphanRemoval = true)
-    private Set<PageBlockData> data = new LinkedHashSet<>();
+    private SortedSet<PageBlockData> data = new TreeSet<>();
 
     public void addData(PageBlockData pageBlockData) {
         data.add(pageBlockData);
         pageBlockData.setPageBlock(this);
+    }
+
+    @Override
+    public int compareTo(PageBlock o) {
+        return this.sort.compareTo(o.sort);
     }
 }
