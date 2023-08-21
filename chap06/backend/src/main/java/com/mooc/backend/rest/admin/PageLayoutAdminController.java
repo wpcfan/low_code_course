@@ -5,6 +5,7 @@ import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
 import com.mooc.backend.rest.vm.PageLayoutAdminVM;
 import com.mooc.backend.services.PageLayoutService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PageLayoutAdminController {
     private final PageLayoutService pageLayoutService;
 
+    @Operation(summary = "获取页面布局列表")
     @GetMapping("/")
     public List<PageLayoutAdminVM> getPageLayouts() {
         return pageLayoutService.getPageLayouts()
@@ -29,11 +31,13 @@ public class PageLayoutAdminController {
                 .toList();
     }
 
+    @Operation(summary = "根据 ID 获取页面布局")
     @GetMapping("/{id}")
     public PageLayoutAdminVM getPageLayout(@PathVariable Long id) {
         return PageLayoutAdminVM.toVM(pageLayoutService.getPageLayout(id));
     }
 
+    @Operation(summary = "添加页面布局")
     @PostMapping("/")
     public PageLayoutAdminVM addPageLayout(@RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
         PageLayout pageLayout = new PageLayout();
@@ -45,6 +49,7 @@ public class PageLayoutAdminController {
         return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(pageLayout));
     }
 
+    @Operation(summary = "更新页面布局")
     @PutMapping("/{id}")
     public PageLayoutAdminVM updatePageLayout(@PathVariable Long id, @RequestBody CreateOrUpdatePageLayoutVM pageLayoutVM) {
         PageLayout oldPageLayout = pageLayoutService.getPageLayout(id);
@@ -55,6 +60,7 @@ public class PageLayoutAdminController {
         return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(oldPageLayout));
     }
 
+    @Operation(summary = "删除页面布局")
     @DeleteMapping("/{id}")
     public void deletePageLayout(@PathVariable Long id) {
         pageLayoutService.deletePageLayout(id);
