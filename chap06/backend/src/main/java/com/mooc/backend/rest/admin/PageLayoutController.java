@@ -1,6 +1,7 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.rest.vm.PageLayoutAdminVM;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,16 @@ public class PageLayoutController {
     private final PageLayoutService pageLayoutService;
 
     @GetMapping("/")
-    public List<PageLayout> getPageLayouts() {
-        return pageLayoutService.getPageLayouts();
+    public List<PageLayoutAdminVM> getPageLayouts() {
+        return pageLayoutService.getPageLayouts()
+                .stream()
+                .map(PageLayoutAdminVM::toVM)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public PageLayout getPageLayout(@PathVariable Long id) {
-        return pageLayoutService.getPageLayout(id);
+    public PageLayoutAdminVM getPageLayout(@PathVariable Long id) {
+        return PageLayoutAdminVM.toVM(pageLayoutService.getPageLayout(id));
     }
 
     @PostMapping("/")
