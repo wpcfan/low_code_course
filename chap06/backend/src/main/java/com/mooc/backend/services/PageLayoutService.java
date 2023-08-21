@@ -22,12 +22,6 @@ public class PageLayoutService {
     }
 
     public PageLayout savePageLayout(PageLayout pageLayout) {
-        pageLayout.getPageBlocks().forEach(pageBlock -> {
-            pageBlock.setPageLayout(pageLayout);
-            pageBlock.getData().forEach(pageBlockItem -> {
-                pageBlockItem.setPageBlock(pageBlock);
-            });
-        });
         return pageLayoutRepository.save(pageLayout);
     }
 

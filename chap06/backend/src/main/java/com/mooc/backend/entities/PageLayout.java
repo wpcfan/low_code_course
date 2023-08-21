@@ -64,7 +64,7 @@ public class PageLayout extends Auditable {
      * orphanRemoval = true 是指删除父对象的时候，同时删除子对象，而且子对象也会从数据库中删除。
      * <p>
      */
-    @OneToMany(mappedBy = "pageLayout", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToMany(mappedBy = "pageLayout", orphanRemoval = true, cascade = {CascadeType.REMOVE})
     private SortedSet<PageBlock> pageBlocks = new TreeSet<>();
 
     public void addPageBlock(PageBlock pageBlock) {

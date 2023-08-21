@@ -1,6 +1,8 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.PageStatus;
+import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
 import com.mooc.backend.rest.vm.PageLayoutAdminVM;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admin/layouts")
 @RequiredArgsConstructor
-public class PageLayoutController {
+public class PageLayoutAdminController {
     private final PageLayoutService pageLayoutService;
 
     @GetMapping("/")
@@ -30,14 +32,24 @@ public class PageLayoutController {
     }
 
     @PostMapping("/")
-    public PageLayout addPageLayout(@RequestBody PageLayout pageLayout) {
-        return pageLayoutService.savePageLayout(pageLayout);
+    public PageLayoutAdminVM addPageLayout(@RequestBody CreateOrUpdatePageLayoutVM pageLayoutVM) {
+        PageLayout pageLayout = new PageLayout();
+        pageLayout.setTitle(pageLayoutVM.title());
+        pageLayout.setConfig(pageLayoutVM.config());
+        pageLayout.setStatus(PageStatus.DRAFT);
+        pageLayout.setPageType(pageLayoutVM.pageType());
+        pageLayout.setPlatform(pageLayoutVM.platform());
+        return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(pageLayout));
     }
 
     @PutMapping("/{id}")
-    public PageLayout updatePageLayout(@PathVariable Long id, @RequestBody PageLayout pageLayout) {
-        pageLayout.setId(id);
-        return pageLayoutService.savePageLayout(pageLayout);
+    public PageLayoutAdminVM updatePageLayout(@PathVariable Long id, @RequestBody CreateOrUpdatePageLayoutVM pageLayoutVM) {
+        PageLayout oldPageLayout = pageLayoutService.getPageLayout(id);
+        oldPageLayout.setTitle(pageLayoutVM.title());
+        oldPageLayout.setConfig(pageLayoutVM.config());
+        oldPageLayout.setPageType(pageLayoutVM.pageType());
+        oldPageLayout.setPlatform(pageLayoutVM.platform());
+        return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(oldPageLayout));
     }
 
     @DeleteMapping("/{id}")
