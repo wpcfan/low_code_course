@@ -45,4 +45,8 @@ public class PageLayout extends Auditable {
     @OneToMany(mappedBy = "pageLayout", orphanRemoval = true)
     private Set<PageBlock> pageBlocks = new LinkedHashSet<>();
 
+    public void addPageBlock(PageBlock pageBlock) {
+        pageBlocks.add(pageBlock);
+        pageBlock.setPageLayout(this);
+    }
 }

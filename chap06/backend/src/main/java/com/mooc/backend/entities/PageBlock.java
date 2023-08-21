@@ -39,4 +39,8 @@ public class PageBlock {
     @OneToMany(mappedBy = "pageBlock", orphanRemoval = true)
     private Set<PageBlockData> data = new LinkedHashSet<>();
 
+    public void addData(PageBlockData pageBlockData) {
+        data.add(pageBlockData);
+        pageBlockData.setPageBlock(this);
+    }
 }

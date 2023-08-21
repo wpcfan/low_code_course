@@ -1,6 +1,7 @@
 package com.mooc.backend.entities;
 
 import com.mooc.backend.enumerations.BlockType;
+import com.mooc.backend.enumerations.ImageLinkType;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,17 @@ public class PageBlockTests {
         PageBlock pageBlock = new PageBlock();
         pageBlock.setType(BlockType.Banner);
         pageBlock.setConfig(new BlockConfig());
+        pageBlock.setSort(1);
+        ImageData imageData = new ImageData("http://localhost:8080/1.png", new ImageLink(ImageLinkType.Url, "http://localhost:8080/1/target"), "title");
+        PageBlockData pageBlockData = new PageBlockData();
+        pageBlockData.setContent(imageData);
+        pageBlockData.setSort(1);
+        pageBlock.addData(pageBlockData);
         entityManager.persist(pageBlock);
         entityManager.flush();
         PageBlock found = entityManager.find(PageBlock.class, pageBlock.getId());
         assertEquals(pageBlock, found);
+        assertEquals(pageBlockData, found.getData().stream().findFirst().get());
+        assertEquals(imageData, found.getData().stream().findFirst().get().getContent());
     }
 }

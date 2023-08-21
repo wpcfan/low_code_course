@@ -56,13 +56,13 @@ public class PageLayoutTests {
         pageBlock1.setType(BlockType.Banner);
         pageBlock1.setConfig(new BlockConfig());
         pageBlock1.setPageLayout(pageLayout);
-        pageLayout.getPageBlocks().add(pageBlock1);
+        pageLayout.addPageBlock(pageBlock1);
 
         PageBlock pageBlock2 = new PageBlock();
         pageBlock2.setType(BlockType.ImageRow);
         pageBlock2.setConfig(new BlockConfig());
         pageBlock2.setPageLayout(pageLayout);
-        pageLayout.getPageBlocks().add(pageBlock2);
+        pageLayout.addPageBlock(pageBlock2);
 
         entityManager.persist(pageLayout);
         entityManager.flush();
