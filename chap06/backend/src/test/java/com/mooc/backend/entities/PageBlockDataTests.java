@@ -23,6 +23,7 @@ public class PageBlockDataTests {
         pageBlockData.setSort(1);
         entityManager.persist(pageBlockData);
         entityManager.flush();
+        entityManager.clear();
         PageBlockData found = entityManager.find(PageBlockData.class, pageBlockData.getId());
         assertEquals(pageBlockData, found);
         assertEquals(data, found.getContent());

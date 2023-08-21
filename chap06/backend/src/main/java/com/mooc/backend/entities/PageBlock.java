@@ -38,7 +38,7 @@ public class PageBlock implements Comparable<PageBlock> {
     @JoinColumn(name = "page_layout_id")
     private PageLayout pageLayout;
 
-    @OneToMany(mappedBy = "pageBlock", orphanRemoval = true)
+    @OneToMany(mappedBy = "pageBlock", orphanRemoval = true, cascade = {CascadeType.ALL})
     private SortedSet<PageBlockData> data = new TreeSet<>();
 
     public void addData(PageBlockData pageBlockData) {

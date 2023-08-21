@@ -31,6 +31,7 @@ public class PageLayoutTests {
         pageLayout.setStatus(PageStatus.DRAFT);
         entityManager.persist(pageLayout);
         entityManager.flush();
+        entityManager.clear();
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
 
@@ -56,16 +57,19 @@ public class PageLayoutTests {
         pageBlock1.setType(BlockType.Banner);
         pageBlock1.setConfig(new BlockConfig());
         pageBlock1.setPageLayout(pageLayout);
+        pageBlock1.setSort(1);
         pageLayout.addPageBlock(pageBlock1);
 
         PageBlock pageBlock2 = new PageBlock();
         pageBlock2.setType(BlockType.ImageRow);
         pageBlock2.setConfig(new BlockConfig());
         pageBlock2.setPageLayout(pageLayout);
+        pageBlock2.setSort(2);
         pageLayout.addPageBlock(pageBlock2);
 
         entityManager.persist(pageLayout);
         entityManager.flush();
+        entityManager.clear();
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
         assertEquals(2, found.getPageBlocks().size());
@@ -97,6 +101,7 @@ public class PageLayoutTests {
 
         entityManager.persist(pageLayout);
         entityManager.flush();
+        entityManager.clear();
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
         assertEquals(2, found.getPageBlocks().size());
