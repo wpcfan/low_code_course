@@ -1,9 +1,11 @@
 package com.mooc.backend.rest.admin;
 
+import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
 import com.mooc.backend.rest.vm.PageLayoutAdminVM;
+import com.mooc.backend.rest.vm.PageLayoutDetailVM;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,8 +35,8 @@ public class PageLayoutAdminController {
 
     @Operation(summary = "根据 ID 获取页面布局")
     @GetMapping("/{id}")
-    public PageLayoutAdminVM getPageLayout(@PathVariable Long id) {
-        return PageLayoutAdminVM.toVM(pageLayoutService.getPageLayout(id));
+    public PageLayoutDetailVM getPageLayout(@PathVariable Long id) {
+        return PageLayoutDetailVM.toVM(pageLayoutService.getPageLayout(id));
     }
 
     @Operation(summary = "添加页面布局")
@@ -64,5 +66,13 @@ public class PageLayoutAdminController {
     @DeleteMapping("/{id}")
     public void deletePageLayout(@PathVariable Long id) {
         pageLayoutService.deletePageLayout(id);
+    }
+
+    @Operation(summary = "添加页面区块")
+    @PostMapping("/{id}/blocks")
+    public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid PageBlock pageBlock) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        pageBlock.setPageLayout(pageLayout);
+        return pageLayoutService.savePageBlock(pageBlock);
     }
 }
