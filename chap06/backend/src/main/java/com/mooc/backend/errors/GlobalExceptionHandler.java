@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -58,6 +59,25 @@ public class GlobalExceptionHandler {
                 .forStatusAndDetail(HttpStatusCode.valueOf(400), "参数类型转换错误");
         body.setType(URI.create(hostname + "/errors/method-argument-type-mismatch-exception"));
         String title = "参数 " + e.getName() + " 类型应为 " + Objects.requireNonNull(e.getRequiredType()).getSimpleName() + "，但实际值为 " + e.getValue();
+        body.setTitle(title);
+        body.setDetail(e.getMessage());
+        body.setProperty("hostname", hostname);
+        body.setProperty("user-agent", request.getHeader("User-Agent"));
+        body.setProperty("locale", request.getLocale().toString());
+        return body;
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ProblemDetail handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException e,
+            WebRequest request
+    ) {
+        ProblemDetail body = ProblemDetail
+                .forStatusAndDetail(HttpStatusCode.valueOf(400), "参数错误");
+        body.setType(URI.create(hostname + "/errors/method-argument-not-valid-exception"));
+        String title = e.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
+                .collect(Collectors.joining(";"));
         body.setTitle(title);
         body.setDetail(e.getMessage());
         body.setProperty("hostname", hostname);

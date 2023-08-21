@@ -6,12 +6,15 @@ import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
 import com.mooc.backend.rest.vm.PageLayoutAdminVM;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "页面布局管理", description = "页面布局管理相关接口")
+@Validated
 @RestController
 @RequestMapping("/api/v1/admin/layouts")
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class PageLayoutAdminController {
     }
 
     @PostMapping("/")
-    public PageLayoutAdminVM addPageLayout(@RequestBody CreateOrUpdatePageLayoutVM pageLayoutVM) {
+    public PageLayoutAdminVM addPageLayout(@RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
         PageLayout pageLayout = new PageLayout();
         pageLayout.setTitle(pageLayoutVM.title());
         pageLayout.setConfig(pageLayoutVM.config());
