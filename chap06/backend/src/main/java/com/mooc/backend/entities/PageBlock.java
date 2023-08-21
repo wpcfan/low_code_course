@@ -8,6 +8,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -32,5 +35,8 @@ public class PageBlock {
     @ManyToOne
     @JoinColumn(name = "page_layout_id")
     private PageLayout pageLayout;
+
+    @OneToMany(mappedBy = "pageBlock", orphanRemoval = true)
+    private Set<PageBlockData> data = new LinkedHashSet<>();
 
 }
