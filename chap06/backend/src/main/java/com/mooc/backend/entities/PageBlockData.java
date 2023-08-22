@@ -3,15 +3,17 @@ package com.mooc.backend.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "mooc_page_block_data")
 public class PageBlockData implements Comparable<PageBlockData> {

@@ -8,7 +8,11 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "页面配置")
 public class PageConfig implements Serializable {
     @Serial

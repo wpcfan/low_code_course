@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mooc.backend.enumerations.BlockType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -14,8 +12,11 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "mooc_page_blocks")
 public class PageBlock implements Comparable<PageBlock> {
@@ -40,6 +41,7 @@ public class PageBlock implements Comparable<PageBlock> {
     @JsonIgnore
     private PageLayout pageLayout;
 
+    @Builder.Default
     @OneToMany(mappedBy = "pageBlock", orphanRemoval = true, cascade = {CascadeType.ALL})
     private SortedSet<PageBlockData> data = new TreeSet<>();
 

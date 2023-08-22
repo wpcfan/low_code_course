@@ -1,6 +1,5 @@
 package com.mooc.backend.rest.admin;
 
-import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
@@ -68,11 +67,4 @@ public class PageLayoutAdminController {
         pageLayoutService.deletePageLayout(id);
     }
 
-    @Operation(summary = "添加页面区块")
-    @PostMapping("/{id}/blocks")
-    public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid PageBlock pageBlock) {
-        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        pageBlock.setPageLayout(pageLayout);
-        return pageLayoutService.savePageBlock(pageBlock);
-    }
 }

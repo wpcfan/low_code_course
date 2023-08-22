@@ -73,8 +73,8 @@ public class PageLayoutTests {
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
         assertEquals(2, found.getPageBlocks().size());
-        assertEquals(pageBlock1, found.getPageBlocks().stream().findFirst().get());
-        assertEquals(pageBlock2, found.getPageBlocks().stream().skip(1).findFirst().get());
+        assertEquals(pageBlock1, found.getPageBlocks().stream().findFirst().orElseThrow());
+        assertEquals(pageBlock2, found.getPageBlocks().stream().skip(1).findFirst().orElseThrow());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class PageLayoutTests {
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
         assertEquals(pageLayout, found);
         assertEquals(2, found.getPageBlocks().size());
-        assertEquals(pageBlock2, found.getPageBlocks().stream().findFirst().get());
-        assertEquals(pageBlock1, found.getPageBlocks().stream().skip(1).findFirst().get());
+        assertEquals(pageBlock2, found.getPageBlocks().stream().findFirst().orElseThrow());
+        assertEquals(pageBlock1, found.getPageBlocks().stream().skip(1).findFirst().orElseThrow());
     }
 }

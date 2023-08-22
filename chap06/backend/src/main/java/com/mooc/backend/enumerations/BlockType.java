@@ -1,5 +1,8 @@
 package com.mooc.backend.enumerations;
 
+import lombok.Getter;
+
+@Getter
 public enum BlockType {
     Banner("banner"),
     ImageRow("image_row"),
@@ -10,9 +13,5 @@ public enum BlockType {
 
     BlockType(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 }

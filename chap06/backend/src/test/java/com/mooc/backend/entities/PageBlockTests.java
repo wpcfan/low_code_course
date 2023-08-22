@@ -34,7 +34,7 @@ public class PageBlockTests {
         entityManager.clear();
         PageBlock found = entityManager.find(PageBlock.class, pageBlock.getId());
         assertEquals(pageBlock, found);
-        assertEquals(pageBlockData, found.getData().stream().findFirst().get());
-        assertEquals(imageData, found.getData().stream().findFirst().get().getContent());
+        assertEquals(pageBlockData, found.getData().stream().findFirst().orElseThrow());
+        assertEquals(imageData, found.getData().stream().findFirst().orElseThrow().getContent());
     }
 }

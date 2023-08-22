@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.net.URI;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -79,6 +80,22 @@ public class GlobalExceptionHandler {
                 .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining(";"));
         body.setTitle(title);
+        body.setDetail(e.getMessage());
+        body.setProperty("hostname", hostname);
+        body.setProperty("user-agent", request.getHeader("User-Agent"));
+        body.setProperty("locale", request.getLocale().toString());
+        return body;
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ProblemDetail handleNoSuchElementException(
+            NoSuchElementException e,
+            WebRequest request
+    ) {
+        ProblemDetail body = ProblemDetail
+                .forStatusAndDetail(HttpStatusCode.valueOf(404), "资源不存在");
+        body.setType(URI.create(hostname + "/errors/no-such-element-exception"));
+        body.setTitle(e.getMessage());
         body.setDetail(e.getMessage());
         body.setProperty("hostname", hostname);
         body.setProperty("user-agent", request.getHeader("User-Agent"));

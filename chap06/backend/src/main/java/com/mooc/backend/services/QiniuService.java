@@ -35,8 +35,7 @@ public class QiniuService {
                     auth.uploadToken(properties.getBucket()),
                     null,
                     null);
-            var json = objectMapper.readValue(response.bodyString(), DefaultPutRet.class);
-            return json;
+            return objectMapper.readValue(response.bodyString(), DefaultPutRet.class);
         } catch (Exception e) {
             throw new CustomException("上传文件失败", e.getMessage(), ErrorType.QiniuFileUploadException);
         }
