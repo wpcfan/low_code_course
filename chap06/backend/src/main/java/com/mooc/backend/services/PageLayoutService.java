@@ -1,7 +1,10 @@
 package com.mooc.backend.services;
 
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.PageType;
+import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.repositories.PageLayoutRepository;
+import com.mooc.backend.rest.vm.PageLayoutDetailVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +30,20 @@ public class PageLayoutService {
 
     public void deletePageLayout(Long id) {
         pageLayoutRepository.deleteById(id);
+    }
+
+    public PageLayout findByPlatformAndPageType(Platform platform, PageType pageType) {
+        // select from mooc_page_layouts where platform = platform and page_type = pageType
+        // 返回的是一个列表，有可能是空的，也有可能是 1 个元素，也有可能多余一个
+        // 如果是空的，我们需要提供一个兜底的布局
+        // 如果是 1 个，直接返回
+        // 如果多余 1 个，需要返回第一个
+        List<PageLayout> pageLayoutList = pageLayoutRepository.findByPlatformAndPageType(platform, pageType);
+        if (pageLayoutList.isEmpty()) {
+            // 如果是空的，我们需要提供一个兜底的布局
+            return PageLayout.builder()
+                    .build();
+        }
+        return pageLayoutList.stream().findFirst().orElseThrow();
     }
 }
