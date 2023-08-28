@@ -1,13 +1,14 @@
 package com.mooc.backend.services;
 
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.repositories.PageLayoutRepository;
-import com.mooc.backend.rest.vm.PageLayoutDetailVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,7 +39,15 @@ public class PageLayoutService {
         // 如果是空的，我们需要提供一个兜底的布局
         // 如果是 1 个，直接返回
         // 如果多余 1 个，需要返回第一个
-        List<PageLayout> pageLayoutList = pageLayoutRepository.findByPlatformAndPageType(platform, pageType);
+        LocalDateTime now = LocalDateTime.now();
+        List<PageLayout> pageLayoutList = pageLayoutRepository
+                .findByPlatformAndPageTypeAndStatusAndStartTimeLessThanAndEndTimeGreaterThan(
+                        platform,
+                        pageType,
+                        PageStatus.PUBLISHED,
+                        now,
+                        now
+                );
         if (pageLayoutList.isEmpty()) {
             // 如果是空的，我们需要提供一个兜底的布局
             return PageLayout.builder()

@@ -5,6 +5,7 @@ import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
 import com.mooc.backend.rest.vm.PageLayoutAdminVM;
 import com.mooc.backend.rest.vm.PageLayoutDetailVM;
+import com.mooc.backend.rest.vm.PublishPageLayoutVM;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,6 +60,29 @@ public class PageLayoutAdminController {
         oldPageLayout.setPageType(pageLayoutVM.pageType());
         oldPageLayout.setPlatform(pageLayoutVM.platform());
         return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(oldPageLayout));
+    }
+
+    @Operation(summary = "发布页面布局")
+    @PatchMapping("/{id}/status/publish")
+    public PageLayoutAdminVM publishPageLayout(
+            @PathVariable Long id,
+            @RequestBody @Valid PublishPageLayoutVM publishPageLayoutVM
+    ) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        pageLayout.setStatus(PageStatus.PUBLISHED);
+        pageLayout.setStartTime(publishPageLayoutVM.startTime());
+        pageLayout.setEndTime(publishPageLayoutVM.endTime());
+        return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(pageLayout));
+    }
+
+    @Operation(summary = "撤回页面布局")
+    @PatchMapping("/{id}/status/draft")
+    public PageLayoutAdminVM draftPageLayout(@PathVariable Long id) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        pageLayout.setStatus(PageStatus.DRAFT);
+        pageLayout.setStartTime(null);
+        pageLayout.setEndTime(null);
+        return PageLayoutAdminVM.toVM(pageLayoutService.savePageLayout(pageLayout));
     }
 
     @Operation(summary = "删除页面布局")
