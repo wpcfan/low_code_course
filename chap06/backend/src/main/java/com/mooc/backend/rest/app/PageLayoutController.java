@@ -2,6 +2,7 @@ package com.mooc.backend.rest.app;
 
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
+import com.mooc.backend.rest.vm.PageLayoutAppVM;
 import com.mooc.backend.rest.vm.PageLayoutDetailVM;
 import com.mooc.backend.services.PageLayoutService;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PageLayoutController {
     final PageLayoutService pageLayoutService;
 
-    @GetMapping("/")
-    public PageLayoutDetailVM getPageLayout(
+    @GetMapping("")
+    public PageLayoutAppVM getPageLayout(
             @RequestParam Platform platform,
             @RequestParam PageType pageType
             ) {
-        return PageLayoutDetailVM.toVM(pageLayoutService.findByPlatformAndPageType(platform, pageType));
+        return PageLayoutAppVM.toVM(pageLayoutService.findByPlatformAndPageType(platform, pageType));
     }
 }

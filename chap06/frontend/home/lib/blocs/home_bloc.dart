@@ -20,7 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeLoadEvent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: FetchStatus.loading));
     try {
-      final page = await pageRepository.getPageLayout(1);
+      final page = await pageRepository.getPageLayout(PageType.home);
       if (page.blocks.any((block) => block.type == PageBlockType.waterfall)) {
         final waterfallBlock = page.blocks
             .firstWhere((block) => block.type == PageBlockType.waterfall);
@@ -56,7 +56,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeRefreshEvent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: FetchStatus.refreshing));
     try {
-      final page = await pageRepository.getPageLayout(1);
+      final page = await pageRepository.getPageLayout(PageType.home);
       emit(state.copyWith(status: FetchStatus.success, layout: page));
     } catch (e) {
       emit(state.copyWith(
