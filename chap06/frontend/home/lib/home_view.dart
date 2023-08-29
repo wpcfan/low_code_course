@@ -19,7 +19,9 @@ class HomeView extends StatelessWidget {
         ..add(const HomeLoadEvent()),
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {
-          if (state.status == FetchStatus.refreshFailure) {
+          if (state.status == FetchStatus.refreshFailure ||
+              state.status == FetchStatus.loadMoreFailure ||
+              state.status == FetchStatus.failure) {
             _showLoadingMoreErrorMessage(context, state);
           }
         },

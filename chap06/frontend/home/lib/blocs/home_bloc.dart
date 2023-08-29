@@ -40,7 +40,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final waterfallBlock = pageLayout.blocks
             .firstWhere((block) => block.type == PageBlockType.waterfall);
         final waterfallData =
-            waterfallBlock.data.map((e) => e as Category).toList();
+            waterfallBlock.data.map((e) => e.content as Category).toList();
         if (waterfallData.isNotEmpty) {
           final category = waterfallData.first;
 
@@ -112,7 +112,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(status: FetchStatus.loadingMore));
     try {
       final waterfallData =
-          state.waterfallBlock!.data.map((e) => e as Category).toList();
+          state.waterfallBlock!.data.map((e) => e.content as Category).toList();
 
       final category = waterfallData.first;
       final pageNum = state.page + 1;

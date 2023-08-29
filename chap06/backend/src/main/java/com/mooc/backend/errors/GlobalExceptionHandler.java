@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.net.URI;
 import java.util.NoSuchElementException;
@@ -114,6 +115,22 @@ public class GlobalExceptionHandler {
         body.setTitle(e.getMessage());
         body.setDetail(e.getDetail());
         body.setProperty("code", e.getCode().getValue());
+        body.setProperty("hostname", hostname);
+        body.setProperty("user-agent", request.getHeader("User-Agent"));
+        body.setProperty("locale", request.getLocale().toString());
+        return body;
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ProblemDetail handleNoHandlerFoundException(
+            NoHandlerFoundException e,
+            WebRequest request
+    ) {
+        ProblemDetail body = ProblemDetail
+                .forStatusAndDetail(HttpStatusCode.valueOf(404), "资源不存在");
+        body.setType(URI.create(hostname + "/errors/no-handler-found-exception"));
+        body.setTitle(e.getMessage());
+        body.setDetail(e.getMessage());
         body.setProperty("hostname", hostname);
         body.setProperty("user-agent", request.getHeader("User-Agent"));
         body.setProperty("locale", request.getLocale().toString());
