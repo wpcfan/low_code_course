@@ -105,6 +105,7 @@ public class PageBlockDataAdminController {
         PageBlockData pageBlockData = new PageBlockData();
         pageBlockData.setPageBlock(pageBlock);
         pageBlockData.setContent(pageBlockDataVM.content());
+        pageBlockData.setSort(pageBlockDataVM.sort());
         return pageBlockDataService.savePageBlockData(pageBlockData);
     }
 
