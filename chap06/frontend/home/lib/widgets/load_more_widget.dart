@@ -12,7 +12,9 @@ class LoadMoreWidget extends StatelessWidget {
       builder: (context, state) {
         switch (state.status) {
           case FetchStatus.loadingMore:
-            return const Center(child: CircularProgressIndicator());
+            return state.hasReachedMax
+                ? const SizedBox()
+                : const Center(child: CircularProgressIndicator());
           default:
             return const SizedBox();
         }

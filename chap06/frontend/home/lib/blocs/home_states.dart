@@ -7,16 +7,31 @@ class HomeState extends Equatable {
   final String? error;
   final List<Product> waterfallItems;
   final int page;
+  final int selectedIndex;
+  final bool hasReachedMax;
+  final bool drawerOpen;
   const HomeState({
     this.layout,
     this.status,
     this.error,
     this.waterfallItems = const [],
     this.page = 1,
+    this.selectedIndex = 0,
+    this.drawerOpen = false,
+    this.hasReachedMax = false,
   });
 
   @override
-  List<Object?> get props => [layout, status, error, waterfallItems, page];
+  List<Object?> get props => [
+        layout,
+        status,
+        error,
+        waterfallItems,
+        page,
+        selectedIndex,
+        drawerOpen,
+        hasReachedMax,
+      ];
 
   HomeState copyWith({
     PageLayout? layout,
@@ -24,6 +39,9 @@ class HomeState extends Equatable {
     String? error,
     List<Product>? waterfallItems,
     int? page,
+    int? selectedIndex,
+    bool? drawerOpen,
+    bool? hasReachedMax,
   }) {
     return HomeState(
       layout: layout ?? this.layout,
@@ -31,6 +49,9 @@ class HomeState extends Equatable {
       error: error ?? this.error,
       waterfallItems: waterfallItems ?? this.waterfallItems,
       page: page ?? this.page,
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      drawerOpen: drawerOpen ?? this.drawerOpen,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
