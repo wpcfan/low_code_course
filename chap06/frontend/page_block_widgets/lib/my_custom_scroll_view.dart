@@ -10,7 +10,7 @@ class MyCustomScrollView extends StatelessWidget {
   final Widget refreshWidget;
   final Widget refreshCompleteWidget;
   final BoxDecoration decoration;
-  final SliverAppBar sliverAppBar;
+  final Widget sliverAppBar;
   final Widget sliver;
   final Widget? loadMoreWidget;
   const MyCustomScrollView({

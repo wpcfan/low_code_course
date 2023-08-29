@@ -11,9 +11,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ProductRepository productRepository;
   HomeBloc({required this.pageRepository, required this.productRepository})
       : super(const HomeState(status: FetchStatus.initial)) {
+    /// 加载
     on<HomeLoadEvent>(_onHomeLoadEvent);
+
+    /// 刷新
     on<HomeRefreshEvent>(_onHomeRefreshEvent);
+
+    /// 加载更多
     on<HomeLoadMoreEvent>(_onHomeLoadMoreEvent);
+
+    /// 切换底部导航
+    on<HomeSwitchBottomNavigationEvent>(_onSwitchBottomNavigation);
+
+    /// 打开抽屉
+    on<HomeOpenEndDrawerEvent>(_onOpenEndDrawer);
+
+    /// 关闭抽屉
+    on<HomeCloseEndDrawerEvent>(_onCloseEndDrawer);
   }
 
   Future<void> _onHomeLoadEvent(
@@ -115,5 +129,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         error: e.toString(),
       ));
     }
+  }
+
+  void _onOpenEndDrawer(HomeOpenEndDrawerEvent event, Emitter<HomeState> emit) {
+    event.scaffoldKey.currentState?.openEndDrawer();
+    emit(state.copyWith(drawerOpen: true));
+  }
+
+  void _onCloseEndDrawer(
+      HomeCloseEndDrawerEvent event, Emitter<HomeState> emit) {
+    event.scaffoldKey.currentState?.closeEndDrawer();
+    emit(state.copyWith(drawerOpen: false));
+  }
+
+  void _onSwitchBottomNavigation(
+      HomeSwitchBottomNavigationEvent event, Emitter<HomeState> emit) {
+    emit(state.copyWith(selectedIndex: event.index));
   }
 }
