@@ -26,7 +26,7 @@ class ProductRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final horizontalSpacing = config.horozontalSpacing ?? 0;
+    final horizontalSpacing = config.horizontalSpacing ?? 0;
     final verticalSpacing = config.verticalSpacing ?? 0;
     final verticalPadding = config.verticalPadding ?? 0;
     final horizontalPadding = config.horizontalPadding ?? 0;

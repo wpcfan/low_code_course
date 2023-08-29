@@ -15,16 +15,17 @@ class SliverListBodyWidget extends StatelessWidget {
 
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        final ratio =
-            screenWidth / (state.config?.baseScreenWidth ?? baseScreenWidth);
+        final baselineScreenWidth =
+            state.config?.baselineScreenWidth ?? baseScreenWidth;
+        final ratio = screenWidth / baselineScreenWidth;
         final blocks = state.blocks;
         final waterfallItems = state.waterfallItems;
         final widgets = blocks.map((e) {
           if (e.type == PageBlockType.imageRow) {
             return SliverToBoxAdapter(
               child: ImageRowWidget(
-                items: e.data.map((e) => e as ImageData).toList(),
-                config: e.config.withRatio(ratio),
+                items: e.data.map((e) => e.content as ImageData).toList(),
+                config: e.config.withRatio(ratio, baselineScreenWidth),
                 onTap: (value) {
                   debugPrint('onTap: $value');
                 },
@@ -33,8 +34,8 @@ class SliverListBodyWidget extends StatelessWidget {
           } else if (e.type == PageBlockType.banner) {
             return SliverToBoxAdapter(
               child: BannerWidget(
-                items: e.data.map((e) => e as ImageData).toList(),
-                config: e.config.withRatio(ratio),
+                items: e.data.map((e) => e.content as ImageData).toList(),
+                config: e.config.withRatio(ratio, baselineScreenWidth),
                 onTap: (value) {
                   debugPrint('onTap: $value');
                 },
@@ -43,8 +44,8 @@ class SliverListBodyWidget extends StatelessWidget {
           } else if (e.type == PageBlockType.productRow) {
             return SliverToBoxAdapter(
               child: ProductRowWidget(
-                items: e.data.map((e) => e as Product).toList(),
-                config: e.config.withRatio(ratio),
+                items: e.data.map((e) => e.content as Product).toList(),
+                config: e.config.withRatio(ratio, baselineScreenWidth),
                 onTap: (value) {
                   debugPrint('onTap: $value');
                 },
@@ -54,7 +55,7 @@ class SliverListBodyWidget extends StatelessWidget {
           } else if (e.type == PageBlockType.waterfall) {
             return WaterfallWidget(
               items: waterfallItems,
-              config: e.config.withRatio(ratio),
+              config: e.config.withRatio(ratio, baselineScreenWidth),
               onTap: (value) {
                 debugPrint('onTap: $value');
               },

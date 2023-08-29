@@ -4,10 +4,10 @@
 /// - productRow: 商品行
 /// - waterfall: 瀑布流
 enum PageBlockType {
-  banner('banner'),
-  imageRow('image_row'),
-  productRow('product_row'),
-  waterfall('waterfall'),
+  banner('Banner'),
+  imageRow('ImageRow'),
+  productRow('ProductRow'),
+  waterfall('Waterfall'),
   unknown('unknown');
 
   final String value;

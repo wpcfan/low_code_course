@@ -68,7 +68,7 @@ class ProductOneRowTwoWidget extends StatelessWidget {
         .gestures(onTap: () => addToCart?.call(product));
     // 商品图片
     final productImage = ImageWidget(
-      imageUrl: product.imageUrl ?? '',
+      imageUrl: product.images.firstOrNull ?? '',
       width: width,
       height: width,
     );

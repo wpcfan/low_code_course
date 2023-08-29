@@ -32,7 +32,7 @@ class ImageRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final horizontalSpacing = config.horozontalSpacing ?? 0;
+    final horizontalSpacing = config.horizontalSpacing ?? 0;
     final verticalPadding = config.verticalPadding ?? 0;
     final horizontalPadding = config.horizontalPadding ?? 0;
     final blockWidth = config.blockWidth ?? 0;
@@ -62,7 +62,7 @@ class ImageRowWidget extends StatelessWidget {
         .constrained(width: blockWidth, height: blockHeight);
     // 构建图片组件，减少重复代码
     Widget buildImageWidget(ImageData imageData) => ImageWidget(
-          imageUrl: imageData.imageUrl,
+          imageUrl: imageData.image,
           width: imageWidth,
           height: imageHeight,
         ).gestures(onTap: () => onTap?.call(imageData.link));

@@ -118,7 +118,7 @@ class _BannerWidgetState extends State<BannerWidget> {
               /// 为了实现无限循环，需要对数据进行取模运算
               int idx = index % widget.items.length;
               return ImageWidget(
-                imageUrl: widget.items[idx].imageUrl,
+                imageUrl: widget.items[idx].image,
                 width: blockWidth,
                 height: blockHeight,
               ).gestures(

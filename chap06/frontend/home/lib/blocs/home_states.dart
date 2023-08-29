@@ -47,6 +47,7 @@ class HomeState extends Equatable {
   PageConfig? get config => layout?.config;
   bool get hasWaterfallBlock =>
       blocks.any((block) => block.type == PageBlockType.waterfall);
-  PageBlock? get waterfallBlock =>
-      blocks.firstWhere((block) => block.type == PageBlockType.waterfall);
+  PageBlock? get waterfallBlock => blocks
+      .where((block) => block.type == PageBlockType.waterfall)
+      .firstOrNull;
 }

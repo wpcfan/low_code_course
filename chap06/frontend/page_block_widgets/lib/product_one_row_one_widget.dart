@@ -25,7 +25,7 @@ class ProductOneRowOneWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // 左边是图片，图片是正方形，所以边长是 innerBlockHeight
     final left = ImageWidget(
-      imageUrl: product.imageUrl ?? '',
+      imageUrl: product.images.firstOrNull ?? '',
       width: height,
       height: height,
     ).padding(right: horizontalSpacing);

@@ -2,7 +2,7 @@ class BlockConfig {
   final double? horizontalPadding;
   final double? verticalPadding;
   final double? blockHeight;
-  final double? horozontalSpacing;
+  final double? horizontalSpacing;
   final double? verticalSpacing;
   final double? blockWidth;
 
@@ -10,7 +10,7 @@ class BlockConfig {
     this.horizontalPadding,
     this.verticalPadding,
     this.blockHeight,
-    this.horozontalSpacing,
+    this.horizontalSpacing,
     this.verticalSpacing,
     this.blockWidth,
   });
@@ -26,8 +26,8 @@ class BlockConfig {
       blockHeight: json['blockHeight'] != null
           ? double.tryParse(json['blockHeight'].toString())
           : null,
-      horozontalSpacing: json['horozontalSpacing'] != null
-          ? double.tryParse(json['horozontalSpacing'].toString())
+      horizontalSpacing: json['horizontalSpacing'] != null
+          ? double.tryParse(json['horizontalSpacing'].toString())
           : null,
       verticalSpacing: json['verticalSpacing'] != null
           ? double.tryParse(json['verticalSpacing'].toString())
@@ -38,14 +38,16 @@ class BlockConfig {
     );
   }
 
-  BlockConfig withRatio(double ratio) {
+  BlockConfig withRatio(double ratio, double baselineScreenWidth) {
     return BlockConfig(
       horizontalPadding: (horizontalPadding ?? 0) * ratio,
       verticalPadding: (verticalPadding ?? 0) * ratio,
       blockHeight: (blockHeight ?? 0) * ratio,
-      horozontalSpacing: (horozontalSpacing ?? 0) * ratio,
+      horizontalSpacing: (horizontalSpacing ?? 0) * ratio,
       verticalSpacing: (verticalSpacing ?? 0) * ratio,
-      blockWidth: (blockWidth ?? 0) * ratio,
+      blockWidth: blockWidth == null
+          ? baselineScreenWidth * ratio
+          : (blockWidth ?? 0) * ratio,
     );
   }
 }

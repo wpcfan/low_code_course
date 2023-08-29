@@ -20,33 +20,59 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeLoadEvent event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: FetchStatus.loading));
     try {
-      final page = await pageRepository.getPageLayout(PageType.home);
-      if (page.blocks.any((block) => block.type == PageBlockType.waterfall)) {
-        final waterfallBlock = page.blocks
+      final pageLayout = await pageRepository.getPageLayout(PageType.home);
+      if (pageLayout.blocks
+          .any((block) => block.type == PageBlockType.waterfall)) {
+        final waterfallBlock = pageLayout.blocks
             .firstWhere((block) => block.type == PageBlockType.waterfall);
         final waterfallData =
             waterfallBlock.data.map((e) => e as Category).toList();
         if (waterfallData.isNotEmpty) {
           final category = waterfallData.first;
 
-          final waterfallItems =
-              await productRepository.getProductsByCategoryId(
-            categoryId: category.id!,
+          await loadProductsByCategory(
+            category: category,
             pageNum: 1,
-            pageSize: 4,
+            pageLayout: pageLayout,
+            emit: emit,
+            failureStatus: FetchStatus.failure,
           );
-          emit(state.copyWith(
-            status: FetchStatus.success,
-            layout: page,
-            waterfallItems: waterfallItems,
-          ));
         }
         return;
       }
-      emit(state.copyWith(status: FetchStatus.success, layout: page));
+      emit(state.copyWith(status: FetchStatus.success, layout: pageLayout));
     } catch (e) {
       emit(state.copyWith(
         status: FetchStatus.failure,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> loadProductsByCategory({
+    required int pageNum,
+    required Category category,
+    required PageLayout pageLayout,
+    required Emitter<HomeState> emit,
+    required FetchStatus failureStatus,
+  }) async {
+    try {
+      final waterfallItems = await productRepository.getProductsByCategoryId(
+        categoryId: category.id!,
+        pageNum: pageNum,
+        pageSize: 4,
+      );
+      emit(state.copyWith(
+        status: FetchStatus.success,
+        layout: pageLayout,
+        page: pageNum,
+        waterfallItems: pageNum == 1
+            ? waterfallItems
+            : [...state.waterfallItems, ...waterfallItems],
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: failureStatus,
         error: e.toString(),
       ));
     }
@@ -75,17 +101,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           state.waterfallBlock!.data.map((e) => e as Category).toList();
 
       final category = waterfallData.first;
-
-      final waterfallItems = await productRepository.getProductsByCategoryId(
-        categoryId: category.id!,
-        pageNum: state.page + 1,
-        pageSize: 4,
+      final pageNum = state.page + 1;
+      await loadProductsByCategory(
+        category: category,
+        pageNum: pageNum,
+        pageLayout: state.layout!,
+        emit: emit,
+        failureStatus: FetchStatus.loadMoreFailure,
       );
-      emit(state.copyWith(
-        status: FetchStatus.success,
-        waterfallItems: [...state.waterfallItems, ...waterfallItems],
-        page: state.page + 1,
-      ));
     } catch (e) {
       emit(state.copyWith(
         status: FetchStatus.loadMoreFailure,

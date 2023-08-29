@@ -1,14 +1,14 @@
 class PageConfig {
-  final double? baseScreenWidth;
+  final double? baselineScreenWidth;
 
   const PageConfig({
-    this.baseScreenWidth,
+    this.baselineScreenWidth,
   });
 
   factory PageConfig.fromJson(Map<String, dynamic> json) {
     return PageConfig(
-      baseScreenWidth: json['baseScreenWidth'] != null
-          ? double.tryParse(json['baseScreenWidth'].toString())
+      baselineScreenWidth: json['baselineScreenWidth'] != null
+          ? double.tryParse(json['baselineScreenWidth'].toString())
           : null,
     );
   }

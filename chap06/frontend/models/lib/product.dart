@@ -5,7 +5,7 @@ class Product implements BlockData {
   final String? sku;
   final String? name;
   final String? description;
-  final String? imageUrl;
+  final List<String> images;
   final String? price;
   final String? originalPrice;
 
@@ -14,7 +14,7 @@ class Product implements BlockData {
     this.sku,
     this.name,
     this.description,
-    this.imageUrl,
+    this.images = const [],
     this.price,
     this.originalPrice,
   });
@@ -25,7 +25,8 @@ class Product implements BlockData {
       sku: json['sku'] as String?,
       name: json['name'] as String?,
       description: json['description'] as String?,
-      imageUrl: json['imageUrl'] as String?,
+      images:
+          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
       price: json['price'] as String?,
       originalPrice: json['originalPrice'] as String?,
     );

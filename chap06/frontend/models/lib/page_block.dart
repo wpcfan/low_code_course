@@ -1,3 +1,5 @@
+import 'package:models/page_block_data.dart';
+
 import 'block_config.dart';
 import 'block_data.dart';
 import 'category.dart';
@@ -5,9 +7,9 @@ import 'enums/enums.dart';
 import 'image_data.dart';
 import 'product.dart';
 
-class PageBlock<T extends BlockData> {
+class PageBlock {
   final BlockConfig config;
-  final List<T> data;
+  final List<PageBlockData<BlockData>> data;
   final PageBlockType type;
 
   const PageBlock({
@@ -20,14 +22,23 @@ class PageBlock<T extends BlockData> {
     return PageBlock(
       config: BlockConfig.fromJson(json['config'] as Map<String, dynamic>),
       data: (json['data'] as List<dynamic>).map((e) {
-        if (json['type'] == 'image_row' || json['type'] == 'banner') {
-          return ImageData.fromJson(e as Map<String, dynamic>) as T;
+        if (json['type'] == 'ImageRow' || json['type'] == 'Banner') {
+          return PageBlockData<ImageData>.fromJson(
+            e as Map<String, dynamic>,
+            (json) => ImageData.fromJson(json),
+          );
         }
-        if (json['type'] == 'product_row') {
-          return Product.fromJson(e as Map<String, dynamic>) as T;
+        if (json['type'] == 'ProductRow') {
+          return PageBlockData<Product>.fromJson(
+            e as Map<String, dynamic>,
+            (json) => Product.fromJson(json),
+          );
         }
-        if (json['type'] == 'waterfall') {
-          return Category.fromJson(e as Map<String, dynamic>) as T;
+        if (json['type'] == 'Waterfall') {
+          return PageBlockData<Category>.fromJson(
+            e as Map<String, dynamic>,
+            (json) => Category.fromJson(json),
+          );
         }
         throw Exception('Unknown block type: ${json['type']}');
       }).toList(),
