@@ -1,4 +1,3 @@
-DELETE FROM `mooc_page_layouts` WHERE `id` = 1;
 INSERT INTO `mooc_page_layouts` (`id`,
                                  `created_at`,
                                  `updated_at`,
