@@ -84,7 +84,7 @@ VALUES (5,
         }',
         1);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -100,7 +100,7 @@ VALUES (1,
         }',
         1);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -116,7 +116,7 @@ VALUES (2,
         }',
         1);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -132,7 +132,7 @@ VALUES (3,
         }',
         1);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -148,7 +148,7 @@ VALUES (4,
         }',
         1);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -164,7 +164,7 @@ VALUES (5,
         }',
         2);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -180,7 +180,7 @@ VALUES (6,
         }',
         2);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -196,7 +196,7 @@ VALUES (7,
         }',
         2);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -213,7 +213,7 @@ VALUES (8,
         }',
         3);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
@@ -230,7 +230,7 @@ VALUES (9,
         }',
         4);
 
-INSERT INTO MOOC_PAGE_BLOCK_DATA (ID,
+INSERT INTO "MOOC_PAGE_BLOCK_DATA" (ID,
                                   SORT,
                                   CONTENT,
                                   PAGE_BLOCK_ID)
