@@ -1,3 +1,4 @@
+SET foreign_key_checks = 0;
 DELETE FROM `mooc_page_layouts` WHERE `id` = 1;
 INSERT INTO `mooc_page_layouts` (`id`,
                                  `created_at`,
@@ -20,3 +21,4 @@ VALUES (1,
         'Home',
         'APP');
 ALTER TABLE `mooc_page_layouts` AUTO_INCREMENT = 2;
+SET foreign_key_checks = 1;

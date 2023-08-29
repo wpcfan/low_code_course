@@ -1,3 +1,5 @@
+SET REFERENTIAL_INTEGRITY FALSE; // 禁用外键约束
+
 INSERT INTO "MOOC_PAGE_LAYOUTS" ("ID",
                                  "CREATED_AT",
                                  "UPDATED_AT",
@@ -20,3 +22,5 @@ VALUES (1,
         'PUBLISHED'
        );
 ALTER TABLE "MOOC_PAGE_LAYOUTS" ALTER COLUMN "ID" RESTART WITH 2;
+
+SET REFERENTIAL_INTEGRITY TRUE; // 启用外键约束
