@@ -1,8 +1,6 @@
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:models/models.dart';
-import 'package:page_block_widgets/page_block_widgets.dart';
 import 'package:repositories/repositories.dart';
 
 import 'blocs/blocs.dart';
@@ -13,53 +11,45 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider(
-        create: (context) => HomeBloc(
-            pageRepository: PageRepository(),
-            productRepository: ProductRepository())
-          ..add(const HomeLoadEvent()),
-        child: BlocConsumer<HomeBloc, HomeState>(
-          listener: (context, state) {
-            if (state.status == FetchStatus.refreshFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error ?? 'Error'),
-                  action: SnackBarAction(
-                    label: 'Retry',
-                    onPressed: () {
-                      context.read<HomeBloc>().add(const HomeRefreshEvent());
-                    },
-                  ),
-                ),
-              );
-            }
-          },
-          builder: (context, state) {
-            switch (state.status) {
-              case FetchStatus.loading:
-                return const Center(child: CircularProgressIndicator());
-              default:
-                return MyCustomScrollView(
-                  loadMoreWidget: const LoadMoreWidget(),
-                  sliver: const SliverListBodyWidget(),
-                  onRefresh: () async {
-                    context.read<HomeBloc>().add(const HomeRefreshEvent());
-                    await context.read<HomeBloc>().stream.firstWhere((state) =>
-                        state.status == FetchStatus.success ||
-                        state.status == FetchStatus.refreshFailure);
-                  },
-                  onLoadMore: () async {
-                    context.read<HomeBloc>().add(const HomeLoadMoreEvent());
-                    await context.read<HomeBloc>().stream.firstWhere((state) =>
-                        state.status == FetchStatus.success ||
-                        state.status == FetchStatus.loadMoreFailure);
-                  },
-                );
-            }
+    final key = GlobalKey<ScaffoldState>();
+    return BlocProvider(
+      create: (context) => HomeBloc(
+          pageRepository: PageRepository(),
+          productRepository: ProductRepository())
+        ..add(const HomeLoadEvent()),
+      child: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state.status == FetchStatus.refreshFailure) {
+            _showLoadingMoreErrorMessage(context, state);
+          }
+        },
+        child: Builder(builder: (context) {
+          return Scaffold(
+            key: key,
+            body: ScaffoldBodyWidget(scaffoldKey: key),
+            bottomNavigationBar: MyBottomBar(
+                onTap: (index) => context
+                    .read<HomeBloc>()
+                    .add(HomeSwitchBottomNavigationEvent(index))),
+            drawer: const LeftDrawer(),
+            endDrawer: const RightDrawer(),
+          );
+        }),
+      ),
+    );
+  }
+
+  void _showLoadingMoreErrorMessage(BuildContext context, HomeState state) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(state.error ?? 'Error'),
+        action: SnackBarAction(
+          label: 'Retry',
+          onPressed: () {
+            context.read<HomeBloc>().add(const HomeRefreshEvent());
           },
         ),
-      ).material(),
+      ),
     );
   }
 }
