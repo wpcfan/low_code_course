@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PageLayoutRepository extends JpaRepository<PageLayout, Long> {
-    List<PageLayout> findByPlatformAndPageTypeAndStatusAndStartTimeLessThanAndEndTimeGreaterThan(
+    List<PageLayout> findTop2ByPlatform(Platform platform);
+    List<PageLayout> findByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(
             Platform platform,
             PageType pageType,
             PageStatus status,

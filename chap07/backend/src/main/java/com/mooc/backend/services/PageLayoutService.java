@@ -41,7 +41,7 @@ public class PageLayoutService {
         // 如果多余 1 个，需要返回第一个
         LocalDateTime now = LocalDateTime.now();
         List<PageLayout> pageLayoutList = pageLayoutRepository
-                .findByPlatformAndPageTypeAndStatusAndStartTimeLessThanAndEndTimeGreaterThan(
+                .findByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(
                         platform,
                         pageType,
                         PageStatus.PUBLISHED,
