@@ -7,6 +7,8 @@ import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.repositories.PageLayoutRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,5 +58,10 @@ public class PlaygroundController {
                 PageStatus.PUBLISHED,
                 now
         );
+    }
+
+    @GetMapping("/all")
+    public Page<PageLayout> all(Pageable pageable) {
+        return pageLayoutRepository.findAll(pageable);
     }
 }
