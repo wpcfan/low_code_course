@@ -5,6 +5,7 @@ import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +19,15 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long> {
 
     boolean existsByTitleContainingAllIgnoreCase(String title);
 
-    Stream<PageLayout> streamByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(Platform platform, PageType pageType, PageStatus status, LocalDateTime startTime, LocalDateTime endTime);
+    @Query("""
+        select pl from PageLayout pl
+            where pl.platform = :platform
+            and pl.pageType = :pageType
+            and pl.status = :status
+            and pl.startTime <= :requestTime
+            and pl.endTime >= :requestTime
+            """)
+    Stream<PageLayout> streamByConditions(Platform platform, PageType pageType, PageStatus status, LocalDateTime requestTime);
 
     List<PageLayout> findTop2ByPlatform(Platform platform);
     List<PageLayout> findByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(

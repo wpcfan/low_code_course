@@ -50,11 +50,10 @@ public class PlaygroundController {
     public Stream<PageLayout> stream(@RequestParam Platform platform,
                                      @RequestParam PageType pageType) {
         var now = java.time.LocalDateTime.now();
-        return pageLayoutRepository.streamByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(
+        return pageLayoutRepository.streamByConditions(
                 platform,
                 pageType,
                 PageStatus.PUBLISHED,
-                now,
                 now
         );
     }
