@@ -34,7 +34,7 @@ public class Product {
     @OneToMany(mappedBy = "product", orphanRemoval = true)
     private Set<ProductImage> productImages = new LinkedHashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "mooc_products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "categories_id"))

@@ -1,7 +1,9 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.Product;
+import com.mooc.backend.repositories.CategoryRepository;
 import com.mooc.backend.repositories.ProductRepository;
+import com.mooc.backend.rest.vm.CreateOrUpdateCategoryVM;
 import com.mooc.backend.rest.vm.CreateOrUpdateProductVM;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,5 +63,16 @@ public class ProductAdminController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
+    }
+
+    @Operation(summary = "为商品添加类目")
+    @PostMapping("/{id}/categories")
+    public Product addCategory(
+            @PathVariable Long id,
+            @RequestBody CreateOrUpdateCategoryVM createOrUpdateCategoryVM
+            ) {
+        Product product = productRepository.findById(id).orElseThrow();
+        product.addCategory(createOrUpdateCategoryVM.toCategory());
+        return productRepository.save(product);
     }
 }

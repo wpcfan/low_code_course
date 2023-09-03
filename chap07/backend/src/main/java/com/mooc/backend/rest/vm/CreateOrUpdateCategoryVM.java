@@ -1,5 +1,6 @@
 package com.mooc.backend.rest.vm;
 
+import com.mooc.backend.entities.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -11,4 +12,10 @@ public record CreateOrUpdateCategoryVM(
         @Size(min = 2, max = 50, message = "类目编码长度必须在 {min} - {max} 之间")
         String code
 ) {
+        public Category toCategory() {
+                return Category.builder()
+                        .name(name)
+                        .code(code)
+                        .build();
+        }
 }
