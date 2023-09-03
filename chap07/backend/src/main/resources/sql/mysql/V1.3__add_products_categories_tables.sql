@@ -1,3 +1,7 @@
+SET foreign_key_checks = 0;
+DROP TABLE IF EXISTS mooc_products_categories;
+DROP TABLE IF EXISTS mooc_products;
+DROP TABLE IF EXISTS mooc_categories;
 CREATE TABLE mooc_categories
 (
     id BIGINT AUTO_INCREMENT NOT NULL,
@@ -27,3 +31,4 @@ ALTER TABLE mooc_products_categories
 
 ALTER TABLE mooc_products_categories
     ADD CONSTRAINT fk_mooc_products_categories_on_product FOREIGN KEY (product_id) REFERENCES mooc_products (id);
+SET foreign_key_checks = 1;

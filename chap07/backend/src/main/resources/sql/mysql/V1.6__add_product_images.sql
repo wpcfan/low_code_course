@@ -1,3 +1,5 @@
+SET foreign_key_checks = 0;
+DROP TABLE IF EXISTS mooc_product_images;
 CREATE TABLE mooc_product_images
 (
     id         BIGINT AUTO_INCREMENT NOT NULL,
@@ -8,3 +10,4 @@ CREATE TABLE mooc_product_images
 
 ALTER TABLE mooc_product_images
     ADD CONSTRAINT FK_MOOC_PRODUCT_IMAGES_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES mooc_products (id);
+SET foreign_key_checks = 1;
