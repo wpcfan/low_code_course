@@ -28,6 +28,6 @@ public class ProductController {
             @ParameterObject Pageable pageable
             ) {
         var result = productRepository.findByCategoriesId(categoryId, pageable).map(ProductData::from);
-        return new SliceWrapper<>(result.getNumber(), result.getSize(), result.getContent());
+        return new SliceWrapper<>(result.getNumber(), result.getSize(), result.hasNext(), result.getContent());
     }
 }
