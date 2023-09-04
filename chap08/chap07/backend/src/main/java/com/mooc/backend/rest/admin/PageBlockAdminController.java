@@ -1,0 +1,65 @@
+package com.mooc.backend.rest.admin;
+
+import com.mooc.backend.entities.PageBlock;
+import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.errors.CustomException;
+import com.mooc.backend.errors.ErrorType;
+import com.mooc.backend.rest.vm.CreateOrUpdatePageBlockVM;
+import com.mooc.backend.services.PageBlockService;
+import com.mooc.backend.services.PageLayoutService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+@Tags({
+        @Tag(name = "页面布局管理", description = "页面布局管理相关接口"),
+        @Tag(name = "页面区块管理", description = "页面区块管理相关接口"),
+})
+@Validated
+@RestController
+@RequestMapping("/api/v1/admin/layouts")
+@RequiredArgsConstructor
+public class PageBlockAdminController {
+    private final PageLayoutService pageLayoutService;
+    private final PageBlockService pageBlockService;
+
+    @Operation(summary = "添加页面区块")
+    @PostMapping("/{id}/blocks")
+    public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreateOrUpdatePageBlockVM pageBlockVM) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        PageBlock pageBlock = new PageBlock();
+        pageBlock.setType(pageBlockVM.type());
+        pageBlock.setSort(pageBlockVM.sort());
+        pageBlock.setConfig(pageBlockVM.config());
+        pageBlock.setPageLayout(pageLayout);
+        return pageBlockService.savePageBlock(pageBlock);
+    }
+
+    @Operation(summary = "更新页面区块")
+    @PutMapping("/{id}/blocks/{blockId}")
+    public PageBlock updatePageBlock(@PathVariable Long id, @PathVariable Long blockId, @RequestBody @Valid CreateOrUpdatePageBlockVM pageBlockVM) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
+            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
+        pageBlock.setType(pageBlockVM.type());
+        pageBlock.setSort(pageBlockVM.sort());
+        pageBlock.setConfig(pageBlockVM.config());
+        return pageBlockService.savePageBlock(pageBlock);
+    }
+
+    @Operation(summary = "删除页面区块")
+    @DeleteMapping("/{id}/blocks/{blockId}")
+    public void deletePageBlock(@PathVariable Long id, @PathVariable Long blockId) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
+            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        pageBlockService.deletePageBlock(blockId);
+    }
+}
