@@ -43,6 +43,6 @@ public class ProductController {
                 .orElse(Sort.unsorted());
         Pageable pageable = PageRequest.of(page, pageSize, sort);
         var result = productRepository.findByCategoriesId(categoryId, pageable).map(ProductData::from);
-        return new SliceWrapper<>(result.getNumber(), result.getSize(), result.getContent());
+        return new SliceWrapper<>(result.getNumber(), result.getSize(), result.hasNext(), result.getContent());
     }
 }
