@@ -11,4 +11,5 @@ export 'page_config.dart';
 export 'page_layout.dart';
 export 'problem.dart';
 export 'product.dart';
+export 'slice_wrapper.dart';
 export 'upload_file.dart';

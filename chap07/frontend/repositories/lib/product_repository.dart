@@ -6,17 +6,20 @@ class ProductRepository {
   final String path;
   final Dio client;
 
-  ProductRepository({Dio? client, this.path = '/categories'})
+  ProductRepository({Dio? client, this.path = '/products'})
       : client = client ?? AppClient();
 
-  Future<List<Product>> getProductsByCategoryId(
-      {required int categoryId,
-      required int pageNum,
-      required int pageSize}) async {
+  Future<SliceWrapper<Product>> getProductsByCategoryId({
+    required int categoryId,
+    required int pageNum,
+    required int pageSize,
+  }) async {
     final response = await client
-        .get('$path/$categoryId/products?_page=$pageNum&_limit=$pageSize');
-    return (response.data as List)
-        .map((productJson) => Product.fromJson(productJson))
-        .toList();
+        .get('$path/by-category/$categoryId?page=$pageNum&size=$pageSize');
+    final slice = SliceWrapper.fromJson(
+      response.data as Map<String, dynamic>,
+      (json) => Product.fromJson(json),
+    );
+    return slice;
   }
 }

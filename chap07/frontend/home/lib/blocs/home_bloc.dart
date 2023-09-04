@@ -46,7 +46,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
           await loadProductsByCategory(
             category: category,
-            pageNum: 1,
+            pageNum: 0,
             pageLayout: pageLayout,
             emit: emit,
             failureStatus: FetchStatus.failure,
@@ -71,7 +71,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required FetchStatus failureStatus,
   }) async {
     try {
-      final waterfallItems = await productRepository.getProductsByCategoryId(
+      final slice = await productRepository.getProductsByCategoryId(
         categoryId: category.id!,
         pageNum: pageNum,
         pageSize: 4,
@@ -79,10 +79,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(state.copyWith(
         status: FetchStatus.success,
         layout: pageLayout,
-        page: pageNum,
-        waterfallItems: pageNum == 1
-            ? waterfallItems
-            : [...state.waterfallItems, ...waterfallItems],
+        page: slice.page,
+        hasReachedMax: !slice.hasNext,
+        waterfallItems: slice.page > 0
+            ? [...state.waterfallItems, ...slice.items]
+            : slice.items,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -108,7 +109,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _onHomeLoadMoreEvent(
       HomeLoadMoreEvent event, Emitter<HomeState> emit) async {
-    if (state.waterfallBlock == null) return;
+    if (state.waterfallBlock == null || state.hasReachedMax) return;
     emit(state.copyWith(status: FetchStatus.loadingMore));
     try {
       final waterfallData =

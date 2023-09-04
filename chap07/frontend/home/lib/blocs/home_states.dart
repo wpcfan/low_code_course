@@ -15,7 +15,7 @@ class HomeState extends Equatable {
     this.status,
     this.error,
     this.waterfallItems = const [],
-    this.page = 1,
+    this.page = 0,
     this.selectedIndex = 0,
     this.drawerOpen = false,
     this.hasReachedMax = false,
