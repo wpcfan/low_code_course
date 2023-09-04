@@ -1,6 +1,5 @@
 package com.mooc.backend.rest.app;
 
-import com.mooc.backend.entities.Product;
 import com.mooc.backend.entities.ProductData;
 import com.mooc.backend.repositories.ProductRepository;
 import io.swagger.v3.oas.annotations.Operation;
