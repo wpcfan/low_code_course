@@ -1,8 +1,0 @@
-# Topmost editor config file
-root = true
-
-# Custom Coding Styles for Java files
-[*.java]
-
-# Character set to be used in java files.
-trim_trailing_whitespace = true

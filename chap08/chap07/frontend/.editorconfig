@@ -1,5 +1,0 @@
-root = true
-
-[*.{dart}]
-quote_type = single
-
