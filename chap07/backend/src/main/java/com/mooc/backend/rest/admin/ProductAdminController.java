@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductAdminController {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Operation(summary = "分页获取商品列表")
     @GetMapping("")
@@ -66,13 +67,29 @@ public class ProductAdminController {
     }
 
     @Operation(summary = "为商品添加类目")
-    @PostMapping("/{id}/categories")
+    @PostMapping("/{id}/categories/{categoryId}")
     public Product addCategory(
             @PathVariable Long id,
-            @RequestBody CreateOrUpdateCategoryVM createOrUpdateCategoryVM
+            @PathVariable Long categoryId
             ) {
         Product product = productRepository.findById(id).orElseThrow();
-        product.addCategory(createOrUpdateCategoryVM.toCategory());
+        var category = categoryRepository.findById(categoryId).orElseThrow();
+        product.addCategory(category);
         return productRepository.save(product);
+    }
+
+    @Operation(summary = "为商品删除类目")
+    @DeleteMapping("/{id}/categories/{categoryId}")
+    public void removeCategory(
+            @PathVariable Long id,
+            @PathVariable Long categoryId
+            ) {
+        Product product = productRepository.findById(id).orElseThrow();
+        var category = product.getCategories().stream()
+                .filter(c -> c.getId().equals(categoryId))
+                .findFirst()
+                .orElseThrow();
+        product.removeCategory(category);
+        productRepository.save(product);
     }
 }
