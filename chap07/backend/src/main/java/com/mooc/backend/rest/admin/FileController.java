@@ -4,19 +4,18 @@ import com.mooc.backend.config.QiniuProperties;
 import com.mooc.backend.errors.CustomException;
 import com.mooc.backend.errors.ErrorType;
 import com.mooc.backend.services.QiniuService;
+import com.mooc.backend.utils.FileUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ProblemDetail;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -83,7 +82,7 @@ public class FileController {
             @Parameter(description = "文件", required = true)
             @RequestPart
             MultipartFile file) {
-        var key = buildFileKey(file.getOriginalFilename());
+        var key = FileUtils.buildFileKey(file.getOriginalFilename());
         try {
             var json = qiniuService.upload(file.getBytes(), key);
             return new FileVM(json.key, properties.getDomain() + "/" + json.key);
@@ -136,18 +135,4 @@ public class FileController {
         // Http 对于 query 类型的查询是有长度限制的，所以这里使用 post 请求
         qiniuService.delete(keys);
     }
-
-    private static String buildFileKey(String fileName) {
-        var uuid = UUID.randomUUID().toString();
-        if (!StringUtils.hasText(fileName)) {
-            return uuid;
-        }
-        var splits = fileName.split("\\.");
-        if (splits.length == 1) {
-            return fileName + "_" + uuid;
-        }
-        var suffix = splits[splits.length - 1];
-        return splits[0] + "_" + uuid + "." + suffix;
-    }
-
 }

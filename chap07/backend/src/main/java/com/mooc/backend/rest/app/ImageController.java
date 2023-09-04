@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Slf4j
-@Tag(name = "ImageController", description = "图片生成接口")
+@Tag(name = "占位图片", description = "占位图片生成接口")
 @Validated
 @RestController
 @RequestMapping("/api/v1/app/image")
