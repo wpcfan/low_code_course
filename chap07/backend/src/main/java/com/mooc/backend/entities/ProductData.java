@@ -2,6 +2,7 @@ package com.mooc.backend.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.mooc.backend.json.PriceDeserializer;
 import com.mooc.backend.json.PriceSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -24,9 +25,11 @@ public record ProductData(
     Set<String> images,
     @Schema(description = "商品价格", example = "¥1234.00")
     @JsonSerialize(using = PriceSerializer.class)
+    @JsonDeserialize(using = PriceDeserializer.class)
     BigDecimal price,
     @Schema(description = "商品原价", example = "¥1300.00")
     @JsonSerialize(using = PriceSerializer.class)
+    @JsonDeserialize(using = PriceDeserializer.class)
     BigDecimal originalPrice
 ) implements BlockData {
     public static ProductData from(Product product) {

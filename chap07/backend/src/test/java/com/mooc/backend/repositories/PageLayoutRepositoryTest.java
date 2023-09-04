@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @ActiveProfiles("test")
@@ -107,8 +108,8 @@ public class PageLayoutRepositoryTest {
                 "xPhone手机",
                 "这是一段商品描述",
                 Set.of("https://picsum.photos/200/300"),
-                "¥1234.00",
-                "¥1300.00"
+                BigDecimal.valueOf(1234.00),
+                BigDecimal.valueOf(1300.00)
         );
         var productBlockData2 = new ProductData(
                 2L,
@@ -116,8 +117,8 @@ public class PageLayoutRepositoryTest {
                 "xPhone手机",
                 "这是一段商品描述",
                 Set.of("https://picsum.photos/200/300"),
-                "¥1234.00",
-                "¥1300.00"
+                BigDecimal.valueOf(1234.00),
+                BigDecimal.valueOf(1300.00)
         );
         var productData1 = PageBlockData.builder()
                 .sort(1)
