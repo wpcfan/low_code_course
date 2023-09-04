@@ -1,9 +1,11 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.Product;
+import com.mooc.backend.entities.ProductImage;
 import com.mooc.backend.repositories.CategoryRepository;
+import com.mooc.backend.repositories.ProductImageRepository;
 import com.mooc.backend.repositories.ProductRepository;
-import com.mooc.backend.rest.vm.CreateOrUpdateCategoryVM;
+import com.mooc.backend.rest.vm.CreateOrUpdateProductImageVM;
 import com.mooc.backend.rest.vm.CreateOrUpdateProductVM;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +25,7 @@ public class ProductAdminController {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Operation(summary = "分页获取商品列表")
     @GetMapping("")
@@ -90,6 +93,35 @@ public class ProductAdminController {
                 .findFirst()
                 .orElseThrow();
         product.removeCategory(category);
+        productRepository.save(product);
+    }
+
+    @Operation(summary = "为商品添加图片")
+    @PostMapping("/{id}/images")
+    public Product addImage(
+            @PathVariable Long id,
+            @RequestBody @Valid CreateOrUpdateProductImageVM createOrUpdateProductImageVM
+            ) {
+        Product product = productRepository.findById(id).orElseThrow();
+        ProductImage productImage = new ProductImage();
+        productImage.setUrl(createOrUpdateProductImageVM.url());
+        product.addProductImage(productImage);
+        return productRepository.save(product);
+    }
+
+    @Operation(summary = "为商品删除图片")
+    @DeleteMapping("/{id}/images/{imageId}")
+    public void removeImage(
+            @PathVariable Long id,
+            @PathVariable Long imageId
+            ) {
+//        productImageRepository.deleteById(imageId);
+        Product product = productRepository.findById(id).orElseThrow();
+        var productImage = product.getProductImages().stream()
+                .filter(c -> c.getId().equals(imageId))
+                .findFirst()
+                .orElseThrow();
+        product.removeProductImage(productImage);
         productRepository.save(product);
     }
 }

@@ -31,7 +31,7 @@ public class Product {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal originalPrice;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ProductImage> productImages = new LinkedHashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
