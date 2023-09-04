@@ -25,6 +25,6 @@ public class ProductController {
     @GetMapping("/by-category/{categoryId}")
     public SliceWrapper<ProductData> findProductsByCategoryId(@PathVariable long categoryId, Pageable pageable) {
         var result = productRepository.findByCategoriesId(categoryId, pageable).map(ProductData::from);
-        return new SliceWrapper<>(result.getNumber(), result.getSize(), result.getContent());
+        return new SliceWrapper<>(result.getNumber(), result.getSize(), result.hasNext(), result.getContent());
     }
 }
