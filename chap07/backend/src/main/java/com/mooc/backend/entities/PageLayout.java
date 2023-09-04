@@ -39,14 +39,17 @@ public class PageLayout extends Auditable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    @Builder.Default
     private PageStatus status = PageStatus.DRAFT;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    @Builder.Default
     private PageType pageType = PageType.Home;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
+    @Builder.Default
     private Platform platform = Platform.APP;
 
     /**
