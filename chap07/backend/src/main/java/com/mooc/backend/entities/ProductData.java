@@ -1,9 +1,13 @@
 package com.mooc.backend.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.mooc.backend.json.PriceSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Schema(description = "商品区块数据")
 @JsonDeserialize(as = ProductData.class)
@@ -19,8 +23,21 @@ public record ProductData(
     @Schema(description = "商品图片", example = "[\"https://picsum.photos/200/300\"]")
     Set<String> images,
     @Schema(description = "商品价格", example = "¥1234.00")
-    String price,
+    @JsonSerialize(using = PriceSerializer.class)
+    BigDecimal price,
     @Schema(description = "商品原价", example = "¥1300.00")
-    String originalPrice
+    @JsonSerialize(using = PriceSerializer.class)
+    BigDecimal originalPrice
 ) implements BlockData {
+    public static ProductData from(Product product) {
+        return new ProductData(
+            product.getId(),
+            product.getSku(),
+            product.getName(),
+            product.getDescription(),
+            product.getProductImages().stream().map(ProductImage::getUrl).collect(Collectors.toSet()),
+            product.getPrice(),
+            product.getOriginalPrice()
+        );
+    }
 }

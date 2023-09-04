@@ -22,7 +22,7 @@ public class ProductController {
 
     @Operation(summary = "分页获取商品列表", description = "客户端瀑布流分页获取商品列表")
     @GetMapping("/by-category/{categoryId}")
-    public Page<Product> findProductsByCategoryId(@PathVariable long categoryId, Pageable pageable) {
-        return productRepository.findByCategoriesId(categoryId, pageable);
+    public Page<ProductData> findProductsByCategoryId(@PathVariable long categoryId, Pageable pageable) {
+        return productRepository.findByCategoriesId(categoryId, pageable).map(ProductData::from);
     }
 }
