@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
     public Product save(Product product) {
         var result = productRepository.save(product);
         updatePageBlockDataWhenProductInfoChanges(result);
@@ -81,9 +83,7 @@ public class ProductService {
         var productImage = new ProductImage();
         productImage.setUrl(url);
         product.addProductImage(productImage);
-        var result = productRepository.save(product);
-        updatePageBlockDataWhenProductInfoChanges(result);
-        return result;
+        return save(product);
     }
 
     @Transactional
@@ -94,9 +94,7 @@ public class ProductService {
                 .findFirst()
                 .orElseThrow();
         product.removeProductImage(productImage);
-        var result = productRepository.save(product);
-        updatePageBlockDataWhenProductInfoChanges(result);
-        return result;
+        return save(product);
     }
 
     @Transactional
@@ -106,9 +104,7 @@ public class ProductService {
         ProductImage productImage = new ProductImage();
         productImage.setUrl(properties.getDomain() + "/" + json.key);
         product.addProductImage(productImage);
-        var result = productRepository.save(product);
-        updatePageBlockDataWhenProductInfoChanges(result);
-        return result;
+        return save(product);
     }
 
 }
