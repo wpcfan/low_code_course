@@ -1,9 +1,12 @@
 package com.mooc.backend.rest.admin;
 
+import com.mooc.backend.specs.PageLayoutFilter;
+import com.mooc.backend.specs.PageLayoutSpec;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +35,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Tag(name = "页面布局管理", description = "页面布局管理相关接口")
 @Validated
 @RestController
@@ -47,21 +53,22 @@ public class PageLayoutAdminController {
             @RequestParam(required = false) Platform platform,
             @RequestParam(required = false) PageStatus status,
             @RequestParam(required = false) PageType pageType,
+            @DateTimeFormat(pattern = "yyyyMMdd") @RequestParam(required = false) LocalDate startTimeFrom,
+            @DateTimeFormat(pattern = "yyyyMMdd") @RequestParam(required = false) LocalDate startTimeTo,
+            @DateTimeFormat(pattern = "yyyyMMdd") @RequestParam(required = false) LocalDate endTimeFrom,
+            @DateTimeFormat(pattern = "yyyyMMdd") @RequestParam(required = false) LocalDate endTimeTo,
             @ParameterObject Pageable pageable) {
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("title", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-                .withMatcher("platform", ExampleMatcher.GenericPropertyMatchers.exact())
-                .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.exact())
-                .withMatcher("pageType", ExampleMatcher.GenericPropertyMatchers.exact());
-        Example<PageLayout> example = Example.of(
-                PageLayout.builder()
-                        .title(title)
-                        .platform(platform)
-                        .status(status)
-                        .pageType(pageType)
-                        .build(),
-                matcher);
-        var result = pageLayoutService.getPageLayouts(example, pageable)
+        PageLayoutFilter filter = new PageLayoutFilter(
+                title,
+                pageType,
+                status,
+                platform,
+                startTimeFrom != null ? startTimeFrom.atStartOfDay() : null,
+                startTimeTo != null ? startTimeTo.atTime(LocalTime.MAX) : null,
+                endTimeFrom != null ? endTimeFrom.atStartOfDay() : null,
+                endTimeTo != null ? endTimeTo.atTime(LocalTime.MAX) : null);
+        var spec = new PageLayoutSpec(filter);
+        var result = pageLayoutService.getPageLayouts(spec, pageable)
                 .map(PageLayoutAdminVM::toVM);
         return new PageWrapper<>(
                 result.getNumber(),
