@@ -2,8 +2,10 @@ package com.mooc.backend.services;
 
 import com.mooc.backend.config.QiniuProperties;
 import com.mooc.backend.entities.Product;
+import com.mooc.backend.entities.ProductData;
 import com.mooc.backend.entities.ProductImage;
 import com.mooc.backend.repositories.CategoryRepository;
+import com.mooc.backend.repositories.PageBlockDataRepository;
 import com.mooc.backend.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final PageBlockDataRepository pageBlockDataRepository;
     private final QiniuService qiniuService;
     private final QiniuProperties properties;
 
@@ -29,7 +32,26 @@ public class ProductService {
 
     @Transactional
     public Product save(Product product) {
-        return productRepository.save(product);
+        var result = productRepository.save(product);
+        updatePageBlockDataWhenProductInfoChanges(result);
+        return result;
+    }
+
+    private void updatePageBlockDataWhenProductInfoChanges(Product result) {
+        pageBlockDataRepository.findAll()
+                .stream()
+                .filter(pageBlockData -> {
+                    var isProductData = pageBlockData.getContent() instanceof ProductData;
+                    if (isProductData) {
+                        var productData = (ProductData) pageBlockData.getContent();
+                        return productData.id().equals(result.getId());
+                    }
+                    return false;
+                })
+                .forEach(pageBlockData -> {
+                    pageBlockData.setContent(ProductData.from(result));
+                    pageBlockDataRepository.save(pageBlockData);
+                });
     }
 
     @Transactional
@@ -59,7 +81,9 @@ public class ProductService {
         var productImage = new ProductImage();
         productImage.setUrl(url);
         product.addProductImage(productImage);
-        return productRepository.save(product);
+        var result = productRepository.save(product);
+        updatePageBlockDataWhenProductInfoChanges(result);
+        return result;
     }
 
     @Transactional
@@ -70,7 +94,9 @@ public class ProductService {
                 .findFirst()
                 .orElseThrow();
         product.removeProductImage(productImage);
-        return productRepository.save(product);
+        var result = productRepository.save(product);
+        updatePageBlockDataWhenProductInfoChanges(result);
+        return result;
     }
 
     @Transactional
@@ -80,7 +106,9 @@ public class ProductService {
         ProductImage productImage = new ProductImage();
         productImage.setUrl(properties.getDomain() + "/" + json.key);
         product.addProductImage(productImage);
-        return productRepository.save(product);
+        var result = productRepository.save(product);
+        updatePageBlockDataWhenProductInfoChanges(result);
+        return result;
     }
 
 }
