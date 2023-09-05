@@ -47,7 +47,7 @@ public class PageLayoutAdminController {
     private final PageLayoutService pageLayoutService;
 
     @Operation(summary = "获取页面布局列表")
-    @GetMapping("/")
+    @GetMapping("")
     public PageWrapper<PageLayoutAdminVM> getPageLayouts(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Platform platform,

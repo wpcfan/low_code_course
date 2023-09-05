@@ -22,4 +22,11 @@ class MyLink {
       value: json['value'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type.value,
+      'value': value,
+    };
+  }
 }

@@ -19,4 +19,12 @@ class PageBlockData<T extends BlockData> {
       content: fromJson(json['content']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'sort': sort,
+      'content': content.toJson(),
+    };
+  }
 }

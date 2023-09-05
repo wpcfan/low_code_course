@@ -31,4 +31,17 @@ class Product implements BlockData {
       originalPrice: json['originalPrice'] as String?,
     );
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'sku': sku,
+      'name': name,
+      'description': description,
+      'images': images,
+      'price': price,
+      'originalPrice': originalPrice,
+    };
+  }
 }

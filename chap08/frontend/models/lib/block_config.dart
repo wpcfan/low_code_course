@@ -50,4 +50,15 @@ class BlockConfig {
           : (blockWidth ?? 0) * ratio,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'horizontalPadding': horizontalPadding,
+      'verticalPadding': verticalPadding,
+      'blockHeight': blockHeight,
+      'horizontalSpacing': horizontalSpacing,
+      'verticalSpacing': verticalSpacing,
+      'blockWidth': blockWidth,
+    };
+  }
 }

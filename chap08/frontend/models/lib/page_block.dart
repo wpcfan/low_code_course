@@ -48,4 +48,12 @@ class PageBlock {
       ),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'config': config.toJson(),
+      'data': data.map((e) => e.toJson()).toList(),
+      'type': type.value,
+    };
+  }
 }

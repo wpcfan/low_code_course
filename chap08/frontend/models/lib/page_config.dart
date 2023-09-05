@@ -12,4 +12,10 @@ class PageConfig {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'baselineScreenWidth': baselineScreenWidth,
+    };
+  }
 }

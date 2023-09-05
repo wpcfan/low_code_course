@@ -24,4 +24,14 @@ class Category implements BlockData {
           [],
     );
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'code': code,
+      'children': children.map((e) => e.toJson()).toList(),
+    };
+  }
 }

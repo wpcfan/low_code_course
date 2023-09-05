@@ -16,4 +16,12 @@ class ImageData implements BlockData {
       link: MyLink.fromJson(json['link'] as Map<String, dynamic>),
     );
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'image': image,
+      'link': link.toJson(),
+    };
+  }
 }
