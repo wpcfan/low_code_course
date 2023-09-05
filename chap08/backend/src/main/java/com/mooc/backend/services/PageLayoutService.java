@@ -7,6 +7,8 @@ import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.repositories.PageLayoutRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +27,7 @@ public class PageLayoutService {
         return pageLayoutRepository.findAll();
     }
 
+    @Transactional
     public PageLayout savePageLayout(PageLayout pageLayout) {
         return pageLayoutRepository.save(pageLayout);
     }

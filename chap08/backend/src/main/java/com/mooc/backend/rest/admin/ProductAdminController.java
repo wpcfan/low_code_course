@@ -1,14 +1,9 @@
 package com.mooc.backend.rest.admin;
 
-import com.mooc.backend.config.QiniuProperties;
 import com.mooc.backend.entities.Product;
-import com.mooc.backend.entities.ProductImage;
-import com.mooc.backend.repositories.CategoryRepository;
-import com.mooc.backend.repositories.ProductImageRepository;
-import com.mooc.backend.repositories.ProductRepository;
 import com.mooc.backend.rest.vm.CreateOrUpdateProductImageVM;
 import com.mooc.backend.rest.vm.CreateOrUpdateProductVM;
-import com.mooc.backend.services.QiniuService;
+import com.mooc.backend.services.ProductService;
 import com.mooc.backend.utils.FileUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,22 +25,18 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class ProductAdminController {
 
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-    private final ProductImageRepository productImageRepository;
-    private final QiniuService qiniuService;
-    private final QiniuProperties properties;
+    private final ProductService productService;
 
     @Operation(summary = "分页获取商品列表")
     @GetMapping("")
     public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+        return productService.findAll(pageable);
     }
 
     @Operation(summary = "根据 ID 获取商品")
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
-        return productRepository.findById(id).orElseThrow();
+        return productService.findById(id);
     }
 
     @Operation(summary = "添加商品")
@@ -57,25 +48,25 @@ public class ProductAdminController {
         product.setDescription(createOrUpdateProductVM.description());
         product.setPrice(createOrUpdateProductVM.price());
         product.setOriginalPrice(createOrUpdateProductVM.originalPrice());
-        return productRepository.save(product);
+        return productService.save(product);
     }
 
     @Operation(summary = "更新商品")
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody @Valid CreateOrUpdateProductVM createOrUpdateProductVM) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productService.findById(id);
         product.setSku(createOrUpdateProductVM.sku());
         product.setName(createOrUpdateProductVM.name());
         product.setDescription(createOrUpdateProductVM.description());
         product.setPrice(createOrUpdateProductVM.price());
         product.setOriginalPrice(createOrUpdateProductVM.originalPrice());
-        return productRepository.save(product);
+        return productService.save(product);
     }
 
     @Operation(summary = "删除商品")
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
+        productService.deleteById(id);
     }
 
     @Operation(summary = "为商品添加类目")
@@ -84,10 +75,7 @@ public class ProductAdminController {
             @PathVariable Long id,
             @PathVariable Long categoryId
             ) {
-        Product product = productRepository.findById(id).orElseThrow();
-        var category = categoryRepository.findById(categoryId).orElseThrow();
-        product.addCategory(category);
-        return productRepository.save(product);
+        return productService.addToCategory(id, categoryId);
     }
 
     @Operation(summary = "为商品删除类目")
@@ -96,13 +84,7 @@ public class ProductAdminController {
             @PathVariable Long id,
             @PathVariable Long categoryId
             ) {
-        Product product = productRepository.findById(id).orElseThrow();
-        var category = product.getCategories().stream()
-                .filter(c -> c.getId().equals(categoryId))
-                .findFirst()
-                .orElseThrow();
-        product.removeCategory(category);
-        productRepository.save(product);
+        productService.removeFromCategory(id, categoryId);
     }
 
     @Operation(summary = "为商品添加图片")
@@ -111,11 +93,7 @@ public class ProductAdminController {
             @PathVariable Long id,
             @RequestBody @Valid CreateOrUpdateProductImageVM createOrUpdateProductImageVM
             ) {
-        Product product = productRepository.findById(id).orElseThrow();
-        ProductImage productImage = new ProductImage();
-        productImage.setUrl(createOrUpdateProductImageVM.url());
-        product.addProductImage(productImage);
-        return productRepository.save(product);
+        return productService.addProductImage(id, createOrUpdateProductImageVM.url());
     }
 
     @Operation(summary = "为商品删除图片")
@@ -124,14 +102,7 @@ public class ProductAdminController {
             @PathVariable Long id,
             @PathVariable Long imageId
             ) {
-//        productImageRepository.deleteById(imageId);
-        Product product = productRepository.findById(id).orElseThrow();
-        var productImage = product.getProductImages().stream()
-                .filter(c -> c.getId().equals(imageId))
-                .findFirst()
-                .orElseThrow();
-        product.removeProductImage(productImage);
-        productRepository.save(product);
+        productService.removeProductImage(id, imageId);
     }
 
     @Operation(summary = "为商品上传单张图片")
@@ -140,14 +111,10 @@ public class ProductAdminController {
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file
     ) {
-        Product product = productRepository.findById(id).orElseThrow();
         var key = FileUtils.buildFileKey(file.getOriginalFilename());
         try {
-            var json = qiniuService.upload(file.getBytes(), key);
-            ProductImage productImage = new ProductImage();
-            productImage.setUrl(properties.getDomain() + "/" + json.key);
-            product.addProductImage(productImage);
-            return productRepository.save(product);
+            var bytes = file.getBytes();
+            return productService.uploadProductImage(id, key, bytes);
         } catch (IOException e) {
             throw new RuntimeException("文件上传失败");
         }

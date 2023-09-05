@@ -1,5 +1,6 @@
 package com.mooc.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -24,6 +25,7 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String code;
 
+    @JsonIgnore
     @ManyToOne
     private Category parent;
 
