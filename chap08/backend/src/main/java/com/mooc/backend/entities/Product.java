@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,6 +27,7 @@ public class Product {
     private String name;
 
     private String description;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
     @Column(nullable = false, precision = 10, scale = 2)
@@ -56,6 +58,17 @@ public class Product {
 
     public void removeCategory(Category category) {
         categories.remove(category);
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void pricePrecisionConvert() {
+        if (price != null) {
+            price = price.setScale(2, RoundingMode.HALF_UP);
+        }
+        if (originalPrice != null) {
+            originalPrice = originalPrice.setScale(2, RoundingMode.HALF_UP);
+        }
     }
 
     @Override

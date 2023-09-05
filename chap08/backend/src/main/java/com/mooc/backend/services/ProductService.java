@@ -5,15 +5,11 @@ import com.mooc.backend.entities.Product;
 import com.mooc.backend.entities.ProductImage;
 import com.mooc.backend.repositories.CategoryRepository;
 import com.mooc.backend.repositories.ProductRepository;
-import com.mooc.backend.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
