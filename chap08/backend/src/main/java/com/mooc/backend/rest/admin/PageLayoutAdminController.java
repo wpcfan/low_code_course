@@ -1,20 +1,36 @@
 package com.mooc.backend.rest.admin;
 
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
+import com.mooc.backend.enumerations.PageType;
+import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.rest.vm.CreateOrUpdatePageLayoutVM;
 import com.mooc.backend.rest.vm.PageLayoutAdminVM;
 import com.mooc.backend.rest.vm.PageLayoutDetailVM;
+import com.mooc.backend.rest.vm.PageWrapper;
 import com.mooc.backend.rest.vm.PublishPageLayoutVM;
 import com.mooc.backend.services.PageLayoutService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "页面布局管理", description = "页面布局管理相关接口")
 @Validated
@@ -26,11 +42,33 @@ public class PageLayoutAdminController {
 
     @Operation(summary = "获取页面布局列表")
     @GetMapping("/")
-    public List<PageLayoutAdminVM> getPageLayouts() {
-        return pageLayoutService.getPageLayouts()
-                .stream()
-                .map(PageLayoutAdminVM::toVM)
-                .toList();
+    public PageWrapper<PageLayoutAdminVM> getPageLayouts(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Platform platform,
+            @RequestParam(required = false) PageStatus status,
+            @RequestParam(required = false) PageType pageType,
+            @ParameterObject Pageable pageable) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("title", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("platform", ExampleMatcher.GenericPropertyMatchers.exact())
+                .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.exact())
+                .withMatcher("pageType", ExampleMatcher.GenericPropertyMatchers.exact());
+        Example<PageLayout> example = Example.of(
+                PageLayout.builder()
+                        .title(title)
+                        .platform(platform)
+                        .status(status)
+                        .pageType(pageType)
+                        .build(),
+                matcher);
+        var result = pageLayoutService.getPageLayouts(example, pageable)
+                .map(PageLayoutAdminVM::toVM);
+        return new PageWrapper<>(
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalPages(),
+                result.getTotalElements(),
+                result.getContent());
     }
 
     @Operation(summary = "根据 ID 获取页面布局")
@@ -53,7 +91,8 @@ public class PageLayoutAdminController {
 
     @Operation(summary = "更新页面布局")
     @PutMapping("/{id}")
-    public PageLayoutAdminVM updatePageLayout(@PathVariable Long id, @RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
+    public PageLayoutAdminVM updatePageLayout(@PathVariable Long id,
+            @RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
         PageLayout oldPageLayout = pageLayoutService.getPageLayout(id);
         oldPageLayout.setTitle(pageLayoutVM.title());
         oldPageLayout.setConfig(pageLayoutVM.config());
@@ -66,8 +105,7 @@ public class PageLayoutAdminController {
     @PatchMapping("/{id}/status/publish")
     public PageLayoutAdminVM publishPageLayout(
             @PathVariable Long id,
-            @RequestBody @Valid PublishPageLayoutVM publishPageLayoutVM
-    ) {
+            @RequestBody @Valid PublishPageLayoutVM publishPageLayoutVM) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         pageLayout.setStatus(PageStatus.PUBLISHED);
         pageLayout.setStartTime(publishPageLayoutVM.startTime());

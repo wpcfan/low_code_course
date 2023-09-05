@@ -1,17 +1,21 @@
 package com.mooc.backend.services;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.repositories.PageLayoutRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -22,9 +26,8 @@ public class PageLayoutService {
         return pageLayoutRepository.findById(id).orElseThrow();
     }
 
-
-    public List<PageLayout> getPageLayouts() {
-        return pageLayoutRepository.findAll();
+    public Page<PageLayout> getPageLayouts(Example<PageLayout> example, Pageable pageable) {
+        return pageLayoutRepository.findAll(example, pageable);
     }
 
     @Transactional
@@ -37,7 +40,8 @@ public class PageLayoutService {
     }
 
     public PageLayout findByPlatformAndPageType(Platform platform, PageType pageType) {
-        // select from mooc_page_layouts where platform = platform and page_type = pageType
+        // select from mooc_page_layouts where platform = platform and page_type =
+        // pageType
         // 返回的是一个列表，有可能是空的，也有可能是 1 个元素，也有可能多余一个
         // 如果是空的，我们需要提供一个兜底的布局
         // 如果是 1 个，直接返回
@@ -49,8 +53,7 @@ public class PageLayoutService {
                         pageType,
                         PageStatus.PUBLISHED,
                         now,
-                        now
-                );
+                        now);
         if (pageLayoutList.isEmpty()) {
             // 如果是空的，我们需要提供一个兜底的布局
             return PageLayout.builder()
