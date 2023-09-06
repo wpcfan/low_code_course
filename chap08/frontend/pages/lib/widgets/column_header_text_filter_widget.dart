@@ -1,7 +1,7 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 
-class ColumnHeaderWidget extends StatelessWidget {
+class ColumnHeaderTextFilterWidget extends StatelessWidget {
   final String headerLabel;
   final double? spacing;
   final bool isFilterable;
@@ -10,7 +10,7 @@ class ColumnHeaderWidget extends StatelessWidget {
   final Color filterOffColor;
   final String? filterValue;
   final Function(String)? onFilter;
-  const ColumnHeaderWidget({
+  const ColumnHeaderTextFilterWidget({
     super.key,
     required this.headerLabel,
     this.spacing = 8,

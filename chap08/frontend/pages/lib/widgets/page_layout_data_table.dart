@@ -1,8 +1,9 @@
 import 'package:common/date_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:models/page_layout.dart';
+import 'package:models/models.dart';
 
-import 'column_header_widget.dart';
+import 'column_header_selection_filter_widget.dart';
+import 'column_header_text_filter_widget.dart';
 
 class PageLayoutDataTable extends StatelessWidget {
   final List<PageLayout> pageLayouts;
@@ -10,7 +11,7 @@ class PageLayoutDataTable extends StatelessWidget {
   final Function(PageLayout)? onDelete;
   final Function(PageLayout)? onPublish;
   final Function(PageLayout)? onDraft;
-  final Function(String, String)? onFilter;
+  final Function(String, Object?)? onFilter;
   const PageLayoutDataTable({
     super.key,
     this.pageLayouts = const [],
@@ -25,13 +26,13 @@ class PageLayoutDataTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final columns = [
       const DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: 'Id',
           isFilterable: false,
         ),
       ),
       DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: '标题',
           isFilterable: true,
           isFilterOn: true,
@@ -39,42 +40,46 @@ class PageLayoutDataTable extends StatelessWidget {
         ),
       ),
       DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderSelectionFilterWidget(
           headerLabel: '操作系统',
           isFilterable: true,
+          items: const [
+            SelectionModel(value: Platform.app, label: 'APP'),
+            SelectionModel(value: Platform.web, label: 'WEB'),
+          ],
           onFilter: (value) => onFilter?.call('platform', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: '布局状态',
           isFilterable: true,
           onFilter: (value) => onFilter?.call('status', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: '目标页面',
           isFilterable: true,
           onFilter: (value) => onFilter?.call('pageType', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: '生效时间',
           isFilterable: true,
           onFilter: (value) => onFilter?.call('startTime', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: '失效时间',
           isFilterable: true,
           onFilter: (value) => onFilter?.call('endTime', value),
         ),
       ),
       const DataColumn(
-        label: ColumnHeaderWidget(
+        label: ColumnHeaderTextFilterWidget(
           headerLabel: '',
           isFilterable: false,
         ),
