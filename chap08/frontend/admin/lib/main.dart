@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pages/page_table_widget.dart';
 
 void main() {
@@ -43,6 +44,14 @@ class MyApp extends StatelessWidget {
         body: const PageTableWidget(),
         // This trailing comma makes auto-formatting nicer for build methods.
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('zh'),
+      ],
     );
   }
 }

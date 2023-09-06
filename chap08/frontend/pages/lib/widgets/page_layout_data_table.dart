@@ -2,6 +2,7 @@ import 'package:common/date_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import 'column_header_date_range_filter_widget.dart';
 import 'column_header_selection_filter_widget.dart';
 import 'column_header_text_filter_widget.dart';
 
@@ -51,28 +52,38 @@ class PageLayoutDataTable extends StatelessWidget {
         ),
       ),
       DataColumn(
-        label: ColumnHeaderTextFilterWidget(
+        label: ColumnHeaderSelectionFilterWidget(
           headerLabel: '布局状态',
           isFilterable: true,
+          items: const [
+            SelectionModel(value: PageStatus.archived, label: '已归档'),
+            SelectionModel(value: PageStatus.draft, label: '草稿'),
+            SelectionModel(value: PageStatus.published, label: '已发布'),
+          ],
           onFilter: (value) => onFilter?.call('status', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderTextFilterWidget(
+        label: ColumnHeaderSelectionFilterWidget(
           headerLabel: '目标页面',
           isFilterable: true,
+          items: const [
+            SelectionModel(value: PageType.home, label: '首页'),
+            SelectionModel(value: PageType.category, label: '分类页'),
+            SelectionModel(value: PageType.about, label: '个人中心页'),
+          ],
           onFilter: (value) => onFilter?.call('pageType', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderTextFilterWidget(
+        label: ColumnHeaderDateRangeFilterWidget(
           headerLabel: '生效时间',
           isFilterable: true,
           onFilter: (value) => onFilter?.call('startTime', value),
         ),
       ),
       DataColumn(
-        label: ColumnHeaderTextFilterWidget(
+        label: ColumnHeaderDateRangeFilterWidget(
           headerLabel: '失效时间',
           isFilterable: true,
           onFilter: (value) => onFilter?.call('endTime', value),
