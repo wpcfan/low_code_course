@@ -24,4 +24,9 @@ class ImageData implements BlockData {
       'link': link.toJson(),
     };
   }
+
+  @override
+  String toString() {
+    return 'ImageData{image: $image, link: $link}';
+  }
 }

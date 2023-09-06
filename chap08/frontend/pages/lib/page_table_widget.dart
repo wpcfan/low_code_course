@@ -1,5 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 import 'widgets/widgets.dart';
 
@@ -8,51 +9,55 @@ class PageTableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // header 应该有 2 个按钮，一个是添加按钮，一个是清除所有过滤器的按钮
-    const header = PageTableHeaderWidget();
-
-    final columns = [
-      const DataColumn(
-        label: ColumnHeaderWidget(
-          headerLabel: 'Name',
-          isFilterable: true,
-        ),
-      ),
-      const DataColumn(
-        label: ColumnHeaderWidget(
-          headerLabel: 'Age',
-          isFilterable: true,
-          isFilterOn: true,
-        ),
-      ),
-      const DataColumn(
-        label: ColumnHeaderWidget(
-          headerLabel: 'Role',
-          isFilterable: true,
-        ),
-      ),
-    ];
-    final rows = [
-      const DataRow(cells: [
-        DataCell(Text('John')),
-        DataCell(Text('28')),
-        DataCell(Text('Software Engineer')),
-      ]),
-      const DataRow(cells: [
-        DataCell(Text('Jane')),
-        DataCell(Text('31')),
-        DataCell(Text('Product Manager')),
-      ]),
-      const DataRow(cells: [
-        DataCell(Text('Susan')),
-        DataCell(Text('24')),
-        DataCell(Text('Software Engineer')),
-      ]),
-    ];
+    final header = PageTableHeaderWidget(
+      onAdd: () => debugPrint('onAdd'),
+      onClearAllFilters: () => debugPrint('onClearAllFilters'),
+    );
     // 中间部分是一个 DataTable
-    final content = DataTable(
-      columns: columns,
-      rows: rows,
+    final content = PageLayoutDataTable(
+      pageLayouts: [
+        PageLayout(
+          id: 1,
+          title: '首页',
+          platform: Platform.app,
+          status: PageStatus.draft,
+          pageType: PageType.home,
+          config: const PageConfig(
+            baselineScreenWidth: 375,
+          ),
+          startTime: DateTime.now(),
+          endTime: DateTime.now(),
+        ),
+        PageLayout(
+          id: 2,
+          title: '首页',
+          platform: Platform.web,
+          status: PageStatus.published,
+          pageType: PageType.home,
+          config: const PageConfig(
+            baselineScreenWidth: 375,
+          ),
+          startTime: DateTime.now(),
+          endTime: DateTime.now(),
+        ),
+        PageLayout(
+          id: 3,
+          title: '首页',
+          platform: Platform.app,
+          status: PageStatus.draft,
+          pageType: PageType.category,
+          config: const PageConfig(
+            baselineScreenWidth: 375,
+          ),
+          startTime: DateTime.now(),
+          endTime: DateTime.now(),
+        ),
+      ],
+      onDelete: (layout) => debugPrint('onDelete: $layout'),
+      onDraft: (layout) => debugPrint('onDraft: $layout'),
+      onEdit: (layout) => debugPrint('onEdit: $layout'),
+      onPublish: (layout) => debugPrint('onPublish: $layout'),
+      onFilter: (filter) => debugPrint('onFilter: $filter'),
     );
     const footer = PageTableFooterWidget(
       totalSize: 3,

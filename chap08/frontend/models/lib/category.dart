@@ -34,4 +34,9 @@ class Category implements BlockData {
       'children': children.map((e) => e.toJson()).toList(),
     };
   }
+
+  @override
+  String toString() {
+    return 'Category{id: $id, name: $name, code: $code, children: $children}';
+  }
 }

@@ -29,4 +29,9 @@ class MyLink {
       'value': value,
     };
   }
+
+  @override
+  String toString() {
+    return 'MyLink{type: $type, value: $value}';
+  }
 }

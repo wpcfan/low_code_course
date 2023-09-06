@@ -27,4 +27,9 @@ class PageBlockData<T extends BlockData> {
       'content': content.toJson(),
     };
   }
+
+  @override
+  String toString() {
+    return 'PageBlockData{id: $id, sort: $sort, content: $content}';
+  }
 }

@@ -70,6 +70,11 @@ class PageLayout {
     };
   }
 
+  @override
+  String toString() {
+    return 'PageLayout{id: $id, title: $title, platform: $platform, pageType: $pageType, status: $status, startTime: $startTime, endTime: $endTime, blocks: $blocks, config: $config}';
+  }
+
   bool get isDraft => status == PageStatus.draft;
 
   bool get isPublished => status == PageStatus.published;

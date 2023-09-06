@@ -61,4 +61,9 @@ class BlockConfig {
       'blockWidth': blockWidth,
     };
   }
+
+  @override
+  String toString() {
+    return 'BlockConfig{horizontalPadding: $horizontalPadding, verticalPadding: $verticalPadding, blockHeight: $blockHeight, horizontalSpacing: $horizontalSpacing, verticalSpacing: $verticalSpacing, blockWidth: $blockWidth}';
+  }
 }

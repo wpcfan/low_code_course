@@ -28,4 +28,9 @@ class PageWrapper<T> {
   bool get isPopulated => items.isNotEmpty;
 
   bool get isEmpty => items.isEmpty;
+
+  @override
+  String toString() {
+    return 'PageWrapper{items: $items, page: $page, size: $size, totalPages: $totalPages, totalSize: $totalSize}';
+  }
 }

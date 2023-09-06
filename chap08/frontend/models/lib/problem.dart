@@ -31,4 +31,9 @@ class Problem {
       locale: json['locale'],
     );
   }
+
+  @override
+  String toString() {
+    return 'Problem{title: $title, detail: $detail, status: $status, type: $type, instance: $instance, ua: $ua, code: $code, locale: $locale}';
+  }
 }

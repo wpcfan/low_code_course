@@ -180,4 +180,9 @@ class PageQuery extends Equatable {
         endDateTo,
         page,
       ];
+
+  @override
+  String toString() {
+    return 'PageQuery{title: $title, platform: $platform, pageType: $pageType, status: $status, startDateFrom: $startDateFrom, startDateTo: $startDateTo, endDateFrom: $endDateFrom, endDateTo: $endDateTo, page: $page}';
+  }
 }

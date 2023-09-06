@@ -20,4 +20,9 @@ class SliceWrapper<T> {
       items: (json['items'] as List).map((e) => fromJson(e)).toList(),
     );
   }
+
+  @override
+  String toString() {
+    return 'SliceWrapper{page: $page, size: $size, hasNext: $hasNext, items: $items}';
+  }
 }

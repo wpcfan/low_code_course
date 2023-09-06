@@ -18,4 +18,9 @@ class PageConfig {
       'baselineScreenWidth': baselineScreenWidth,
     };
   }
+
+  @override
+  String toString() {
+    return 'PageConfig{baselineScreenWidth: $baselineScreenWidth}';
+  }
 }

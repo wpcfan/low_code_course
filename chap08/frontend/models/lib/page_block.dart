@@ -56,4 +56,9 @@ class PageBlock {
       'type': type.value,
     };
   }
+
+  @override
+  String toString() {
+    return 'PageBlock{config: $config, data: $data, type: $type}';
+  }
 }

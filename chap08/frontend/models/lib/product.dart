@@ -44,4 +44,9 @@ class Product implements BlockData {
       'originalPrice': originalPrice,
     };
   }
+
+  @override
+  String toString() {
+    return 'Product{id: $id, sku: $sku, name: $name, description: $description, images: $images, price: $price, originalPrice: $originalPrice}';
+  }
 }

@@ -22,4 +22,9 @@ class FileVM extends Equatable {
       'url': url,
     };
   }
+
+  @override
+  String toString() {
+    return 'FileVM{key: $key, url: $url}';
+  }
 }
