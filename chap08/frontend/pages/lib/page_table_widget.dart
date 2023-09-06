@@ -57,7 +57,7 @@ class PageTableWidget extends StatelessWidget {
       onDraft: (layout) => debugPrint('onDraft: $layout'),
       onEdit: (layout) => debugPrint('onEdit: $layout'),
       onPublish: (layout) => debugPrint('onPublish: $layout'),
-      onFilter: (filter) => debugPrint('onFilter: $filter'),
+      onFilter: (filter, value) => debugPrint('onFilter: $filter $value '),
     );
     const footer = PageTableFooterWidget(
       totalSize: 3,

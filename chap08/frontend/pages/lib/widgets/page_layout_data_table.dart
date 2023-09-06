@@ -10,7 +10,7 @@ class PageLayoutDataTable extends StatelessWidget {
   final Function(PageLayout)? onDelete;
   final Function(PageLayout)? onPublish;
   final Function(PageLayout)? onDraft;
-  final Function(String)? onFilter;
+  final Function(String, String)? onFilter;
   const PageLayoutDataTable({
     super.key,
     this.pageLayouts = const [],
@@ -35,42 +35,42 @@ class PageLayoutDataTable extends StatelessWidget {
           headerLabel: '标题',
           isFilterable: true,
           isFilterOn: true,
-          onFilter: () => onFilter?.call('title'),
+          onFilter: (value) => onFilter?.call('title', value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderWidget(
           headerLabel: '操作系统',
           isFilterable: true,
-          onFilter: () => onFilter?.call('platform'),
+          onFilter: (value) => onFilter?.call('platform', value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderWidget(
           headerLabel: '布局状态',
           isFilterable: true,
-          onFilter: () => onFilter?.call('status'),
+          onFilter: (value) => onFilter?.call('status', value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderWidget(
           headerLabel: '目标页面',
           isFilterable: true,
-          onFilter: () => onFilter?.call('pageType'),
+          onFilter: (value) => onFilter?.call('pageType', value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderWidget(
           headerLabel: '生效时间',
           isFilterable: true,
-          onFilter: () => onFilter?.call('startTime'),
+          onFilter: (value) => onFilter?.call('startTime', value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderWidget(
           headerLabel: '失效时间',
           isFilterable: true,
-          onFilter: () => onFilter?.call('endTime'),
+          onFilter: (value) => onFilter?.call('endTime', value),
         ),
       ),
       const DataColumn(
