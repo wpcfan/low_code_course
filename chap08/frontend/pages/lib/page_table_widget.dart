@@ -2,6 +2,7 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import 'popups/popups.dart';
 import 'widgets/widgets.dart';
 
 class PageTableWidget extends StatelessWidget {
@@ -10,7 +11,10 @@ class PageTableWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final header = PageTableHeaderWidget(
-      onAdd: () => debugPrint('onAdd'),
+      onAdd: () => showDialog(
+        context: context,
+        builder: (context) => const CreateOrUpdatePageLayout(),
+      ),
       onClearAllFilters: () => debugPrint('onClearAllFilters'),
     );
     // 中间部分是一个 DataTable
