@@ -13,7 +13,10 @@ class PageTableWidget extends StatelessWidget {
     final header = PageTableHeaderWidget(
       onAdd: () => showDialog(
         context: context,
-        builder: (context) => const CreateOrUpdatePageLayout(),
+        builder: (context) => CreateOrUpdatePageLayout(
+          title: '新增页面布局',
+          onCreated: (layout) => debugPrint('onCreated: $layout'),
+        ),
       ),
       onClearAllFilters: () => debugPrint('onClearAllFilters'),
     );
@@ -59,7 +62,14 @@ class PageTableWidget extends StatelessWidget {
       ],
       onDelete: (layout) => debugPrint('onDelete: $layout'),
       onDraft: (layout) => debugPrint('onDraft: $layout'),
-      onEdit: (layout) => debugPrint('onEdit: $layout'),
+      onEdit: (layout) => showDialog(
+        context: context,
+        builder: (context) => CreateOrUpdatePageLayout(
+          title: '编辑页面布局',
+          pageLayout: layout,
+          onUpdated: (layout) => debugPrint('onUpdated: $layout'),
+        ),
+      ),
       onPublish: (layout) => debugPrint('onPublish: $layout'),
       onFilterTitle: (value) => debugPrint('onFilterTitle: $value'),
       onFilterPlatform: (value) => debugPrint('onFilterPlatform: $value'),

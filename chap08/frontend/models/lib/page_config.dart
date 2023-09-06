@@ -23,4 +23,16 @@ class PageConfig {
   String toString() {
     return 'PageConfig{baselineScreenWidth: $baselineScreenWidth}';
   }
+
+  PageConfig copyWith({
+    double? baselineScreenWidth,
+  }) {
+    return PageConfig(
+      baselineScreenWidth: baselineScreenWidth ?? this.baselineScreenWidth,
+    );
+  }
+
+  factory PageConfig.empty() {
+    return const PageConfig();
+  }
 }

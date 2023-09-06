@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class CreateOrUpdatePageLayout extends StatefulWidget {
-  const CreateOrUpdatePageLayout({super.key});
+  final String title;
+  final PageLayout? pageLayout;
+  final Function(PageLayout)? onCreated;
+  final Function(PageLayout)? onUpdated;
+
+  const CreateOrUpdatePageLayout({
+    super.key,
+    required this.title,
+    this.pageLayout,
+    this.onCreated,
+    this.onUpdated,
+  });
 
   @override
   State<CreateOrUpdatePageLayout> createState() =>
@@ -11,17 +22,25 @@ class CreateOrUpdatePageLayout extends StatefulWidget {
 
 class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
   final _formKey = GlobalKey<FormState>();
+  late PageLayout _formValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _formValue = widget.pageLayout ?? PageLayout.empty();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('创建页面布局'),
+      title: Text(widget.title),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             children: [
               TextFormField(
+                initialValue: widget.pageLayout?.title,
                 decoration: const InputDecoration(
                   labelText: '页面标题',
                 ),
@@ -31,8 +50,14 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
                   }
                   return null;
                 },
+                onSaved: (newValue) {
+                  setState(() {
+                    _formValue = _formValue.copyWith(title: newValue);
+                  });
+                },
               ),
               DropdownButtonFormField(
+                value: widget.pageLayout?.pageType,
                 decoration: const InputDecoration(
                   labelText: '页面类型',
                 ),
@@ -51,8 +76,14 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
                   ),
                 ],
                 onChanged: (value) => debugPrint('onChanged: $value'),
+                onSaved: (newValue) {
+                  setState(() {
+                    _formValue = _formValue.copyWith(pageType: newValue);
+                  });
+                },
               ),
               DropdownButtonFormField(
+                value: widget.pageLayout?.platform,
                 decoration: const InputDecoration(
                   labelText: '页面平台',
                 ),
@@ -67,8 +98,15 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
                   ),
                 ],
                 onChanged: (value) => debugPrint('onChanged: $value'),
+                onSaved: (newValue) {
+                  setState(() {
+                    _formValue = _formValue.copyWith(platform: newValue);
+                  });
+                },
               ),
               TextFormField(
+                initialValue:
+                    widget.pageLayout?.config.baselineScreenWidth?.toString(),
                 decoration: const InputDecoration(
                   labelText: '基准屏幕宽度',
                 ),
@@ -82,6 +120,15 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
                   }
                   return null;
                 },
+                onSaved: (newValue) {
+                  setState(() {
+                    _formValue = _formValue.copyWith(
+                      config: _formValue.config.copyWith(
+                        baselineScreenWidth: double.parse(newValue!),
+                      ),
+                    );
+                  });
+                },
               ),
             ],
           ),
@@ -93,11 +140,16 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
           child: const Text('取消'),
         ),
         TextButton(
-          onPressed: () => {
-            if (_formKey.currentState!.validate())
-              {
-                Navigator.of(context).pop(),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+              if (widget.pageLayout == null) {
+                widget.onCreated?.call(_formValue);
+              } else {
+                widget.onUpdated?.call(_formValue);
               }
+              Navigator.of(context).pop();
+            }
           },
           child: const Text('确定'),
         ),

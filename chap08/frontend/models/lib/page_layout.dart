@@ -75,6 +75,40 @@ class PageLayout {
     return 'PageLayout{id: $id, title: $title, platform: $platform, pageType: $pageType, status: $status, startTime: $startTime, endTime: $endTime, blocks: $blocks, config: $config}';
   }
 
+  PageLayout copyWith({
+    int? id,
+    String? title,
+    Platform? platform,
+    PageType? pageType,
+    PageStatus? status,
+    DateTime? startTime,
+    DateTime? endTime,
+    List<PageBlock>? blocks,
+    PageConfig? config,
+  }) {
+    return PageLayout(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      platform: platform ?? this.platform,
+      pageType: pageType ?? this.pageType,
+      status: status ?? this.status,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      blocks: blocks ?? this.blocks,
+      config: config ?? this.config,
+    );
+  }
+
+  factory PageLayout.empty() {
+    return PageLayout(
+      title: '',
+      platform: Platform.app,
+      pageType: PageType.home,
+      status: PageStatus.draft,
+      config: PageConfig.empty(),
+    );
+  }
+
   bool get isDraft => status == PageStatus.draft;
 
   bool get isPublished => status == PageStatus.published;
