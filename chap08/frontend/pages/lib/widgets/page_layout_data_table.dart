@@ -12,7 +12,13 @@ class PageLayoutDataTable extends StatelessWidget {
   final Function(PageLayout)? onDelete;
   final Function(PageLayout)? onPublish;
   final Function(PageLayout)? onDraft;
-  final Function(String, Object?)? onFilter;
+  final Function(String?)? onFilterTitle;
+  final Function(Platform?)? onFilterPlatform;
+  final Function(PageStatus?)? onFilterPageStatus;
+  final Function(PageType?)? onFilterPageType;
+  final Function(DateRange?)? onFilterStartTime;
+  final Function(DateRange?)? onFilterEndTime;
+
   const PageLayoutDataTable({
     super.key,
     this.pageLayouts = const [],
@@ -20,7 +26,12 @@ class PageLayoutDataTable extends StatelessWidget {
     this.onDelete,
     this.onPublish,
     this.onDraft,
-    this.onFilter,
+    this.onFilterTitle,
+    this.onFilterPlatform,
+    this.onFilterPageStatus,
+    this.onFilterPageType,
+    this.onFilterStartTime,
+    this.onFilterEndTime,
   });
 
   @override
@@ -37,7 +48,7 @@ class PageLayoutDataTable extends StatelessWidget {
           headerLabel: '标题',
           isFilterable: true,
           isFilterOn: true,
-          onFilter: (value) => onFilter?.call('title', value),
+          onFilter: (value) => onFilterTitle?.call(value),
         ),
       ),
       DataColumn(
@@ -48,7 +59,7 @@ class PageLayoutDataTable extends StatelessWidget {
             SelectionModel(value: Platform.app, label: 'APP'),
             SelectionModel(value: Platform.web, label: 'WEB'),
           ],
-          onFilter: (value) => onFilter?.call('platform', value),
+          onFilter: (value) => onFilterPlatform?.call(value),
         ),
       ),
       DataColumn(
@@ -60,7 +71,7 @@ class PageLayoutDataTable extends StatelessWidget {
             SelectionModel(value: PageStatus.draft, label: '草稿'),
             SelectionModel(value: PageStatus.published, label: '已发布'),
           ],
-          onFilter: (value) => onFilter?.call('status', value),
+          onFilter: (value) => onFilterPageStatus?.call(value),
         ),
       ),
       DataColumn(
@@ -72,21 +83,21 @@ class PageLayoutDataTable extends StatelessWidget {
             SelectionModel(value: PageType.category, label: '分类页'),
             SelectionModel(value: PageType.about, label: '个人中心页'),
           ],
-          onFilter: (value) => onFilter?.call('pageType', value),
+          onFilter: (value) => onFilterPageType?.call(value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderDateRangeFilterWidget(
           headerLabel: '生效时间',
           isFilterable: true,
-          onFilter: (value) => onFilter?.call('startTime', value),
+          onFilter: (value) => onFilterStartTime?.call(value),
         ),
       ),
       DataColumn(
         label: ColumnHeaderDateRangeFilterWidget(
           headerLabel: '失效时间',
           isFilterable: true,
-          onFilter: (value) => onFilter?.call('endTime', value),
+          onFilter: (value) => onFilterEndTime?.call(value),
         ),
       ),
       const DataColumn(

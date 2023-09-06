@@ -57,7 +57,12 @@ class PageTableWidget extends StatelessWidget {
       onDraft: (layout) => debugPrint('onDraft: $layout'),
       onEdit: (layout) => debugPrint('onEdit: $layout'),
       onPublish: (layout) => debugPrint('onPublish: $layout'),
-      onFilter: (filter, value) => debugPrint('onFilter: $filter $value '),
+      onFilterTitle: (value) => debugPrint('onFilterTitle: $value'),
+      onFilterPlatform: (value) => debugPrint('onFilterPlatform: $value'),
+      onFilterPageStatus: (value) => debugPrint('onFilterPageStatus: $value'),
+      onFilterPageType: (value) => debugPrint('onFilterPageType: $value'),
+      onFilterStartTime: (value) => debugPrint('onFilterStartTime: $value'),
+      onFilterEndTime: (value) => debugPrint('onFilterEndTime: $value'),
     );
     const footer = PageTableFooterWidget(
       totalSize: 3,
