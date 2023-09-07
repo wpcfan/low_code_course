@@ -85,7 +85,7 @@ class PageAdminRepository {
     debugPrint('PageAdminRepository.publish($id, $startTime, $endTime)');
 
     final response = await client.patch(
-      '$baseUrl/$id/publish',
+      '$baseUrl/$id/status/publish',
       data: jsonEncode({
         'startTime': startTime?.toIso8601String(),
         'endTime': endTime?.toIso8601String(),
@@ -105,7 +105,7 @@ class PageAdminRepository {
   Future<PageLayout> draft(int id) async {
     debugPrint('PageAdminRepository.draft($id)');
 
-    final response = await client.patch('$baseUrl/$id/draft');
+    final response = await client.patch('$baseUrl/$id/status/draft');
 
     final result = PageLayout.fromJson(response.data);
 
@@ -153,20 +153,20 @@ class PageAdminRepository {
       params['status'] = query.status!.value;
     }
 
-    if (query.startDateFrom != null) {
-      params['startDateFrom'] = query.startDateFrom!;
+    if (query.startTimeFrom != null) {
+      params['startTimeFrom'] = query.startTimeFrom!;
     }
 
-    if (query.startDateTo != null) {
-      params['startDateTo'] = query.startDateTo!;
+    if (query.startTimeTo != null) {
+      params['startTimeTo'] = query.startTimeTo!;
     }
 
-    if (query.endDateFrom != null) {
-      params['endDateFrom'] = query.endDateFrom!;
+    if (query.endTimeFrom != null) {
+      params['endTimeFrom'] = query.endTimeFrom!;
     }
 
-    if (query.endDateTo != null) {
-      params['endDateTo'] = query.endDateTo!;
+    if (query.endTimeTo != null) {
+      params['endTimeTo'] = query.endTimeTo!;
     }
 
     params['page'] = query.page.toString();

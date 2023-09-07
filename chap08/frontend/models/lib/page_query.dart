@@ -9,10 +9,10 @@ class PageQuery extends Equatable {
   final Platform? platform;
   final PageType? pageType;
   final PageStatus? status;
-  final String? startDateFrom;
-  final String? startDateTo;
-  final String? endDateFrom;
-  final String? endDateTo;
+  final String? startTimeFrom;
+  final String? startTimeTo;
+  final String? endTimeFrom;
+  final String? endTimeTo;
   final int page;
 
   const PageQuery({
@@ -20,10 +20,10 @@ class PageQuery extends Equatable {
     this.platform,
     this.pageType,
     this.status,
-    this.startDateFrom,
-    this.startDateTo,
-    this.endDateFrom,
-    this.endDateTo,
+    this.startTimeFrom,
+    this.startTimeTo,
+    this.endTimeFrom,
+    this.endTimeTo,
     this.page = 0,
   });
 
@@ -32,10 +32,10 @@ class PageQuery extends Equatable {
     Platform? platform,
     PageType? pageType,
     PageStatus? status,
-    String? startDateFrom,
-    String? startDateTo,
-    String? endDateFrom,
-    String? endDateTo,
+    String? startTimeFrom,
+    String? startTimeTo,
+    String? endTimeFrom,
+    String? endTimeTo,
     int? page,
   }) {
     return PageQuery(
@@ -43,10 +43,10 @@ class PageQuery extends Equatable {
       platform: platform ?? this.platform,
       pageType: pageType ?? this.pageType,
       status: status ?? this.status,
-      startDateFrom: startDateFrom ?? this.startDateFrom,
-      startDateTo: startDateTo ?? this.startDateTo,
-      endDateFrom: endDateFrom ?? this.endDateFrom,
-      endDateTo: endDateTo ?? this.endDateTo,
+      startTimeFrom: startTimeFrom ?? startTimeFrom,
+      startTimeTo: startTimeTo ?? startTimeTo,
+      endTimeFrom: endTimeFrom ?? endTimeFrom,
+      endTimeTo: endTimeTo ?? endTimeTo,
       page: page ?? this.page,
     );
   }
@@ -59,10 +59,10 @@ class PageQuery extends Equatable {
           platform: platform,
           pageType: pageType,
           status: status,
-          startDateFrom: startDateFrom,
-          startDateTo: startDateTo,
-          endDateFrom: endDateFrom,
-          endDateTo: endDateTo,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: startTimeTo,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: endTimeTo,
           page: page,
         );
       case 'platform':
@@ -71,10 +71,10 @@ class PageQuery extends Equatable {
           platform: null,
           pageType: pageType,
           status: status,
-          startDateFrom: startDateFrom,
-          startDateTo: startDateTo,
-          endDateFrom: endDateFrom,
-          endDateTo: endDateTo,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: startTimeTo,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: endTimeTo,
           page: page,
         );
       case 'pageType':
@@ -83,10 +83,10 @@ class PageQuery extends Equatable {
           platform: platform,
           pageType: null,
           status: status,
-          startDateFrom: startDateFrom,
-          startDateTo: startDateTo,
-          endDateFrom: endDateFrom,
-          endDateTo: endDateTo,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: startTimeTo,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: endTimeTo,
           page: page,
         );
       case 'status':
@@ -95,58 +95,58 @@ class PageQuery extends Equatable {
           platform: platform,
           pageType: pageType,
           status: null,
-          startDateFrom: startDateFrom,
-          startDateTo: startDateTo,
-          endDateFrom: endDateFrom,
-          endDateTo: endDateTo,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: startTimeTo,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: endTimeTo,
           page: page,
         );
-      case 'startDateFrom':
+      case 'startTimeFrom':
         return PageQuery(
           title: title,
           platform: platform,
           pageType: pageType,
           status: status,
-          startDateFrom: null,
-          startDateTo: startDateTo,
-          endDateFrom: endDateFrom,
-          endDateTo: endDateTo,
+          startTimeFrom: null,
+          startTimeTo: startTimeTo,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: endTimeTo,
           page: page,
         );
-      case 'startDateTo':
+      case 'startTimeTo':
         return PageQuery(
           title: title,
           platform: platform,
           pageType: pageType,
           status: status,
-          startDateFrom: startDateFrom,
-          startDateTo: null,
-          endDateFrom: endDateFrom,
-          endDateTo: endDateTo,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: null,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: endTimeTo,
           page: page,
         );
-      case 'endDateFrom':
+      case 'endTimeFrom':
         return PageQuery(
           title: title,
           platform: platform,
           pageType: pageType,
           status: status,
-          startDateFrom: startDateFrom,
-          startDateTo: startDateTo,
-          endDateFrom: null,
-          endDateTo: endDateTo,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: startTimeTo,
+          endTimeFrom: null,
+          endTimeTo: endTimeTo,
           page: page,
         );
-      case 'endDateTo':
+      case 'endTimeTo':
         return PageQuery(
           title: title,
           platform: platform,
           pageType: pageType,
           status: status,
-          startDateFrom: startDateFrom,
-          startDateTo: startDateTo,
-          endDateFrom: endDateFrom,
-          endDateTo: null,
+          startTimeFrom: startTimeFrom,
+          startTimeTo: startTimeTo,
+          endTimeFrom: endTimeFrom,
+          endTimeTo: null,
           page: page,
         );
       default:
@@ -160,10 +160,10 @@ class PageQuery extends Equatable {
       'platform': platform?.value,
       'pageType': pageType?.value,
       'status': status?.value,
-      'startDateFrom': startDateFrom,
-      'startDateTo': startDateTo,
-      'endDateFrom': endDateFrom,
-      'endDateTo': endDateTo,
+      'startTimeFrom': startTimeFrom,
+      'startTimeTo': startTimeTo,
+      'endTimeFrom': endTimeFrom,
+      'endTimeTo': endTimeTo,
       'page': page,
     });
   }
@@ -174,15 +174,15 @@ class PageQuery extends Equatable {
         platform,
         pageType,
         status,
-        startDateFrom,
-        startDateTo,
-        endDateFrom,
-        endDateTo,
+        startTimeFrom,
+        startTimeTo,
+        endTimeFrom,
+        endTimeTo,
         page,
       ];
 
   @override
   String toString() {
-    return 'PageQuery{title: $title, platform: $platform, pageType: $pageType, status: $status, startDateFrom: $startDateFrom, startDateTo: $startDateTo, endDateFrom: $endDateFrom, endDateTo: $endDateTo, page: $page}';
+    return 'PageQuery{title: $title, platform: $platform, pageType: $pageType, status: $status, startTimeFrom: $startTimeFrom, startTimeTo: $startTimeTo, endTimeFrom: $endTimeFrom, endTimeTo: $endTimeTo, page: $page}';
   }
 }

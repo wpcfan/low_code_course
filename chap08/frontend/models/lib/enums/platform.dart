@@ -2,8 +2,8 @@
 /// - app: App 包括 iOS 和 Android
 /// - web: Web 包括移动网页，暂时不包括 PC 端网页
 enum Platform {
-  app('App'),
-  web('Web');
+  app('APP'),
+  web('WEB');
 
   final String value;
 

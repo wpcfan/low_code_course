@@ -14,7 +14,6 @@ class ColumnHeaderSelectionFilterWidget<T> extends StatefulWidget {
   final String headerLabel;
   final double? spacing;
   final bool isFilterable;
-  final bool isFilterOn;
   final Color filterOnColor;
   final Color filterOffColor;
   final List<SelectionModel<T>> items;
@@ -25,7 +24,6 @@ class ColumnHeaderSelectionFilterWidget<T> extends StatefulWidget {
     required this.headerLabel,
     this.spacing = 8,
     this.isFilterable = false,
-    this.isFilterOn = false,
     this.filterOnColor = Colors.deepPurpleAccent,
     this.filterOffColor = Colors.grey,
     this.onFilter,
@@ -50,9 +48,9 @@ class _ColumnHeaderSelectionFilterWidgetState<T>
 
   @override
   Widget build(BuildContext context) {
-    final icon = widget.isFilterOn ? Icons.filter_alt : Icons.filter_alt_off;
-    final iconColor =
-        widget.isFilterOn ? widget.filterOnColor : widget.filterOffColor;
+    final isFilterOn = widget.isFilterable && _selectedValue != null;
+    final icon = isFilterOn ? Icons.filter_alt : Icons.filter_alt_off;
+    final iconColor = isFilterOn ? widget.filterOnColor : widget.filterOffColor;
     final filterIcon = PopupMenuButton(
       itemBuilder: (context) {
         return [

@@ -85,7 +85,7 @@ public class PageLayoutAdminController {
     }
 
     @Operation(summary = "添加页面布局")
-    @PostMapping("/")
+    @PostMapping("")
     public PageLayoutAdminVM addPageLayout(@RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
         PageLayout pageLayout = new PageLayout();
         pageLayout.setTitle(pageLayoutVM.title());

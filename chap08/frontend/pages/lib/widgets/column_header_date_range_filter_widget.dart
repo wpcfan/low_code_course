@@ -22,7 +22,6 @@ class ColumnHeaderDateRangeFilterWidget extends StatefulWidget {
   final String headerLabel;
   final double? spacing;
   final bool isFilterable;
-  final bool isFilterOn;
   final Color filterOnColor;
   final Color filterOffColor;
   final DateRange? filterValue;
@@ -33,7 +32,6 @@ class ColumnHeaderDateRangeFilterWidget extends StatefulWidget {
     required this.headerLabel,
     this.spacing,
     this.isFilterable = false,
-    this.isFilterOn = false,
     this.filterOnColor = Colors.deepPurple,
     this.filterOffColor = Colors.grey,
     this.filterValue,
@@ -59,9 +57,11 @@ class _ColumnHeaderDateRangeFilterWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final icon = widget.isFilterOn ? Icons.filter_alt : Icons.filter_alt_off;
-    final iconColor =
-        widget.isFilterOn ? widget.filterOnColor : widget.filterOffColor;
+    final isFilterOn = widget.isFilterable &&
+        widget.filterValue != null &&
+        (widget.filterValue!.start != null || widget.filterValue!.end != null);
+    final icon = isFilterOn ? Icons.filter_alt : Icons.filter_alt_off;
+    final iconColor = isFilterOn ? widget.filterOnColor : widget.filterOffColor;
     final filterIcon = PopupMenuButton(
       itemBuilder: (context) {
         return [

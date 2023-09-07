@@ -5,7 +5,6 @@ class ColumnHeaderTextFilterWidget extends StatelessWidget {
   final String headerLabel;
   final double? spacing;
   final bool isFilterable;
-  final bool isFilterOn;
   final Color filterOnColor;
   final Color filterOffColor;
   final String? filterValue;
@@ -15,7 +14,6 @@ class ColumnHeaderTextFilterWidget extends StatelessWidget {
     required this.headerLabel,
     this.spacing = 8,
     this.isFilterable = false,
-    this.isFilterOn = false,
     this.filterOnColor = Colors.deepPurpleAccent,
     this.filterOffColor = Colors.grey,
     this.onFilter,
@@ -24,6 +22,8 @@ class ColumnHeaderTextFilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isFilterOn =
+        isFilterable && filterValue != null && filterValue!.isNotEmpty;
     final icon = isFilterOn ? Icons.filter_alt : Icons.filter_alt_off;
     final iconColor = isFilterOn ? filterOnColor : filterOffColor;
     final controller = TextEditingController(text: filterValue);

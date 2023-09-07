@@ -19,6 +19,7 @@ class PageLayoutDataTable extends StatelessWidget {
   final Function(PageType?)? onFilterPageType;
   final Function(DateRange?)? onFilterStartTime;
   final Function(DateRange?)? onFilterEndTime;
+  final PageQuery? query;
 
   const PageLayoutDataTable({
     super.key,
@@ -33,6 +34,7 @@ class PageLayoutDataTable extends StatelessWidget {
     this.onFilterPageType,
     this.onFilterStartTime,
     this.onFilterEndTime,
+    this.query,
   });
 
   @override
@@ -48,7 +50,7 @@ class PageLayoutDataTable extends StatelessWidget {
         label: ColumnHeaderTextFilterWidget(
           headerLabel: '标题',
           isFilterable: true,
-          isFilterOn: true,
+          filterValue: query?.title,
           onFilter: (value) => onFilterTitle?.call(value),
         ),
       ),
@@ -56,6 +58,7 @@ class PageLayoutDataTable extends StatelessWidget {
         label: ColumnHeaderSelectionFilterWidget(
           headerLabel: '操作系统',
           isFilterable: true,
+          filterValue: query?.platform,
           items: const [
             SelectionModel(value: Platform.app, label: 'APP'),
             SelectionModel(value: Platform.web, label: 'WEB'),
@@ -67,6 +70,7 @@ class PageLayoutDataTable extends StatelessWidget {
         label: ColumnHeaderSelectionFilterWidget(
           headerLabel: '布局状态',
           isFilterable: true,
+          filterValue: query?.status,
           items: const [
             SelectionModel(value: PageStatus.archived, label: '已归档'),
             SelectionModel(value: PageStatus.draft, label: '草稿'),
@@ -79,6 +83,7 @@ class PageLayoutDataTable extends StatelessWidget {
         label: ColumnHeaderSelectionFilterWidget(
           headerLabel: '目标页面',
           isFilterable: true,
+          filterValue: query?.pageType,
           items: const [
             SelectionModel(value: PageType.home, label: '首页'),
             SelectionModel(value: PageType.category, label: '分类页'),
@@ -91,6 +96,16 @@ class PageLayoutDataTable extends StatelessWidget {
         label: ColumnHeaderDateRangeFilterWidget(
           headerLabel: '生效时间',
           isFilterable: true,
+          filterValue: query == null
+              ? null
+              : DateRange(
+                  start: query!.startTimeFrom == null
+                      ? null
+                      : DateTime.parse(query!.startTimeFrom!),
+                  end: query!.startTimeTo == null
+                      ? null
+                      : DateTime.parse(query!.startTimeTo!),
+                ),
           onFilter: (value) => onFilterStartTime?.call(value),
         ),
       ),
@@ -98,6 +113,16 @@ class PageLayoutDataTable extends StatelessWidget {
         label: ColumnHeaderDateRangeFilterWidget(
           headerLabel: '失效时间',
           isFilterable: true,
+          filterValue: query == null
+              ? null
+              : DateRange(
+                  start: query!.endTimeFrom == null
+                      ? null
+                      : DateTime.parse(query!.endTimeFrom!),
+                  end: query!.endTimeTo == null
+                      ? null
+                      : DateTime.parse(query!.endTimeTo!),
+                ),
           onFilter: (value) => onFilterEndTime?.call(value),
         ),
       ),
