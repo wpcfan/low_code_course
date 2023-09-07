@@ -70,7 +70,8 @@ class PageTableWidget extends StatelessWidget {
           onUpdated: (layout) => debugPrint('onUpdated: $layout'),
         ),
       ),
-      onPublish: (layout) => debugPrint('onPublish: $layout'),
+      onPublish: (layout, start, end) =>
+          debugPrint('onPublish: $layout $start $end'),
       onFilterTitle: (value) => debugPrint('onFilterTitle: $value'),
       onFilterPlatform: (value) => debugPrint('onFilterPlatform: $value'),
       onFilterPageStatus: (value) => debugPrint('onFilterPageStatus: $value'),

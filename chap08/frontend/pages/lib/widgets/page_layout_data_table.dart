@@ -11,7 +11,7 @@ class PageLayoutDataTable extends StatelessWidget {
   final List<PageLayout> pageLayouts;
   final Function(PageLayout)? onEdit;
   final Function(PageLayout)? onDelete;
-  final Function(PageLayout)? onPublish;
+  final Function(PageLayout, DateTime, DateTime)? onPublish;
   final Function(PageLayout)? onDraft;
   final Function(String?)? onFilterTitle;
   final Function(Platform?)? onFilterPlatform;
@@ -129,7 +129,7 @@ class PageLayoutDataTable extends StatelessWidget {
                 icon: const Icon(Icons.delete),
               ),
               IconButton(
-                onPressed: () => onPublish?.call(pageLayout),
+                onPressed: () => _handlePublish(context, pageLayout),
                 icon: const Icon(Icons.publish),
               ),
               IconButton(
@@ -148,6 +148,19 @@ class PageLayoutDataTable extends StatelessWidget {
       rows: rows,
     );
     return content;
+  }
+
+  void _handlePublish(BuildContext context, PageLayout pageLayout) async {
+    final result = await showDateRangePicker(
+      initialEntryMode: DatePickerEntryMode.input,
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      locale: const Locale('zh'),
+    );
+    if (result != null) {
+      onPublish?.call(pageLayout, result.start, result.end);
+    }
   }
 
   void _handleDelete(BuildContext context, PageLayout pageLayout) async {
