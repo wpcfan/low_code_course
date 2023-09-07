@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forms/forms.dart';
 import 'package:models/models.dart';
 
 class CreateOrUpdatePageLayout extends StatefulWidget {
@@ -39,17 +40,13 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TextFormField(
+              MyTextFormField(
                 initialValue: widget.pageLayout?.title,
-                decoration: const InputDecoration(
-                  labelText: '页面标题',
-                ),
-                validator: (value) {
-                  if (value != null && value.isEmpty) {
-                    return '页面标题不能为空';
-                  }
-                  return null;
-                },
+                label: '页面标题',
+                validators: [
+                  Validators.required(label: '页面标题'),
+                  Validators.maxLength(label: '页面标题', maxLength: 255),
+                ],
                 onSaved: (newValue) {
                   setState(() {
                     _formValue = _formValue.copyWith(title: newValue);
@@ -104,22 +101,15 @@ class _CreateOrUpdatePageLayoutState extends State<CreateOrUpdatePageLayout> {
                   });
                 },
               ),
-              TextFormField(
+              MyTextFormField(
                 initialValue:
                     widget.pageLayout?.config.baselineScreenWidth?.toString(),
-                decoration: const InputDecoration(
-                  labelText: '基准屏幕宽度',
-                ),
-                validator: (value) {
-                  if (value != null && value.isEmpty) {
-                    return '基准屏幕宽度不能为空';
-                  }
-                  if (double.tryParse(value!) == null ||
-                      double.parse(value) < 300) {
-                    return '基准屏幕宽度必须是大于 300 的数字';
-                  }
-                  return null;
-                },
+                label: '基准屏幕宽度',
+                validators: [
+                  Validators.required(label: '基准屏幕宽度'),
+                  Validators.isDouble(label: '基准屏幕宽度'),
+                  Validators.min(label: '基准屏幕宽度', min: 300),
+                ],
                 onSaved: (newValue) {
                   setState(() {
                     _formValue = _formValue.copyWith(
