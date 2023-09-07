@@ -1,6 +1,7 @@
 import 'package:common/date_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:pages/popups/popups.dart';
 
 import 'column_header_date_range_filter_widget.dart';
 import 'column_header_selection_filter_widget.dart';
@@ -124,7 +125,7 @@ class PageLayoutDataTable extends StatelessWidget {
                 icon: const Icon(Icons.edit),
               ),
               IconButton(
-                onPressed: () => onDelete?.call(pageLayout),
+                onPressed: () => _handleDelete(context, pageLayout),
                 icon: const Icon(Icons.delete),
               ),
               IconButton(
@@ -132,7 +133,7 @@ class PageLayoutDataTable extends StatelessWidget {
                 icon: const Icon(Icons.publish),
               ),
               IconButton(
-                onPressed: () => onDraft?.call(pageLayout),
+                onPressed: () => _handleDraft(context, pageLayout),
                 icon: const Icon(Icons.download_for_offline),
               )
             ],
@@ -147,5 +148,36 @@ class PageLayoutDataTable extends StatelessWidget {
       rows: rows,
     );
     return content;
+  }
+
+  void _handleDelete(BuildContext context, PageLayout pageLayout) async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return const ConfirmDialog(
+          title: '删除页面布局',
+          content: '确定要删除页面布局吗？',
+        );
+      },
+    );
+    if (result) {
+      onDelete?.call(pageLayout);
+    }
+  }
+
+  void _handleDraft(BuildContext context, PageLayout pageLayout) async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return const ConfirmDialog(
+          title: '下线页面布局',
+          content: '确定要下线页面布局吗？',
+        );
+      },
+    );
+
+    if (result) {
+      onDraft?.call(pageLayout);
+    }
   }
 }
