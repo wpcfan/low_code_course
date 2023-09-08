@@ -28,7 +28,7 @@ public record PageLayoutDetailVM(
         PageType pageType,
         @Schema(description = "页面平台", example = "APP")
         Platform platform,
-        @Schema(description = "页面区块列表")
+        @Schema(description = "页面区块列表", example = "[{...},{...},{...}]")
         Set<PageBlock> blocks
 ) {
     public static PageLayoutDetailVM toVM(PageLayout pageLayout) {
