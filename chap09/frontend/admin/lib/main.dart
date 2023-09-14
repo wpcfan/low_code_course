@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pages/page_table_widget.dart';
 
 class SimpleBlocObserver extends BlocObserver {
@@ -11,6 +12,36 @@ class SimpleBlocObserver extends BlocObserver {
   }
 }
 
+final GoRouter _router = GoRouter(
+  routes: [
+    GoRoute(
+        path: '/',
+        builder: (context, state) => Scaffold(
+              body: Center(
+                child: TextButton(
+                  onPressed: () {
+                    context.go('/layouts');
+                  },
+                  child: const Text('Hello World'),
+                ),
+              ),
+            )),
+    GoRoute(
+      path: '/layouts',
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.deepPurple,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: const Text('Hello World'),
+        ),
+        body: const PageTableWidget(),
+        // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+    ),
+  ],
+);
 void main() {
   /// 初始化 Bloc 的观察者，用于监听 Bloc 的生命周期
   Bloc.observer = SimpleBlocObserver();
@@ -23,7 +54,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -44,17 +75,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.deepPurple,
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: const Text('Hello World'),
-        ),
-        body: const PageTableWidget(),
-        // This trailing comma makes auto-formatting nicer for build methods.
-      ),
+      routerConfig: _router,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
