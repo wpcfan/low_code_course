@@ -15,17 +15,9 @@ class SimpleBlocObserver extends BlocObserver {
 final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
-        path: '/',
-        builder: (context, state) => Scaffold(
-              body: Center(
-                child: TextButton(
-                  onPressed: () {
-                    context.go('/layouts');
-                  },
-                  child: const Text('Hello World'),
-                ),
-              ),
-            )),
+      path: '/',
+      redirect: (context, state) => '/layouts',
+    ),
     GoRoute(
       path: '/layouts',
       builder: (context, state) => Scaffold(
@@ -40,6 +32,84 @@ final GoRouter _router = GoRouter(
         // This trailing comma makes auto-formatting nicer for build methods.
       ),
     ),
+    GoRoute(
+        path: '/playgrounds',
+        builder: (context, state) => Scaffold(
+              appBar: AppBar(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurple,
+                // Here we take the value from the MyHomePage object that was created by
+                // the App.build method, and use it to set our appbar title.
+                title: const Text('Hello World'),
+              ),
+              body: ListView.builder(
+                itemCount: 100,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('Item $index'),
+                    onTap: () {
+                      context.go('/playgrounds/$index');
+                    },
+                  );
+                },
+              ),
+              // This trailing comma makes auto-formatting nicer for build methods.
+            ),
+        routes: [
+          GoRoute(
+            path: ':id',
+            builder: (context, state) => Scaffold(
+              appBar: AppBar(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurple,
+                // Here we take the value from the MyHomePage object that was created by
+                // the App.build method, and use it to set our appbar title.
+                title: const Text('Hello World'),
+              ),
+              body: Center(
+                child: Text('Playground ${state.pathParameters['id']}'),
+              ),
+              // This trailing comma makes auto-formatting nicer for build methods.
+            ),
+          ),
+        ]),
+    ShellRoute(
+      builder: (context, state, child) => Scaffold(
+        appBar: AppBar(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.deepPurple,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: const Text('Hello World'),
+        ),
+        body: child,
+        // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      routes: [
+        GoRoute(
+          path: '/shells',
+          builder: (context, state) => ListView.builder(
+            itemCount: 100,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text('Item $index'),
+                onTap: () {
+                  context.go('/shells/$index');
+                },
+              );
+            },
+          ),
+          routes: [
+            GoRoute(
+              path: ':id',
+              builder: (context, state) => Center(
+                child: Text('Shell ${state.pathParameters['id']}'),
+              ),
+            ),
+          ],
+        )
+      ],
+    )
   ],
 );
 void main() {
