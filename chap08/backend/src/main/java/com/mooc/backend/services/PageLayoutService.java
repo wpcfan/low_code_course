@@ -1,22 +1,19 @@
 package com.mooc.backend.services;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.data.domain.Example;
+import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.PageStatus;
+import com.mooc.backend.enumerations.PageType;
+import com.mooc.backend.enumerations.Platform;
+import com.mooc.backend.repositories.PageLayoutRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mooc.backend.entities.PageLayout;
-import com.mooc.backend.enumerations.PageStatus;
-import com.mooc.backend.enumerations.PageType;
-import com.mooc.backend.enumerations.Platform;
-import com.mooc.backend.repositories.PageLayoutRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service

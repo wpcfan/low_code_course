@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,11 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PageLayoutSpec implements Specification<PageLayout> {
     private final PageLayoutFilter filter;
+
     @Override
     public Predicate toPredicate(
-            Root<PageLayout> root,
-            CriteriaQuery<?> query,
-            CriteriaBuilder builder) {
+            @NonNull Root<PageLayout> root,
+            @NonNull CriteriaQuery<?> query,
+            @NonNull CriteriaBuilder builder) {
         // root: 代表查询的实体类
         // query: 查询语句
         // builder: 构造查询条件的工具
