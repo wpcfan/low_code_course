@@ -8,7 +8,11 @@ import 'popups/popups.dart';
 import 'widgets/widgets.dart';
 
 class PageTableWidget extends StatelessWidget {
-  const PageTableWidget({super.key});
+  final Function(int)? onSelect;
+  const PageTableWidget({
+    super.key,
+    this.onSelect,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +89,7 @@ class PageTableWidget extends StatelessWidget {
           bloc.add(PageEventStartTimeChanged(value?.start, value?.end)),
       onFilterEndTime: (value) =>
           bloc.add(PageEventEndTimeChanged(value?.start, value?.end)),
+      onSelect: (id) => onSelect?.call(id),
     );
   }
 }

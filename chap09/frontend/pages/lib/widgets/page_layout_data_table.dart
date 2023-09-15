@@ -1,4 +1,4 @@
-import 'package:common/date_extensions.dart';
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:pages/popups/popups.dart';
@@ -9,6 +9,7 @@ import 'column_header_text_filter_widget.dart';
 
 class PageLayoutDataTable extends StatelessWidget {
   final List<PageLayout> pageLayouts;
+  final Function(int)? onSelect;
   final Function(PageLayout)? onEdit;
   final Function(PageLayout)? onDelete;
   final Function(PageLayout, DateTime, DateTime)? onPublish;
@@ -24,6 +25,7 @@ class PageLayoutDataTable extends StatelessWidget {
   const PageLayoutDataTable({
     super.key,
     this.pageLayouts = const [],
+    this.onSelect,
     this.onEdit,
     this.onDelete,
     this.onPublish,
@@ -135,7 +137,10 @@ class PageLayoutDataTable extends StatelessWidget {
     ];
     final rows = pageLayouts.map((pageLayout) {
       final cells = [
-        DataCell(Text('${pageLayout.id ?? 0}')),
+        DataCell(TextButton(
+          onPressed: () => onSelect?.call(pageLayout.id!),
+          child: Text('${pageLayout.id}'),
+        )),
         DataCell(Text(pageLayout.title)),
         DataCell(Text(pageLayout.platform.value)),
         DataCell(Text(pageLayout.status.value)),
@@ -143,26 +148,24 @@ class PageLayoutDataTable extends StatelessWidget {
         DataCell(Text(pageLayout.startTime?.formatted ?? '')),
         DataCell(Text(pageLayout.endTime?.formatted ?? '')),
         DataCell(
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => onEdit?.call(pageLayout),
-                icon: const Icon(Icons.edit),
-              ),
-              IconButton(
-                onPressed: () => _handleDelete(context, pageLayout),
-                icon: const Icon(Icons.delete),
-              ),
-              IconButton(
-                onPressed: () => _handlePublish(context, pageLayout),
-                icon: const Icon(Icons.publish),
-              ),
-              IconButton(
-                onPressed: () => _handleDraft(context, pageLayout),
-                icon: const Icon(Icons.download_for_offline),
-              )
-            ],
-          ),
+          [
+            IconButton(
+              onPressed: () => onEdit?.call(pageLayout),
+              icon: const Icon(Icons.edit),
+            ),
+            IconButton(
+              onPressed: () => _handleDelete(context, pageLayout),
+              icon: const Icon(Icons.delete),
+            ),
+            IconButton(
+              onPressed: () => _handlePublish(context, pageLayout),
+              icon: const Icon(Icons.publish),
+            ),
+            IconButton(
+              onPressed: () => _handleDraft(context, pageLayout),
+              icon: const Icon(Icons.download_for_offline),
+            )
+          ].toRow(),
         ),
       ];
       return DataRow(cells: cells);
