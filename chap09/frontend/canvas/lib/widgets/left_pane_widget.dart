@@ -1,5 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 class LeftPaneWidget extends StatelessWidget {
   const LeftPaneWidget({super.key});
@@ -17,6 +18,22 @@ class LeftPaneWidget extends StatelessWidget {
     return ListView(
       children: [
         Draggable(
+          data: PageBlock(
+            type: PageBlockType.imageRow,
+            config: const BlockConfig(blockHeight: 100),
+            data: [
+              PageBlockData<ImageData>(
+                sort: 1,
+                content: const ImageData(
+                  image: 'https://picsum.photos/200/300',
+                  link: MyLink(
+                    type: LinkType.url,
+                    value: 'https://www.baidu.com',
+                  ),
+                ),
+              ),
+            ],
+          ),
           childWhenDragging: oneRowOneImage.opacity(0.6),
           feedback: Theme(
             data: ThemeData.dark(),
@@ -33,6 +50,7 @@ class LeftPaneWidget extends StatelessWidget {
         ),
         const Divider(),
         Draggable(
+          data: '一行两图片组件',
           childWhenDragging: oneRowTwoImage,
           feedback: oneRowTwoImage
               .constrained(
