@@ -14,10 +14,13 @@ class CanvasWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<PageBlock> pageBlocks = [];
+    const double baselineScreenWidth = 400.0;
+    const double toolbarWidth = 40.0;
     return [
       const LeftPaneWidget().expanded(),
       CenterPaneWidget(
         blocks: pageBlocks,
+        baselineScreenWidth: baselineScreenWidth,
         onBlockAdded: (value) {
           pageBlocks.add(value.copyWith(
             id: pageBlocks.length + 1,
@@ -34,8 +37,18 @@ class CanvasWidget extends StatelessWidget {
             pageBlocks[index] = element.copyWith(sort: index + 1);
           });
         },
+        onBlockDeleted: (value) async {
+          final result = await showDialog<bool>(
+            context: context,
+            builder: (context) => const ConfirmDialog(
+              title: '删除区块',
+              content: '是否确认删除此区块？',
+            ),
+          );
+        },
+        onBlockEdited: (value) => debugPrint('onBlockEdited $value'),
       ).constrained(
-        width: 400,
+        width: baselineScreenWidth + toolbarWidth,
       ),
       const RightPaneWidget().expanded(),
     ].toRow();

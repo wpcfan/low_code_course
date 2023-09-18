@@ -8,11 +8,16 @@ class CenterPaneWidget extends StatelessWidget {
   final double baselineScreenWidth;
   final Function(PageBlock)? onBlockAdded;
   final Function(PageBlock, PageBlock)? onBlockMoved;
+  final Function(PageBlock)? onBlockDeleted;
+  final Function(PageBlock)? onBlockEdited;
+
   const CenterPaneWidget({
     super.key,
     required this.blocks,
     this.onBlockAdded,
     this.onBlockMoved,
+    this.onBlockDeleted,
+    this.onBlockEdited,
     this.baselineScreenWidth = 400.0,
   });
 
@@ -20,15 +25,33 @@ class CenterPaneWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     page(PageBlock block) => ({required Widget child}) => Draggable(
           data: block,
-          feedback: child,
-          childWhenDragging: child,
+          feedback: child.opacity(0.6),
+          childWhenDragging: child.decorated(
+            border: Border.all(color: Colors.deepPurple, width: 2),
+          ),
           child: DragTarget(
             onWillAccept: (data) => data is PageBlock && data.id != null,
             onAccept: (data) {
               onBlockMoved?.call(data as PageBlock, block);
             },
             builder: (context, candidateData, rejectedData) {
-              return child;
+              final toolbar = [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => onBlockDeleted?.call(block),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => onBlockEdited?.call(block),
+                ),
+              ].toColumn(
+                mainAxisSize: MainAxisSize.min,
+              );
+
+              return [child, toolbar].toRow(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+              );
             },
           ),
         );
