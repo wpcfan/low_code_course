@@ -66,4 +66,22 @@ class BlockConfig {
   String toString() {
     return 'BlockConfig{horizontalPadding: $horizontalPadding, verticalPadding: $verticalPadding, blockHeight: $blockHeight, horizontalSpacing: $horizontalSpacing, verticalSpacing: $verticalSpacing, blockWidth: $blockWidth}';
   }
+
+  BlockConfig copyWith({
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? blockHeight,
+    double? horizontalSpacing,
+    double? verticalSpacing,
+    double? blockWidth,
+  }) {
+    return BlockConfig(
+      horizontalPadding: horizontalPadding ?? this.horizontalPadding,
+      verticalPadding: verticalPadding ?? this.verticalPadding,
+      blockHeight: blockHeight ?? this.blockHeight,
+      horizontalSpacing: horizontalSpacing ?? this.horizontalSpacing,
+      verticalSpacing: verticalSpacing ?? this.verticalSpacing,
+      blockWidth: blockWidth ?? this.blockWidth,
+    );
+  }
 }

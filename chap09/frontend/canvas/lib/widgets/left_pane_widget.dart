@@ -7,6 +7,13 @@ class LeftPaneWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const defaultBlockConfig = BlockConfig(
+      blockHeight: 100,
+      horizontalSpacing: 12,
+      verticalSpacing: 12,
+      horizontalPadding: 12,
+      verticalPadding: 12,
+    );
     const oneRowOneImage = ListTile(
       title: Text('一行一图片组件'),
       subtitle: Text('此组件一般用于特别活动推荐位'),
@@ -20,12 +27,12 @@ class LeftPaneWidget extends StatelessWidget {
         Draggable(
           data: PageBlock(
             type: PageBlockType.imageRow,
-            config: const BlockConfig(blockHeight: 100),
+            config: defaultBlockConfig.copyWith(blockHeight: 100),
             data: [
               PageBlockData<ImageData>(
                 sort: 1,
                 content: const ImageData(
-                  image: 'https://picsum.photos/200/300',
+                  image: 'http://localhost:8080/api/v1/app/image/400/100',
                   link: MyLink(
                     type: LinkType.url,
                     value: 'https://www.baidu.com',
@@ -50,7 +57,32 @@ class LeftPaneWidget extends StatelessWidget {
         ),
         const Divider(),
         Draggable(
-          data: '一行两图片组件',
+          data: PageBlock(
+            type: PageBlockType.imageRow,
+            config: defaultBlockConfig.copyWith(blockHeight: 120),
+            data: [
+              PageBlockData<ImageData>(
+                sort: 1,
+                content: const ImageData(
+                  image: 'http://localhost:8080/api/v1/app/image/190/120',
+                  link: MyLink(
+                    type: LinkType.url,
+                    value: 'https://www.baidu.com',
+                  ),
+                ),
+              ),
+              PageBlockData<ImageData>(
+                sort: 2,
+                content: const ImageData(
+                  image: 'http://localhost:8080/api/v1/app/image/190/120',
+                  link: MyLink(
+                    type: LinkType.url,
+                    value: 'https://www.baidu.com',
+                  ),
+                ),
+              ),
+            ],
+          ),
           childWhenDragging: oneRowTwoImage,
           feedback: oneRowTwoImage
               .constrained(
