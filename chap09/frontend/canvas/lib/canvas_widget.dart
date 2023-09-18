@@ -13,6 +13,7 @@ class CanvasWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return [
+      const LeftPaneWidget().expanded(),
       const CenterPaneWidget().expanded(),
       const RightPaneWidget().expanded(),
     ].toRow();
