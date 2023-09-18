@@ -8,11 +8,15 @@ import 'image_data.dart';
 import 'product.dart';
 
 class PageBlock {
+  final int? id;
+  final int sort;
   final BlockConfig config;
   final List<PageBlockData<BlockData>> data;
   final PageBlockType type;
 
   const PageBlock({
+    this.id,
+    required this.sort,
     required this.config,
     required this.data,
     this.type = PageBlockType.unknown,
@@ -20,6 +24,8 @@ class PageBlock {
 
   factory PageBlock.fromJson(Map<String, dynamic> json) {
     return PageBlock(
+      id: json['id'] as int?,
+      sort: json['sort'] as int,
       config: BlockConfig.fromJson(json['config'] as Map<String, dynamic>),
       data: (json['data'] as List<dynamic>).map((e) {
         if (json['type'] == 'ImageRow' || json['type'] == 'Banner') {
@@ -51,6 +57,8 @@ class PageBlock {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
+      'sort': sort,
       'config': config.toJson(),
       'data': data.map((e) => e.toJson()).toList(),
       'type': type.value,
@@ -59,6 +67,22 @@ class PageBlock {
 
   @override
   String toString() {
-    return 'PageBlock{config: $config, data: $data, type: $type}';
+    return 'PageBlock{id: $id, sort: $sort, config: $config, data: $data, type: $type}';
+  }
+
+  PageBlock copyWith({
+    int? id,
+    int? sort,
+    BlockConfig? config,
+    List<PageBlockData<BlockData>>? data,
+    PageBlockType? type,
+  }) {
+    return PageBlock(
+      id: id ?? this.id,
+      sort: sort ?? this.sort,
+      config: config ?? this.config,
+      data: data ?? this.data,
+      type: type ?? this.type,
+    );
   }
 }

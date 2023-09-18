@@ -26,6 +26,7 @@ class LeftPaneWidget extends StatelessWidget {
       children: [
         Draggable(
           data: PageBlock(
+            sort: 0,
             type: PageBlockType.imageRow,
             config: defaultBlockConfig.copyWith(blockHeight: 100),
             data: [
@@ -58,6 +59,7 @@ class LeftPaneWidget extends StatelessWidget {
         const Divider(),
         Draggable(
           data: PageBlock(
+            sort: 0,
             type: PageBlockType.imageRow,
             config: defaultBlockConfig.copyWith(blockHeight: 120),
             data: [

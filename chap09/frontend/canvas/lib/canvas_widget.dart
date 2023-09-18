@@ -19,7 +19,20 @@ class CanvasWidget extends StatelessWidget {
       CenterPaneWidget(
         blocks: pageBlocks,
         onBlockAdded: (value) {
-          pageBlocks.add(value);
+          pageBlocks.add(value.copyWith(
+            id: pageBlocks.length + 1,
+          ));
+        },
+        onBlockMoved: (from, to) {
+          final fromIndex =
+              pageBlocks.indexWhere((element) => element.id == from.id);
+          pageBlocks.removeAt(fromIndex);
+          final toIndex =
+              pageBlocks.indexWhere((element) => element.id == to.id);
+          pageBlocks.insert(toIndex, from);
+          pageBlocks.asMap().forEach((index, element) {
+            pageBlocks[index] = element.copyWith(sort: index + 1);
+          });
         },
       ).constrained(
         width: 400,
