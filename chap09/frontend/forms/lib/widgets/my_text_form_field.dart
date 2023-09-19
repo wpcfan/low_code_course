@@ -27,7 +27,7 @@ class MyTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: initialValue,
+      controller: TextEditingController(text: initialValue),
       decoration: decoration,
       validator: (value) {
         for (final validator in validators) {
