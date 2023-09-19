@@ -10,11 +10,13 @@ import 'blocs/blocs.dart';
 
 class ImageExplorer extends StatelessWidget {
   final Function()? onCancel;
+  final Function(FileVM)? onTap;
   final bool cancelDisplayed;
 
   const ImageExplorer({
     super.key,
     this.onCancel,
+    this.onTap,
     this.cancelDisplayed = false,
   });
 
@@ -48,7 +50,7 @@ class ImageExplorer extends StatelessWidget {
                 editable: state.editable,
                 images: state.files,
                 selectedKeys: state.selectedKeys,
-                onTap: (file) => debugPrint('onSelected: ${file.key}'),
+                onTap: (file) => onTap?.call(file),
                 onToggleSelected: (key) =>
                     context.read<FileBloc>().add(FileEventToggleSelected(key)),
               ).expanded(),

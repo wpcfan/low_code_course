@@ -1,4 +1,5 @@
 import 'package:common/common.dart';
+import 'package:files/files.dart';
 import 'package:flutter/material.dart';
 import 'package:forms/forms.dart';
 import 'package:models/models.dart';
@@ -56,6 +57,20 @@ class _EditImageDataWidgetState extends State<EditImageDataWidget> {
         initialValue: _formValue.image,
         label: '图片地址',
         hint: '请输入图片地址',
+        suffix: const Icon(
+          Icons.image,
+          color: Colors.grey,
+        ).inkWell(onTap: () async {
+          final String? image = await showDialog(
+            context: context,
+            builder: (context) => const ImageExplorerDialog(),
+          );
+          if (image != null) {
+            setState(() {
+              _formValue = _formValue.copyWith(image: image);
+            });
+          }
+        }),
         validators: [
           Validators.required(label: '图片地址'),
         ],

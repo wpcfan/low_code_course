@@ -11,6 +11,7 @@ class ImageExplorerDialog extends StatelessWidget {
         width: 800,
         height: 600,
         child: ImageExplorer(
+          onTap: (file) => Navigator.of(context).pop(file.url),
           onCancel: () => Navigator.of(context).pop(),
           cancelDisplayed: true,
         ),
