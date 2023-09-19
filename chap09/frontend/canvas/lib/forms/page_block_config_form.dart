@@ -28,9 +28,7 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
       ),
       const SizedBox(width: 8),
       TextButton(
-        onPressed: () {
-          _formKey.currentState?.reset();
-        },
+        onPressed: () {},
         child: const Text('清除表单'),
       ),
     ].toRow();
