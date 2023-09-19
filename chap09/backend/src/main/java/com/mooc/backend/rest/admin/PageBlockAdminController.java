@@ -52,6 +52,19 @@ public class PageBlockAdminController {
         return pageBlockService.savePageBlock(pageBlock);
     }
 
+    @Operation(summary = "移动页面区块")
+    @PutMapping("/{id}/blocks/{blockId}/sort/{targetBlockId}")
+    public void movePageBlock(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long targetBlockId) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
+            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(targetBlockId))) {
+            throw new CustomException("目标页面区块不存在", "TargetPageBlockNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        pageBlockService.movePageBlock(blockId, targetBlockId);
+    }
+
     @Operation(summary = "删除页面区块")
     @DeleteMapping("/{id}/blocks/{blockId}")
     public void deletePageBlock(@PathVariable Long id, @PathVariable Long blockId) {
