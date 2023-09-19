@@ -28,8 +28,10 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
       ),
       const SizedBox(width: 8),
       TextButton(
-        onPressed: () {},
-        child: const Text('清除表单'),
+        onPressed: () {
+          _formKey.currentState?.reset();
+        },
+        child: const Text('重置表单'),
       ),
     ].toRow();
 
@@ -64,7 +66,7 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
           Validators.required(label: '排序'),
           Validators.isInteger(label: '排序'),
           Validators.min(label: '排序', min: 0),
-          Validators.max(label: '排序', max: 100)
+          Validators.max(label: '排序', max: 48)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(sort: int.parse(value ?? '0'));
@@ -79,8 +81,8 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
         validators: [
           Validators.required(label: '水平内边距'),
           Validators.isDouble(label: '水平内边距'),
-          Validators.min(label: '水平内边距', min: 0),
-          Validators.max(label: '水平内边距', max: 100)
+          Validators.min(label: '水平内边距', min: 1),
+          Validators.max(label: '水平内边距', max: 48)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(
@@ -98,8 +100,8 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
         validators: [
           Validators.required(label: '垂直内边距'),
           Validators.isDouble(label: '垂直内边距'),
-          Validators.min(label: '垂直内边距', min: 0),
-          Validators.max(label: '垂直内边距', max: 100)
+          Validators.min(label: '垂直内边距', min: 1),
+          Validators.max(label: '垂直内边距', max: 48)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(
@@ -117,8 +119,8 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
         validators: [
           Validators.required(label: '水平间距'),
           Validators.isDouble(label: '水平间距'),
-          Validators.min(label: '水平间距', min: 0),
-          Validators.max(label: '水平间距', max: 100)
+          Validators.min(label: '水平间距', min: 1),
+          Validators.max(label: '水平间距', max: 48)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(
@@ -136,8 +138,8 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
         validators: [
           Validators.required(label: '垂直间距'),
           Validators.isDouble(label: '垂直间距'),
-          Validators.min(label: '垂直间距', min: 0),
-          Validators.max(label: '垂直间距', max: 100)
+          Validators.min(label: '垂直间距', min: 1),
+          Validators.max(label: '垂直间距', max: 48)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(
@@ -155,8 +157,8 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
         validators: [
           Validators.required(label: '区块高度'),
           Validators.isDouble(label: '区块高度'),
-          Validators.min(label: '区块高度', min: 0),
-          Validators.max(label: '区块高度', max: 100)
+          Validators.min(label: '区块高度', min: 1),
+          Validators.max(label: '区块高度', max: 1000)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(

@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -27,17 +28,34 @@ class RightPaneWidget extends StatelessWidget {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      Center(
-                        child: PageBlockConfigForm(
-                          selectBlock: block!,
-                        ),
-                      ),
-                      const Center(child: Text('数据内容')),
+                      PageBlockConfigForm(
+                        selectBlock: block!,
+                      ).center(),
+                      _buildDataTab(),
                     ],
                   ),
                 ),
               ],
             ),
           );
+  }
+
+  Widget _buildDataTab() {
+    switch (block?.type) {
+      case PageBlockType.imageRow:
+        return ImageDataForm(
+          items: block!.data.map((e) => e as PageBlockData<ImageData>).toList(),
+        );
+      case PageBlockType.productRow:
+        return ProductDataForm(
+          items: block!.data.map((e) => e as PageBlockData<Product>).toList(),
+        );
+      case PageBlockType.waterfall:
+        return WaterfallDataForm(
+          items: block!.data.map((e) => e as PageBlockData<Category>).toList(),
+        );
+      default:
+        return Container();
+    }
   }
 }

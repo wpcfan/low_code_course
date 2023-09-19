@@ -2,6 +2,7 @@ library models;
 
 export 'block_config.dart';
 export 'block_data.dart';
+export 'category.dart';
 export 'enums/enums.dart';
 export 'file_vm.dart';
 export 'image_data.dart';
