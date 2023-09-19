@@ -125,6 +125,23 @@ public class PageBlockDataAdminController {
         return pageBlockDataService.savePageBlockData(pageBlockData);
     }
 
+    @Operation(summary = "移动页面区块数据")
+    @PutMapping("/{id}/blocks/{blockId}/data/{dataId}/sort/{targetDataId}")
+    public void movePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId, @PathVariable Long targetDataId) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
+            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
+        if (pageBlock.getData().stream().noneMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
+            throw new CustomException("页面区块数据不存在", "PageBlockDataNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        if (pageBlock.getData().stream().noneMatch(pageBlockData -> pageBlockData.getId().equals(targetDataId))) {
+            throw new CustomException("目标页面区块数据不存在", "TargetPageBlockDataNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        pageBlockDataService.movePageBlockData(pageBlock, dataId, targetDataId);
+    }
+
     @Operation(summary = "删除页面区块数据")
     @DeleteMapping("/{id}/blocks/{blockId}/data/{dataId}")
     public void deletePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId) {

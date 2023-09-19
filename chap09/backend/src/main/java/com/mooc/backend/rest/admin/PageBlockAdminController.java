@@ -62,7 +62,7 @@ public class PageBlockAdminController {
         if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(targetBlockId))) {
             throw new CustomException("目标页面区块不存在", "TargetPageBlockNotFound", ErrorType.ResourcesNotFoundException);
         }
-        pageBlockService.movePageBlock(blockId, targetBlockId);
+        pageBlockService.movePageBlock(pageLayout, blockId, targetBlockId);
     }
 
     @Operation(summary = "删除页面区块")
