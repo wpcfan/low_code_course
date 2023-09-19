@@ -60,19 +60,38 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
     formItems.add(
       MyTextFormField(
         initialValue: _formValue.sort.toString(),
+        readonly: true,
         label: '排序',
-        hint: '请输入排序',
+        // hint: '请输入排序',
+        // validators: [
+        //   Validators.required(label: '排序'),
+        //   Validators.isInteger(label: '排序'),
+        //   Validators.min(label: '排序', min: 0),
+        //   Validators.max(label: '排序', max: 48)
+        // ],
+        // onSaved: (value) {
+        //   _formValue = _formValue.copyWith(sort: int.parse(value ?? '0'));
+        // },
+      ),
+    );
+
+    formItems.add(
+      MyTextFormField(
+        initialValue: _formValue.title,
+        readonly: true,
+        label: '标题',
+        hint: '请输入标题',
         validators: [
-          Validators.required(label: '排序'),
-          Validators.isInteger(label: '排序'),
-          Validators.min(label: '排序', min: 0),
-          Validators.max(label: '排序', max: 48)
+          Validators.required(label: '标题'),
+          Validators.minLength(label: '排序', minLength: 2),
+          Validators.maxLength(label: '排序', maxLength: 255)
         ],
         onSaved: (value) {
           _formValue = _formValue.copyWith(sort: int.parse(value ?? '0'));
         },
       ),
     );
+
     formItems.add(
       MyTextFormField(
         initialValue: _formValue.config.horizontalPadding.toString(),

@@ -27,6 +27,7 @@ class LeftPaneWidget extends StatelessWidget {
         Draggable(
           data: PageBlock(
             sort: 0,
+            title: '一行一图片组件',
             type: PageBlockType.imageRow,
             config: defaultBlockConfig.copyWith(blockHeight: 100),
             data: [
@@ -60,6 +61,7 @@ class LeftPaneWidget extends StatelessWidget {
         Draggable(
           data: PageBlock(
             sort: 0,
+            title: '一行两图片组件',
             type: PageBlockType.imageRow,
             config: defaultBlockConfig.copyWith(blockHeight: 120),
             data: [

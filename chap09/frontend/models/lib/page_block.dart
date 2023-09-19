@@ -9,6 +9,7 @@ import 'product.dart';
 
 class PageBlock {
   final int? id;
+  final String? title;
   final int sort;
   final BlockConfig config;
   final List<PageBlockData<BlockData>> data;
@@ -16,6 +17,7 @@ class PageBlock {
 
   const PageBlock({
     this.id,
+    this.title,
     required this.sort,
     required this.config,
     required this.data,
@@ -25,6 +27,7 @@ class PageBlock {
   factory PageBlock.fromJson(Map<String, dynamic> json) {
     return PageBlock(
       id: json['id'] as int?,
+      title: json['title'] as String?,
       sort: json['sort'] as int,
       config: BlockConfig.fromJson(json['config'] as Map<String, dynamic>),
       data: (json['data'] as List<dynamic>).map((e) {
@@ -58,6 +61,7 @@ class PageBlock {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'title': title,
       'sort': sort,
       'config': config.toJson(),
       'data': data.map((e) => e.toJson()).toList(),
@@ -67,11 +71,12 @@ class PageBlock {
 
   @override
   String toString() {
-    return 'PageBlock{id: $id, sort: $sort, config: $config, data: $data, type: $type}';
+    return 'PageBlock{id: $id, title: $title, sort: $sort, config: $config, data: $data, type: $type}';
   }
 
   PageBlock copyWith({
     int? id,
+    String? title,
     int? sort,
     BlockConfig? config,
     List<PageBlockData<BlockData>>? data,
@@ -79,6 +84,7 @@ class PageBlock {
   }) {
     return PageBlock(
       id: id ?? this.id,
+      title: title ?? this.title,
       sort: sort ?? this.sort,
       config: config ?? this.config,
       data: data ?? this.data,

@@ -32,7 +32,7 @@ public class PageBlockAdminController {
     public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreateOrUpdatePageBlockVM pageBlockVM) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         PageBlock pageBlock = new PageBlock();
-        pageBlock.setType(pageBlockVM.type());
+        pageBlock.setTitle(pageBlockVM.title());
         pageBlock.setSort(pageBlockVM.sort());
         pageBlock.setConfig(pageBlockVM.config());
         pageBlock.setPageLayout(pageLayout);
@@ -47,8 +47,7 @@ public class PageBlockAdminController {
             throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
         }
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
-        pageBlock.setType(pageBlockVM.type());
-        pageBlock.setSort(pageBlockVM.sort());
+        pageBlock.setTitle(pageBlockVM.title());
         pageBlock.setConfig(pageBlockVM.config());
         return pageBlockService.savePageBlock(pageBlock);
     }

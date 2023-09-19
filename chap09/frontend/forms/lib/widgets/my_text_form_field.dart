@@ -9,6 +9,7 @@ class MyTextFormField extends StatelessWidget {
   final String? label;
   final String? hint;
   final Widget? suffix;
+  final bool readonly;
   final InputDecoration decoration;
   MyTextFormField({
     super.key,
@@ -18,6 +19,7 @@ class MyTextFormField extends StatelessWidget {
     this.label,
     this.hint,
     this.suffix,
+    this.readonly = false,
   }) : decoration = InputDecoration(
           labelText: label,
           hintText: hint,
@@ -27,6 +29,7 @@ class MyTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readonly,
       controller: TextEditingController(text: initialValue),
       decoration: decoration,
       validator: (value) {

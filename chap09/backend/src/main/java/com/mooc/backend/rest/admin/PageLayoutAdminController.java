@@ -3,8 +3,6 @@ package com.mooc.backend.rest.admin;
 import com.mooc.backend.specs.PageLayoutFilter;
 import com.mooc.backend.specs.PageLayoutSpec;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
