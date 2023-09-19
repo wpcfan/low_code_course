@@ -4,7 +4,7 @@ import 'package:models/models.dart';
 
 import 'widgets/widgets.dart';
 
-class CanvasWidget extends StatelessWidget {
+class CanvasWidget extends StatefulWidget {
   final int pageLayoutId;
   const CanvasWidget({
     super.key,
@@ -12,8 +12,15 @@ class CanvasWidget extends StatelessWidget {
   });
 
   @override
+  State<CanvasWidget> createState() => _CanvasWidgetState();
+}
+
+class _CanvasWidgetState extends State<CanvasWidget> {
+  PageBlock? _selectedBlock;
+  final List<PageBlock> pageBlocks = [];
+
+  @override
   Widget build(BuildContext context) {
-    final List<PageBlock> pageBlocks = [];
     const double baselineScreenWidth = 400.0;
     const double toolbarWidth = 40.0;
     return [
@@ -22,19 +29,23 @@ class CanvasWidget extends StatelessWidget {
         blocks: pageBlocks,
         baselineScreenWidth: baselineScreenWidth,
         onBlockAdded: (value) {
-          pageBlocks.add(value.copyWith(
-            id: pageBlocks.length + 1,
-          ));
+          setState(() {
+            pageBlocks.add(value.copyWith(
+              id: pageBlocks.length + 1,
+            ));
+          });
         },
         onBlockMoved: (from, to) {
-          final fromIndex =
-              pageBlocks.indexWhere((element) => element.id == from.id);
-          pageBlocks.removeAt(fromIndex);
-          final toIndex =
-              pageBlocks.indexWhere((element) => element.id == to.id);
-          pageBlocks.insert(toIndex, from);
-          pageBlocks.asMap().forEach((index, element) {
-            pageBlocks[index] = element.copyWith(sort: index + 1);
+          setState(() {
+            final fromIndex =
+                pageBlocks.indexWhere((element) => element.id == from.id);
+            pageBlocks.removeAt(fromIndex);
+            final toIndex =
+                pageBlocks.indexWhere((element) => element.id == to.id);
+            pageBlocks.insert(toIndex, from);
+            pageBlocks.asMap().forEach((index, element) {
+              pageBlocks[index] = element.copyWith(sort: index + 1);
+            });
           });
         },
         onBlockDeleted: (value) async {
@@ -46,11 +57,13 @@ class CanvasWidget extends StatelessWidget {
             ),
           );
         },
-        onBlockEdited: (value) => debugPrint('onBlockEdited $value'),
+        onBlockEdited: (value) => setState(() {
+          _selectedBlock = value;
+        }),
       ).constrained(
         width: baselineScreenWidth + toolbarWidth,
       ),
-      const RightPaneWidget().expanded(),
+      RightPaneWidget(block: _selectedBlock).expanded(),
     ].toRow();
   }
 }
