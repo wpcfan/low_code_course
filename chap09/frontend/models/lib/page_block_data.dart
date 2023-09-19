@@ -32,4 +32,16 @@ class PageBlockData<T extends BlockData> {
   String toString() {
     return 'PageBlockData{id: $id, sort: $sort, content: $content}';
   }
+
+  PageBlockData<T> copyWith({
+    int? id,
+    int? sort,
+    T? content,
+  }) {
+    return PageBlockData(
+      id: id ?? this.id,
+      sort: sort ?? this.sort,
+      content: content ?? this.content,
+    );
+  }
 }

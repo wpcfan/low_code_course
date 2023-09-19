@@ -34,4 +34,14 @@ class MyLink {
   String toString() {
     return 'MyLink{type: $type, value: $value}';
   }
+
+  MyLink copyWith({
+    LinkType? type,
+    String? value,
+  }) {
+    return MyLink(
+      type: type ?? this.type,
+      value: value ?? this.value,
+    );
+  }
 }

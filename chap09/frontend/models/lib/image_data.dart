@@ -29,4 +29,14 @@ class ImageData implements BlockData {
   String toString() {
     return 'ImageData{image: $image, link: $link}';
   }
+
+  ImageData copyWith({
+    String? image,
+    MyLink? link,
+  }) {
+    return ImageData(
+      image: image ?? this.image,
+      link: link ?? this.link,
+    );
+  }
 }

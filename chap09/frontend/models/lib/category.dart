@@ -39,4 +39,18 @@ class Category implements BlockData {
   String toString() {
     return 'Category{id: $id, name: $name, code: $code, children: $children}';
   }
+
+  Category copyWith({
+    int? id,
+    String? name,
+    String? code,
+    List<Category>? children,
+  }) {
+    return Category(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      code: code ?? this.code,
+      children: children ?? this.children,
+    );
+  }
 }
