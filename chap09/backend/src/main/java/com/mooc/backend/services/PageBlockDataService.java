@@ -21,7 +21,16 @@ public class PageBlockDataService {
         return pageBlockDataRepository.save(pageBlockData);
     }
 
-    public void deletePageBlockData(Long id) {
+    public void deletePageBlockData(PageBlock pageBlock, Long id) {
+        PageBlockData pageBlockData = pageBlock.getData().stream()
+                .filter(data -> data.getId().equals(id))
+                .findFirst()
+                .orElseThrow();
+        final int sort = pageBlockData.getSort();
+        pageBlock.removeData(pageBlockData);
+        pageBlock.getData().stream()
+                .filter(data -> data.getSort() > sort)
+                .forEach(data -> data.setSort(data.getSort() - 1));
         pageBlockDataRepository.deleteById(id);
     }
 

@@ -1,10 +1,12 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.PageBlock;
+import com.mooc.backend.entities.PageBlockData;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.errors.CustomException;
 import com.mooc.backend.errors.ErrorType;
-import com.mooc.backend.rest.vm.CreateOrUpdatePageBlockVM;
+import com.mooc.backend.rest.vm.CreatePageBlockVM;
+import com.mooc.backend.rest.vm.UpdatePageBlockVM;
 import com.mooc.backend.services.PageBlockService;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,19 +31,26 @@ public class PageBlockAdminController {
 
     @Operation(summary = "添加页面区块")
     @PostMapping("/{id}/blocks")
-    public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreateOrUpdatePageBlockVM pageBlockVM) {
+    public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreatePageBlockVM pageBlockVM) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         PageBlock pageBlock = new PageBlock();
         pageBlock.setTitle(pageBlockVM.title());
-        pageBlock.setSort(pageBlockVM.sort());
+        pageBlock.setSort(pageLayout.getPageBlocks().size() + 1);
         pageBlock.setConfig(pageBlockVM.config());
+        pageBlock.setType(pageBlockVM.type());
+        pageBlockVM.data().forEach(dataVM -> {
+            PageBlockData pageBlockData = new PageBlockData();
+            pageBlockData.setContent(dataVM.content());
+            pageBlockData.setSort(pageBlock.getData().size() + 1);
+            pageBlock.addData(pageBlockData);
+        });
         pageBlock.setPageLayout(pageLayout);
         return pageBlockService.savePageBlock(pageBlock);
     }
 
     @Operation(summary = "更新页面区块")
     @PutMapping("/{id}/blocks/{blockId}")
-    public PageBlock updatePageBlock(@PathVariable Long id, @PathVariable Long blockId, @RequestBody @Valid CreateOrUpdatePageBlockVM pageBlockVM) {
+    public PageBlock updatePageBlock(@PathVariable Long id, @PathVariable Long blockId, @RequestBody @Valid UpdatePageBlockVM pageBlockVM) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
             throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
@@ -72,6 +81,6 @@ public class PageBlockAdminController {
         if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
             throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
         }
-        pageBlockService.deletePageBlock(blockId);
+        pageBlockService.deletePageBlock(pageLayout, blockId);
     }
 }

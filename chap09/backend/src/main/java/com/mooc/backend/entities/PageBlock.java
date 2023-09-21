@@ -53,6 +53,11 @@ public class PageBlock implements Comparable<PageBlock> {
         pageBlockData.setPageBlock(this);
     }
 
+    public void removeData(PageBlockData pageBlockData) {
+        data.remove(pageBlockData);
+        pageBlockData.setPageBlock(null);
+    }
+
     @Override
     public int compareTo(PageBlock o) {
         return this.sort.compareTo(o.sort);

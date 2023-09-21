@@ -22,8 +22,17 @@ public class PageBlockService {
         return pageBlockRepository.save(pageBlock);
     }
 
-    public void deletePageBlock(Long id) {
-        pageBlockRepository.deleteById(id);
+    public void deletePageBlock(PageLayout pageLayout, Long id) {
+        PageBlock pageBlock = pageLayout.getPageBlocks().stream()
+                .filter(block -> block.getId().equals(id))
+                .findFirst()
+                .orElseThrow();
+        final int sort = pageBlock.getSort();
+        pageLayout.removePageBlock(pageBlock);
+        pageLayout.getPageBlocks().stream()
+                        .filter(block -> block.getSort() > sort)
+                        .forEach(block -> block.setSort(block.getSort() - 1));
+        pageLayoutService.savePageLayout(pageLayout);
     }
 
     public void movePageBlock(PageLayout pageLayout, Long blockId, Long targetBlockId) {

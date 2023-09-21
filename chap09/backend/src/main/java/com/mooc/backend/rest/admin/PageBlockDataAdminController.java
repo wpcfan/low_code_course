@@ -153,6 +153,6 @@ public class PageBlockDataAdminController {
         if (pageBlock.getData().stream().anyMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
             throw new CustomException("页面区块数据不存在", "PageBlockDataNotFound", ErrorType.ResourcesNotFoundException);
         }
-        pageBlockDataService.deletePageBlockData(dataId);
+        pageBlockDataService.deletePageBlockData(pageBlock, dataId);
     }
 }

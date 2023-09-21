@@ -70,12 +70,17 @@ public class PageLayout extends Auditable {
      * <p>
      */
     @Builder.Default
-    @OneToMany(mappedBy = "pageLayout", orphanRemoval = true, cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "pageLayout", orphanRemoval = true, cascade = {CascadeType.ALL})
     private SortedSet<PageBlock> pageBlocks = new TreeSet<>();
 
     public void addPageBlock(PageBlock pageBlock) {
         pageBlocks.add(pageBlock);
         pageBlock.setPageLayout(this);
+    }
+
+    public void removePageBlock(PageBlock pageBlock) {
+        pageBlocks.remove(pageBlock);
+        pageBlock.setPageLayout(null);
     }
 
     @Override
