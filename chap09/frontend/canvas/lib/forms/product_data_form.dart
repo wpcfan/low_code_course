@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ProductDataForm extends StatelessWidget {
-  final List<PageBlockData<Product>> items;
+  final List<PageBlockData<BlockData>> items;
   const ProductDataForm({
     super.key,
     this.items = const [],

@@ -117,7 +117,7 @@ public class PageBlockDataAdminController {
             throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
         }
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
-        if (pageBlock.getData().stream().anyMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
+        if (pageBlock.getData().stream().noneMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
             throw new CustomException("页面区块数据不存在", "PageBlockDataNotFound", ErrorType.ResourcesNotFoundException);
         }
         PageBlockData pageBlockData = pageBlockDataService.getPageBlockData(dataId);
@@ -150,7 +150,7 @@ public class PageBlockDataAdminController {
             throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
         }
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
-        if (pageBlock.getData().stream().anyMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
+        if (pageBlock.getData().stream().noneMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
             throw new CustomException("页面区块数据不存在", "PageBlockDataNotFound", ErrorType.ResourcesNotFoundException);
         }
         pageBlockDataService.deletePageBlockData(pageBlock, dataId);

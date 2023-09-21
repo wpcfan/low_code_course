@@ -6,9 +6,13 @@ import '../forms/forms.dart';
 
 class RightPaneWidget extends StatelessWidget {
   final PageBlock? block;
+  final Function(PageBlockData, PageBlockData)? onMove;
+  final Function(PageBlockData)? onUpdate;
   const RightPaneWidget({
     super.key,
     this.block,
+    this.onMove,
+    this.onUpdate,
   });
 
   @override
@@ -43,16 +47,19 @@ class RightPaneWidget extends StatelessWidget {
   Widget _buildDataTab() {
     switch (block?.type) {
       case PageBlockType.imageRow:
+        final items = block!.data;
         return ImageDataForm(
-          items: block!.data.map((e) => e as PageBlockData<ImageData>).toList(),
+          onMove: onMove,
+          onUpdate: onUpdate,
+          items: items,
         );
       case PageBlockType.productRow:
         return ProductDataForm(
-          items: block!.data.map((e) => e as PageBlockData<Product>).toList(),
+          items: block!.data,
         );
       case PageBlockType.waterfall:
         return WaterfallDataForm(
-          items: block!.data.map((e) => e as PageBlockData<Category>).toList(),
+          items: block!.data,
         );
       default:
         return Container();

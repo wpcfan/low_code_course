@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class WaterfallDataForm extends StatelessWidget {
-  final List<PageBlockData<Category>> items;
+  final List<PageBlockData<BlockData>> items;
   const WaterfallDataForm({
     super.key,
     this.items = const [],

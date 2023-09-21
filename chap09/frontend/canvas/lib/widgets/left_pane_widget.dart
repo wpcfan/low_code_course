@@ -1,3 +1,4 @@
+import 'package:canvas/blocs/constants.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -8,11 +9,11 @@ class LeftPaneWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const defaultBlockConfig = BlockConfig(
-      blockHeight: 100,
-      horizontalSpacing: 12,
-      verticalSpacing: 12,
-      horizontalPadding: 12,
-      verticalPadding: 12,
+      blockHeight: Constants.defaultBlockHeight,
+      horizontalSpacing: Constants.defaultHorizontalSpacing,
+      verticalSpacing: Constants.defaultVerticalSpacing,
+      horizontalPadding: Constants.defaultHorizontalPadding,
+      verticalPadding: Constants.defaultVerticalPadding,
     );
     const oneRowOneImage = ListTile(
       title: Text('一行一图片组件'),
@@ -26,7 +27,7 @@ class LeftPaneWidget extends StatelessWidget {
       children: [
         Draggable(
           data: PageBlock(
-            sort: 0,
+            sort: 1,
             title: '一行一图片组件',
             type: PageBlockType.imageRow,
             config: defaultBlockConfig.copyWith(blockHeight: 100),
@@ -60,7 +61,7 @@ class LeftPaneWidget extends StatelessWidget {
         const Divider(),
         Draggable(
           data: PageBlock(
-            sort: 0,
+            sort: 1,
             title: '一行两图片组件',
             type: PageBlockType.imageRow,
             config: defaultBlockConfig.copyWith(blockHeight: 120),

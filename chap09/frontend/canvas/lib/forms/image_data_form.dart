@@ -5,14 +5,14 @@ import 'package:models/models.dart';
 import '../popups/popups.dart';
 
 class ImageDataForm extends StatelessWidget {
-  final List<PageBlockData<ImageData>> items;
+  final List<PageBlockData<BlockData>> items;
   final Function(PageBlockData, PageBlockData)? onMove;
-  final Function(PageBlockData)? onEdit;
+  final Function(PageBlockData)? onUpdate;
   const ImageDataForm({
     super.key,
     this.items = const [],
     this.onMove,
-    this.onEdit,
+    this.onUpdate,
   });
 
   @override
@@ -21,21 +21,22 @@ class ImageDataForm extends StatelessWidget {
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
+        final content = item.content as ImageData;
         return ListTile(
-          title: Text(item.content.link.type.value),
-          subtitle: Text(item.content.link.value),
-          leading: Image.network(item.content.image),
+          title: Text(content.link.type.value),
+          subtitle: Text(content.link.value),
+          leading: Image.network(content.image),
           trailing: [
             Text(item.sort.toString()),
             [
               if (item.sort > 1)
-                const Icon(Icons.arrow_upward).expanded().inkWell(
+                const Icon(Icons.arrow_upward).inkWell(
                   onTap: () {
                     onMove?.call(item, items[index - 1]);
                   },
                 ),
               if (item.sort < items.length)
-                const Icon(Icons.arrow_downward).expanded().inkWell(
+                const Icon(Icons.arrow_downward).inkWell(
                   onTap: () {
                     onMove?.call(item, items[index + 1]);
                   },
@@ -47,12 +48,12 @@ class ImageDataForm extends StatelessWidget {
               context: context,
               builder: (context) {
                 return EditImageDataWidget(
-                  imageData: item.content,
+                  imageData: content,
                 );
               },
             );
             if (result != null) {
-              onEdit?.call(item.copyWith(content: result));
+              onUpdate?.call(item.copyWith(content: result));
             }
           },
         );
