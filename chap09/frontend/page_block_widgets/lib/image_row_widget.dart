@@ -26,7 +26,7 @@ class ImageRowWidget extends StatelessWidget {
     required this.items,
     required this.config,
     this.numDisplayed = 3,
-    this.fracDisplayed = 0,
+    this.fracDisplayed = 0.3,
     this.onTap,
   });
 
