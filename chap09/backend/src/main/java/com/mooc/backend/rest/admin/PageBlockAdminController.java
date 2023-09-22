@@ -29,7 +29,11 @@ public class PageBlockAdminController {
     private final PageLayoutService pageLayoutService;
     private final PageBlockService pageBlockService;
 
-    @Operation(summary = "添加页面区块")
+    @Operation(summary = "添加页面区块", description = """
+            添加页面区块会同时添加页面区块数据
+            比如添加一个图片区块，那么就会同时添加一个图片区块数据
+            添加区块时，默认的排序是当前页面布局的区块数量加一
+            """)
     @PostMapping("/{id}/blocks")
     public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreatePageBlockVM pageBlockVM) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
@@ -61,7 +65,16 @@ public class PageBlockAdminController {
         return pageBlockService.savePageBlock(pageBlock);
     }
 
-    @Operation(summary = "移动页面区块")
+    @Operation(summary = "移动页面区块", description = """
+            移动页面区块会同时更新所有排序在此区块之后的区块的排序
+            比如排序为 1, 2, 3, 4, 5 的区块，如果移动 3 号区块到 5 号区块之后，
+            那么 4 号区块的排序会变成 3，5 号区块的排序会变成 4.
+            也就是 3 号区块后面的区块排序都会减一。
+            反方向的移动也是一样的，还是以 1, 2, 3, 4, 5 的区块为例，
+            如果移动 5 号区块到 3 号区块之前，那么 3 号区块的排序会变成 4，4 号区块的排序会变成 5.
+            也就是 3 号区块前面的区块排序都会加一。
+            建议客户端在执行移动区块之后，自行更新区块排序，或者重新获取页面布局
+            """)
     @PutMapping("/{id}/blocks/{blockId}/sort/{targetBlockId}")
     public void movePageBlock(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long targetBlockId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
@@ -74,7 +87,13 @@ public class PageBlockAdminController {
         pageBlockService.movePageBlock(pageLayout, blockId, targetBlockId);
     }
 
-    @Operation(summary = "删除页面区块")
+    @Operation(summary = "删除页面区块", description = """
+            删除页面区块会同时删除页面区块数据
+            而且会同时更新所有排序在此区块之后的区块的排序
+            比如排序为 1, 2, 3, 4, 5 的区块，如果删除 3 号区块，
+            那么 4 号区块的排序会变成 3，5 号区块的排序会变成 4.
+            建议客户端在执行删除区块之后，自行更新区块排序，或者重新获取页面布局
+            """)
     @DeleteMapping("/{id}/blocks/{blockId}")
     public void deletePageBlock(@PathVariable Long id, @PathVariable Long blockId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);

@@ -91,7 +91,12 @@ public class PageBlockDataAdminController {
                     }
             )
     )
-    @Operation(summary = "添加页面区块数据")
+    @Operation(summary = "添加页面区块数据", description = """
+            注意，我们将忽略客户端传入的区块的顺序
+            所有新增的区块数据的排序都位于已有区块数据的后面
+            比如排序为 1, 2, 3, 4, 5 的区块数据，如果添加一个新的区块数据，
+            那么新的区块数据的排序会变成 6.
+            """)
     @PostMapping("/{id}/blocks/{blockId}/data")
     public PageBlockData addPageBlockData(
             @PathVariable Long id,
@@ -105,7 +110,7 @@ public class PageBlockDataAdminController {
         PageBlockData pageBlockData = new PageBlockData();
         pageBlockData.setPageBlock(pageBlock);
         pageBlockData.setContent(pageBlockDataVM.content());
-        pageBlockData.setSort(pageBlockDataVM.sort());
+        pageBlockData.setSort(pageBlock.getData().size() + 1);
         return pageBlockDataService.savePageBlockData(pageBlockData);
     }
 
@@ -125,7 +130,14 @@ public class PageBlockDataAdminController {
         return pageBlockDataService.savePageBlockData(pageBlockData);
     }
 
-    @Operation(summary = "移动页面区块数据")
+    @Operation(summary = "移动页面区块数据", description = """
+            此 API 的目的是为了改变页面区块数据的排序
+            比如排序为 1, 2, 3, 4, 5 的区块数据，如果移动 3 号区块数据到 5 号区块数据之后，
+            那么 3 号区块数据的排序会变成 5，4 号区块数据的排序会变成 3，5 号区块数据的排序会变成 4.
+            注意需要区分两种方向的移动，还是上面的例子，如果我们移动 3 号区块数据到 1 号区块数据之前
+            那么 3 号区块数据的排序会变成 1，1 号区块数据的排序会变成 2，2 号区块数据的排序会变成 3.
+            建议客户端在执行移动区块数据之后，自行更新区块数据排序，或者重新获取区块
+            """)
     @PutMapping("/{id}/blocks/{blockId}/data/{dataId}/sort/{targetDataId}")
     public void movePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId, @PathVariable Long targetDataId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
@@ -142,7 +154,12 @@ public class PageBlockDataAdminController {
         pageBlockDataService.movePageBlockData(pageBlock, dataId, targetDataId);
     }
 
-    @Operation(summary = "删除页面区块数据")
+    @Operation(summary = "删除页面区块数据", description = """
+            删除页面区块数据会同时更新所有排序在此区块数据之后的区块数据的排序
+            比如排序为 1, 2, 3, 4, 5 的区块数据，如果删除 3 号区块数据，
+            那么 4 号区块数据的排序会变成 3，5 号区块数据的排序会变成 4.
+            建议客户端在执行删除区块数据之后，自行更新区块数据排序，或者重新获取区块
+            """)
     @DeleteMapping("/{id}/blocks/{blockId}/data/{dataId}")
     public void deletePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);

@@ -63,7 +63,9 @@ class CanvasWidget extends StatelessWidget {
   Widget _buildCanvas(BuildContext context, CanvasState state) {
     final bloc = context.read<CanvasBloc>();
     return [
-      const LeftPaneWidget().expanded(),
+      LeftPaneWidget(
+        blocksCount: state.blocks.length,
+      ).expanded(),
       CenterPaneWidget(
         blocks: state.blocks,
         baselineScreenWidth: state.pageConfig.baselineScreenWidth,

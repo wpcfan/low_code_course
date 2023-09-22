@@ -5,7 +5,11 @@ import 'package:models/models.dart';
 import '../blocs/constants.dart';
 
 class LeftPaneWidget extends StatelessWidget {
-  const LeftPaneWidget({super.key});
+  final int blocksCount;
+  const LeftPaneWidget({
+    super.key,
+    required this.blocksCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +144,7 @@ class LeftPaneWidget extends StatelessWidget {
     switch (type) {
       case PageBlockType.imageRow:
         return PageBlock(
-          sort: 1,
+          sort: blocksCount + 1,
           title: title,
           type: type,
           config: defaultConfig,

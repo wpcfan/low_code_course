@@ -128,12 +128,24 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
         state.pageLayoutId!,
         event.blockId,
       );
+      final sort = state.blocks
+          .firstWhere(
+            (b) => b.id == event.blockId,
+          )
+          .sort;
+      final newBlocks = [
+        for (final b in state.blocks)
+          if (b.id != event.blockId) b,
+      ];
+
+      // 更新所有大于 sort 的 block 顺序
       final newPageLayout = state.pageLayout?.copyWith(
         blocks: [
-          for (final b in state.blocks)
-            if (b.id != event.blockId) b,
-        ],
+          for (final b in newBlocks)
+            if (b.sort > sort) b.copyWith(sort: b.sort - 1) else b,
+        ]..sort((a, b) => a.sort.compareTo(b.sort)),
       );
+
       if (state.selectedBlockId == event.blockId) {
         emit(CanvasState(
           pageLayout: newPageLayout,
@@ -306,20 +318,31 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
         state.selectedBlockId!,
         event.blockDataId,
       );
+      final sort = state.selectedBlockData
+          .firstWhere(
+            (d) => d.id == event.blockDataId,
+          )
+          .sort;
+      final newBlockData = [
+        for (final d in state.selectedBlockData)
+          if (d.id != event.blockDataId) d,
+      ];
+      // 更新所有大于 sort 的 data 顺序
+      final newBlocks = [
+        for (final block in state.blocks)
+          if (block.id == state.selectedBlockId)
+            block.copyWith(
+              data: [
+                for (final b in newBlockData)
+                  if (b.sort > sort) b.copyWith(sort: b.sort - 1) else b,
+              ]..sort((a, b) => a.sort.compareTo(b.sort)),
+            )
+          else
+            block,
+      ];
       emit(state.copyWith(
         pageLayout: state.pageLayout?.copyWith(
-          blocks: [
-            for (final block in state.blocks)
-              if (block.id == state.selectedBlockId)
-                block.copyWith(
-                  data: [
-                    for (final d in state.selectedBlockData)
-                      if (d.id != event.blockDataId) d,
-                  ],
-                )
-              else
-                block,
-          ],
+          blocks: newBlocks,
         ),
         saving: false,
       ));
