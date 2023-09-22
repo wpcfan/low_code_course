@@ -106,7 +106,15 @@ class CanvasWidget extends StatelessWidget {
         width: state.pageConfig.baselineScreenWidth + 80,
       ),
       RightPaneWidget(
-        onMove: (from, to) {
+        onUpdateBlock: (value) {
+          if (value.id == null) {
+            return;
+          }
+          bloc.add(
+            CanvasEventUpdateBlock(value.id!, value),
+          );
+        },
+        onMoveData: (from, to) {
           if (from.id == to.id || from.id == null || to.id == null) {
             return;
           }
@@ -114,7 +122,7 @@ class CanvasWidget extends StatelessWidget {
             CanvasEventMoveBlockData(from.id!, to.id!),
           );
         },
-        onUpdate: (value) {
+        onUpdateData: (value) {
           if (value.id == null) {
             return;
           }

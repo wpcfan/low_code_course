@@ -5,7 +5,12 @@ import 'package:models/models.dart';
 
 class PageBlockConfigForm extends StatefulWidget {
   final PageBlock selectBlock;
-  const PageBlockConfigForm({super.key, required this.selectBlock});
+  final Function(PageBlock)? onUpdate;
+  const PageBlockConfigForm({
+    super.key,
+    required this.selectBlock,
+    this.onUpdate,
+  });
 
   @override
   State<PageBlockConfigForm> createState() => _PageBlockConfigFormState();
@@ -51,7 +56,7 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
     final form = _formKey.currentState;
     if (form?.validate() ?? false) {
       form?.save();
-      debugPrint(_formValue.toString());
+      widget.onUpdate?.call(_formValue);
     }
   }
 
@@ -78,16 +83,15 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
     formItems.add(
       MyTextFormField(
         initialValue: _formValue.title,
-        readonly: true,
         label: '标题',
         hint: '请输入标题',
         validators: [
           Validators.required(label: '标题'),
-          Validators.minLength(label: '排序', minLength: 2),
-          Validators.maxLength(label: '排序', maxLength: 255)
+          Validators.minLength(label: '标题', minLength: 2),
+          Validators.maxLength(label: '标题', maxLength: 255)
         ],
         onSaved: (value) {
-          _formValue = _formValue.copyWith(sort: int.parse(value ?? '0'));
+          _formValue = _formValue.copyWith(title: value);
         },
       ),
     );
@@ -183,25 +187,6 @@ class _PageBlockConfigFormState extends State<PageBlockConfigForm> {
           _formValue = _formValue.copyWith(
               config: _formValue.config
                   .copyWith(blockHeight: double.parse(value ?? '0')));
-        },
-      ),
-    );
-
-    formItems.add(
-      MyTextFormField(
-        initialValue: (_formValue.config.blockWidth ?? '').toString(),
-        label: '区块宽度',
-        hint: '请输入区块宽度',
-        validators: [
-          Validators.required(label: '区块宽度'),
-          Validators.isDouble(label: '区块宽度'),
-          Validators.min(label: '区块宽度', min: 0),
-          Validators.max(label: '区块宽度', max: 100)
-        ],
-        onSaved: (value) {
-          _formValue = _formValue.copyWith(
-              config: _formValue.config
-                  .copyWith(blockWidth: double.parse(value ?? '0')));
         },
       ),
     );

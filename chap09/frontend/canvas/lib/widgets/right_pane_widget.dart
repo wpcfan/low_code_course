@@ -6,13 +6,15 @@ import '../forms/forms.dart';
 
 class RightPaneWidget extends StatelessWidget {
   final PageBlock? block;
-  final Function(PageBlockData, PageBlockData)? onMove;
-  final Function(PageBlockData)? onUpdate;
+  final Function(PageBlockData, PageBlockData)? onMoveData;
+  final Function(PageBlockData)? onUpdateData;
+  final Function(PageBlock)? onUpdateBlock;
   const RightPaneWidget({
     super.key,
     this.block,
-    this.onMove,
-    this.onUpdate,
+    this.onMoveData,
+    this.onUpdateData,
+    this.onUpdateBlock,
   });
 
   @override
@@ -33,6 +35,7 @@ class RightPaneWidget extends StatelessWidget {
                   child: TabBarView(
                     children: [
                       PageBlockConfigForm(
+                        onUpdate: onUpdateBlock,
                         selectBlock: block!,
                       ).center(),
                       _buildDataTab(),
@@ -49,8 +52,8 @@ class RightPaneWidget extends StatelessWidget {
       case PageBlockType.imageRow:
         final items = block!.data;
         return ImageDataForm(
-          onMove: onMove,
-          onUpdate: onUpdate,
+          onMove: onMoveData,
+          onUpdate: onUpdateData,
           items: items,
         );
       case PageBlockType.productRow:
