@@ -1,1 +1,1 @@
-export 'edit_image_data_widget.dart';
+export 'create_or_update_image_data_widget.dart';

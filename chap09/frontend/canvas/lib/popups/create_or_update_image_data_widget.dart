@@ -4,31 +4,42 @@ import 'package:flutter/material.dart';
 import 'package:forms/forms.dart';
 import 'package:models/models.dart';
 
-class EditImageDataWidget extends StatefulWidget {
-  final ImageData imageData;
-  const EditImageDataWidget({
+class CreateOrUpdateImageDataWidget extends StatefulWidget {
+  final String? title;
+  final ImageData? imageData;
+  const CreateOrUpdateImageDataWidget({
     super.key,
-    required this.imageData,
+    this.imageData,
+    this.title = '编辑图片数据',
   });
 
   @override
-  State<EditImageDataWidget> createState() => _EditImageDataWidgetState();
+  State<CreateOrUpdateImageDataWidget> createState() =>
+      _CreateOrUpdateImageDataWidgetState();
 }
 
-class _EditImageDataWidgetState extends State<EditImageDataWidget> {
+class _CreateOrUpdateImageDataWidgetState
+    extends State<CreateOrUpdateImageDataWidget> {
   final _formKey = GlobalKey<FormState>();
   late ImageData _formValue;
 
   @override
   void initState() {
     super.initState();
-    _formValue = widget.imageData;
+    _formValue = widget.imageData ??
+        const ImageData(
+          image: '',
+          link: MyLink(
+            type: LinkType.url,
+            value: '',
+          ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('编辑图片区块数据'),
+      title: Text(widget.title ?? ''),
       content: _buildFormItems(),
       actions: [
         TextButton(

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:models/models.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 class CanvasState extends Equatable {
   final PageLayout? pageLayout;

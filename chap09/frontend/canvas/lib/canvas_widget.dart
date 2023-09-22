@@ -1,9 +1,12 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:models/models.dart';
 import 'package:repositories/repositories.dart';
 
+import '../popups/popups.dart';
 import 'blocs/blocs.dart';
+import 'constants.dart';
 import 'widgets/widgets.dart';
 
 class CanvasWidget extends StatelessWidget {
@@ -33,11 +36,10 @@ class CanvasWidget extends StatelessWidget {
           pageBlockAdminRepository: context.read<PageBlockAdminRepository>(),
           pageBlockDataAdminRepository:
               context.read<PageBlockDataAdminRepository>(),
-        )..add(
-            CanvasEventLoaded(pageLayoutId),
-          ),
+        )..add(CanvasEventLoaded(pageLayoutId)),
         child: BlocBuilder<CanvasBloc, CanvasState>(
           builder: (context, state) {
+            final bloc = context.read<CanvasBloc>();
             if (state.isFailure) {
               return const Center(
                 child: Text('Failed to load page layout'),
@@ -49,19 +51,67 @@ class CanvasWidget extends StatelessWidget {
               );
             }
             if (state.isSuccess) {
-              return _buildCanvas(context, state);
+              return _buildScaffold(context, state, bloc);
             }
-            return const Center(
-              child: Text('Unknown error'),
-            );
+            return const Center(child: Text('Unknown error'));
           },
         ),
       ),
     );
   }
 
-  Widget _buildCanvas(BuildContext context, CanvasState state) {
-    final bloc = context.read<CanvasBloc>();
+  Widget _buildScaffold(
+      BuildContext context, CanvasState state, CanvasBloc bloc) {
+    final bool isBannerSelected = state.selectedBlockId != null &&
+        state.selectedBlock != null &&
+        state.selectedBlock!.type == PageBlockType.banner;
+    final addBannerImageBtn = FloatingActionButton(
+      onPressed: () => _handleAddBannerImage(state, bloc, context),
+      child: const Icon(Icons.add),
+    );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(state.pageLayout?.title ?? ''),
+      ),
+      body: _buildCanvas(context, state, bloc),
+      floatingActionButton: isBannerSelected ? addBannerImageBtn : null,
+    );
+  }
+
+  void _handleAddBannerImage(
+    CanvasState state,
+    CanvasBloc bloc,
+    BuildContext context,
+  ) async {
+    if (state.selectedBlockData.length >=
+        Constants.defaultBannerImageMaxCount) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('轮播图最多只能添加${Constants.defaultBannerImageMaxCount}张图片'),
+        ),
+      );
+      return;
+    }
+    final result = await showDialog<ImageData>(
+      context: context,
+      builder: (context) {
+        return const CreateOrUpdateImageDataWidget(
+          title: '添加图片',
+        );
+      },
+    );
+    if (result != null) {
+      bloc.add(
+        CanvasEventCreateBlockData(PageBlockData(
+          sort: state.selectedBlock!.data.length + 1,
+          content: result,
+        )),
+      );
+    }
+  }
+
+  Widget _buildCanvas(
+      BuildContext context, CanvasState state, CanvasBloc bloc) {
     return [
       LeftPaneWidget(
         blocksCount: state.blocks.length,
@@ -70,39 +120,25 @@ class CanvasWidget extends StatelessWidget {
         blocks: state.blocks,
         baselineScreenWidth: state.pageConfig.baselineScreenWidth,
         onBlockAdded: (value) {
-          bloc.add(
-            CanvasEventCreateBlock(value),
-          );
+          bloc.add(CanvasEventCreateBlock(value));
         },
         onBlockMoved: (from, to) {
           if (from.id == to.id || from.id == null || to.id == null) {
             return;
           }
-          bloc.add(
-            CanvasEventMoveBlock(from.id!, to.id!),
-          );
+          bloc.add(CanvasEventMoveBlock(from.id!, to.id!));
         },
         onBlockDeleted: (value) async {
-          final result = await showDialog<bool>(
-            context: context,
-            builder: (context) => const ConfirmDialog(
-              title: '删除区块',
-              content: '是否确认删除此区块？',
-            ),
-          );
-          if (result == true) {
-            bloc.add(
-              CanvasEventDeleteBlock(value.id!),
-            );
+          if (value.id == null) {
+            return;
           }
+          bloc.add(CanvasEventDeleteBlock(value.id!));
         },
         onBlockEdited: (value) {
           if (value.id == null) {
             return;
           }
-          bloc.add(
-            CanvasEventSelectBlock(value.id!),
-          );
+          bloc.add(CanvasEventSelectBlock(value.id!));
         },
       ).constrained(
         width: state.pageConfig.baselineScreenWidth + 80,
@@ -112,25 +148,25 @@ class CanvasWidget extends StatelessWidget {
           if (value.id == null) {
             return;
           }
-          bloc.add(
-            CanvasEventUpdateBlock(value.id!, value),
-          );
+          bloc.add(CanvasEventUpdateBlock(value.id!, value));
         },
         onMoveData: (from, to) {
           if (from.id == to.id || from.id == null || to.id == null) {
             return;
           }
-          bloc.add(
-            CanvasEventMoveBlockData(from.id!, to.id!),
-          );
+          bloc.add(CanvasEventMoveBlockData(from.id!, to.id!));
         },
         onUpdateData: (value) {
           if (value.id == null) {
             return;
           }
-          bloc.add(
-            CanvasEventUpdateBlockData(value.id!, value),
-          );
+          bloc.add(CanvasEventUpdateBlockData(value.id!, value));
+        },
+        onDeleteData: (value) async {
+          if (value.id == null) {
+            return;
+          }
+          bloc.add(CanvasEventDeleteBlockData(value.id!));
         },
         block: state.selectedBlock,
       ).expanded(),

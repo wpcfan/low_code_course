@@ -2,7 +2,7 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-import '../blocs/constants.dart';
+import '../constants.dart';
 
 class LeftPaneWidget extends StatelessWidget {
   final int blocksCount;
@@ -36,6 +36,10 @@ class LeftPaneWidget extends StatelessWidget {
       title: Text('一行多图片组件'),
       subtitle: Text('此组件一般用于特别活动推荐位'),
     );
+    const banner = ListTile(
+      title: Text('轮播图区块'),
+      subtitle: Text('此组件一般用于特别活动推荐位'),
+    );
     return ListView(
       children: [
         _buildDraggableItem(
@@ -64,6 +68,13 @@ class LeftPaneWidget extends StatelessWidget {
           child: oneRowMoreImage,
           type: PageBlockType.imageRow,
           count: 4,
+        ),
+        const Divider(),
+        _buildDraggableItem(
+          config: defaultBlockConfig,
+          child: banner,
+          type: PageBlockType.banner,
+          count: Constants.defaultBannerImageCount,
         ),
       ],
     );
@@ -143,6 +154,7 @@ class LeftPaneWidget extends StatelessWidget {
     );
     switch (type) {
       case PageBlockType.imageRow:
+      case PageBlockType.banner:
         return PageBlock(
           sort: blocksCount + 1,
           title: title,
@@ -150,8 +162,8 @@ class LeftPaneWidget extends StatelessWidget {
           config: defaultConfig,
           data: _buildImageBlockDataList(
             count: count ?? 1,
-            width: _buildImageWidth(count),
-            height: _buildImageHeight(count),
+            width: _buildImageWidth(count, type),
+            height: _buildImageHeight(count, type),
           ),
         );
       default:
@@ -182,6 +194,7 @@ class LeftPaneWidget extends StatelessWidget {
                 blockHeight: Constants.defaultOneRowThreeBlockHeight);
         }
       case PageBlockType.banner:
+        return config.copyWith(blockHeight: Constants.defaultBannerBlockHeight);
       case PageBlockType.productRow:
         switch (count) {
           case 1:
@@ -195,27 +208,41 @@ class LeftPaneWidget extends StatelessWidget {
     }
   }
 
-  int _buildImageWidth(int? count) {
-    switch (count) {
-      case 1:
-        return Constants.defaultOneRowOneImageWidth;
-      case 2:
-        return Constants.defaultOneRowTwoImageWidth;
-      case 3:
+  int _buildImageWidth(int? count, PageBlockType type) {
+    switch (type) {
+      case PageBlockType.imageRow:
+        switch (count) {
+          case 1:
+            return Constants.defaultOneRowOneImageWidth;
+          case 2:
+            return Constants.defaultOneRowTwoImageWidth;
+          case 3:
+          default:
+            return Constants.defaultOneRowThreeImageWidth;
+        }
+      case PageBlockType.banner:
+        return Constants.defaultBannerImageWidth;
       default:
-        return Constants.defaultOneRowThreeImageWidth;
+        return Constants.defaultOneRowOneImageWidth;
     }
   }
 
-  int _buildImageHeight(int? count) {
-    switch (count) {
-      case 1:
-        return Constants.defaultOneRowOneImageHeight;
-      case 2:
-        return Constants.defaultOneRowTwoImageHeight;
-      case 3:
+  int _buildImageHeight(int? count, PageBlockType type) {
+    switch (type) {
+      case PageBlockType.imageRow:
+        switch (count) {
+          case 1:
+            return Constants.defaultOneRowOneImageHeight;
+          case 2:
+            return Constants.defaultOneRowTwoImageHeight;
+          case 3:
+          default:
+            return Constants.defaultOneRowThreeImageHeight;
+        }
+      case PageBlockType.banner:
+        return Constants.defaultBannerImageHeight;
       default:
-        return Constants.defaultOneRowThreeImageHeight;
+        return Constants.defaultOneRowOneImageHeight;
     }
   }
 

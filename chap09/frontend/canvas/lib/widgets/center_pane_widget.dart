@@ -38,7 +38,18 @@ class CenterPaneWidget extends StatelessWidget {
               final toolbar = [
                 IconButton(
                   icon: const Icon(Icons.delete),
-                  onPressed: () => onBlockDeleted?.call(block),
+                  onPressed: () async {
+                    final result = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => const ConfirmDialog(
+                        title: '删除区块',
+                        content: '是否确认删除此区块？',
+                      ),
+                    );
+                    if (result == true) {
+                      onBlockDeleted?.call(block);
+                    }
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.edit),

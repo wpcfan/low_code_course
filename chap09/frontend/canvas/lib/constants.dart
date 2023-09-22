@@ -16,4 +16,10 @@ class Constants {
   static const double defaultOneRowThreeBlockHeight = 180;
   static const int defaultOneRowThreeImageWidth = 120;
   static const int defaultOneRowThreeImageHeight = 180;
+  static const int defaultBannerImageWidth = 400;
+  static const int defaultBannerImageHeight = 200;
+  static const double defaultBannerBlockHeight = 200;
+  static const int defaultBannerImageCount = 5;
+  static const int defaultBannerImageMaxCount = 6;
+  static const int defaultBannerImageMinCount = 2;
 }

@@ -2,18 +2,26 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import '../constants.dart';
 import '../popups/popups.dart';
 
-class ImageDataForm extends StatelessWidget {
+class BannerDataForm extends StatelessWidget {
   final List<PageBlockData<BlockData>> items;
   final Function(PageBlockData, PageBlockData)? onMove;
   final Function(PageBlockData)? onUpdate;
-  const ImageDataForm({
+  final Function(PageBlockData)? onDelete;
+  final int minimum;
+  final int maximum;
+  const BannerDataForm({
     super.key,
     this.items = const [],
     this.onMove,
     this.onUpdate,
-  });
+    this.onDelete,
+    this.minimum = Constants.defaultBannerImageMinCount,
+    this.maximum = Constants.defaultBannerImageMaxCount,
+  }) : assert(minimum >= Constants.defaultBannerImageMinCount &&
+            maximum <= Constants.defaultBannerImageMaxCount);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +36,7 @@ class ImageDataForm extends StatelessWidget {
           leading: Image.network(content.image),
           trailing: [
             Text(item.sort.toString()),
+            const SizedBox(width: 10),
             [
               if (item.sort > 1)
                 const Icon(Icons.arrow_upward).inkWell(
@@ -41,7 +50,33 @@ class ImageDataForm extends StatelessWidget {
                     onMove?.call(item, items[index + 1]);
                   },
                 ),
-            ].toColumn(mainAxisSize: MainAxisSize.min)
+            ].toColumn(mainAxisSize: MainAxisSize.min),
+            const SizedBox(width: 10),
+            const Icon(Icons.delete).inkWell(
+              onTap: () async {
+                if (items.length <= minimum) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('至少需要 $minimum 个'),
+                    ),
+                  );
+                  return;
+                }
+                final result = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return const ConfirmDialog(
+                      title: '删除',
+                      content: '确定要删除吗？',
+                    );
+                  },
+                );
+
+                if (result == true) {
+                  onDelete?.call(item);
+                }
+              },
+            ),
           ].toRow(mainAxisSize: MainAxisSize.min),
           onTap: () async {
             final result = await showDialog<ImageData>(
