@@ -2,6 +2,8 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import '../popups/popups.dart';
+
 class ProductDataForm extends StatelessWidget {
   final List<PageBlockData<BlockData>> items;
   final Function(PageBlockData, PageBlockData)? onMove;
@@ -55,7 +57,16 @@ class ProductDataForm extends StatelessWidget {
                 ),
             ].toColumn(mainAxisSize: MainAxisSize.min)
           ].toRow(mainAxisSize: MainAxisSize.min),
-          onTap: () async {},
+          onTap: () async {
+            final result = await showSearch(
+              context: context,
+              delegate: ProductSearchDelegate(),
+            );
+
+            if (result != null) {
+              onUpdate?.call(item.copyWith(content: result));
+            }
+          },
         );
       },
     );
