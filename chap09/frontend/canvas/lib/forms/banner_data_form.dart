@@ -33,7 +33,12 @@ class BannerDataForm extends StatelessWidget {
         return ListTile(
           title: Text(content.link.type.value),
           subtitle: Text(content.link.value),
-          leading: Image.network(content.image),
+          leading: Image.network(
+            content.image,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
           trailing: [
             Text(item.sort.toString()),
             const SizedBox(width: 10),
