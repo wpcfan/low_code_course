@@ -48,6 +48,10 @@ class LeftPaneWidget extends StatelessWidget {
       title: Text('一行两商品区块'),
       subtitle: Text('此组件一般用于特别活动推荐位'),
     );
+    const waterfall = ListTile(
+      title: Text('瀑布流区块'),
+      subtitle: Text('此组件一般用于特别活动推荐位'),
+    );
     return ListView(
       children: [
         _buildDraggableItem(
@@ -97,6 +101,13 @@ class LeftPaneWidget extends StatelessWidget {
           child: oneRowTwoProduct,
           type: PageBlockType.productRow,
           count: 2,
+        ),
+        const Divider(),
+        _buildDraggableItem(
+          config: defaultBlockConfig,
+          child: waterfall,
+          type: PageBlockType.waterfall,
+          count: 1,
         ),
       ],
     );
@@ -199,6 +210,14 @@ class LeftPaneWidget extends StatelessWidget {
             width: _buildImageWidth(count, type),
             height: _buildImageHeight(count, type),
           ),
+        );
+      case PageBlockType.waterfall:
+        return PageBlock(
+          sort: blocksCount + 1,
+          title: title,
+          type: type,
+          config: defaultConfig,
+          data: [],
         );
       default:
         return PageBlock(

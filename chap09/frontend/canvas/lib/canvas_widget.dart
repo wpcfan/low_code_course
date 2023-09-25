@@ -29,9 +29,13 @@ class CanvasWidget extends StatelessWidget {
         RepositoryProvider<PageBlockDataAdminRepository>(
           create: (context) => PageBlockDataAdminRepository(),
         ),
+        RepositoryProvider<ProductRepository>(
+          create: (context) => ProductRepository(),
+        ),
       ],
       child: BlocProvider(
         create: (context) => CanvasBloc(
+          productRepository: context.read<ProductRepository>(),
           pageAdminRepository: context.read<PageAdminRepository>(),
           pageBlockAdminRepository: context.read<PageBlockAdminRepository>(),
           pageBlockDataAdminRepository:
@@ -103,7 +107,7 @@ class CanvasWidget extends StatelessWidget {
     if (result != null) {
       bloc.add(
         CanvasEventCreateBlockData(PageBlockData(
-          sort: state.selectedBlock!.data.length + 1,
+          sort: state.selectedBlockData.length + 1,
           content: result,
         )),
       );
@@ -118,6 +122,7 @@ class CanvasWidget extends StatelessWidget {
       ).expanded(),
       CenterPaneWidget(
         blocks: state.blocks,
+        waterfallItems: state.waterfallItems,
         baselineScreenWidth: state.pageConfig.baselineScreenWidth,
         onBlockAdded: (value) {
           bloc.add(CanvasEventCreateBlock(value));
@@ -167,6 +172,9 @@ class CanvasWidget extends StatelessWidget {
             return;
           }
           bloc.add(CanvasEventDeleteBlockData(value.id!));
+        },
+        onCreateData: (value) async {
+          bloc.add(CanvasEventCreateBlockData(value));
         },
         block: state.selectedBlock,
       ).expanded(),

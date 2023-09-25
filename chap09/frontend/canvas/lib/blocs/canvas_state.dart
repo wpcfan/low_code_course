@@ -9,6 +9,7 @@ class CanvasState extends Equatable {
   final String? error;
   final bool saving;
   final FetchStatus status;
+  final List<Product> waterfallItems;
 
   get isInitial => status == FetchStatus.initial;
   get isFailure => status == FetchStatus.failure;
@@ -38,6 +39,8 @@ class CanvasState extends Equatable {
       );
   List<PageBlockData<BlockData>> get selectedBlockData =>
       selectedBlock?.data ?? [];
+  bool get hasWaterfallBlock =>
+      blocks.any((block) => block.type == PageBlockType.waterfall);
 
   const CanvasState({
     this.pageLayout,
@@ -45,6 +48,7 @@ class CanvasState extends Equatable {
     this.error,
     this.saving = false,
     this.status = FetchStatus.initial,
+    this.waterfallItems = const [],
   });
 
   @override
@@ -52,6 +56,9 @@ class CanvasState extends Equatable {
         pageLayout,
         selectedBlock,
         error,
+        saving,
+        status,
+        waterfallItems,
       ];
 
   CanvasState copyWith({
@@ -60,6 +67,7 @@ class CanvasState extends Equatable {
     String? error,
     bool? saving,
     FetchStatus? status,
+    List<Product>? waterfallItems,
   }) {
     return CanvasState(
       pageLayout: pageLayout ?? this.pageLayout,
@@ -67,6 +75,7 @@ class CanvasState extends Equatable {
       error: error ?? this.error,
       saving: saving ?? this.saving,
       status: status ?? this.status,
+      waterfallItems: waterfallItems ?? this.waterfallItems,
     );
   }
 

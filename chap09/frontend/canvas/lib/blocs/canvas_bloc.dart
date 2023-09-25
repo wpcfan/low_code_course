@@ -9,11 +9,12 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
   final PageAdminRepository pageAdminRepository;
   final PageBlockAdminRepository pageBlockAdminRepository;
   final PageBlockDataAdminRepository pageBlockDataAdminRepository;
-
+  final ProductRepository productRepository;
   CanvasBloc({
     required this.pageAdminRepository,
     required this.pageBlockAdminRepository,
     required this.pageBlockDataAdminRepository,
+    required this.productRepository,
   }) : super(CanvasState.initial()) {
     on<CanvasEventLoaded>(_onCanvasEventLoad);
     on<CanvasEventSelectBlock>(_onCanvasEventSelectBlock);
@@ -36,6 +37,27 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
       final pageLayout = await pageAdminRepository.get(
         event.pageLayoutId,
       );
+      if (pageLayout.blocks
+          .any((block) => block.type == PageBlockType.waterfall)) {
+        final waterfallBlock = pageLayout.blocks
+            .firstWhere((block) => block.type == PageBlockType.waterfall);
+        final waterfallData =
+            waterfallBlock.data.map((e) => e.content as Category).toList();
+        if (waterfallData.isNotEmpty) {
+          final category = waterfallData.first;
+
+          final waterfallItems = await loadProductsByCategory(
+            category: category,
+            pageLayout: pageLayout,
+          );
+          emit(state.copyWith(
+            pageLayout: pageLayout,
+            waterfallItems: waterfallItems,
+            status: FetchStatus.success,
+          ));
+          return;
+        }
+      }
       emit(state.copyWith(
         pageLayout: pageLayout,
         status: FetchStatus.success,
@@ -45,6 +67,22 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
         error: e.toString(),
         status: FetchStatus.failure,
       ));
+    }
+  }
+
+  Future<List<Product>> loadProductsByCategory({
+    required Category category,
+    required PageLayout pageLayout,
+  }) async {
+    try {
+      final slice = await productRepository.getProductsByCategoryId(
+        categoryId: category.id!,
+        pageNum: 0,
+        pageSize: 4,
+      );
+      return slice.items;
+    } catch (e) {
+      return [];
     }
   }
 
@@ -128,6 +166,11 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
         state.pageLayoutId!,
         event.blockId,
       );
+      final blockTypeDeleted = state.blocks
+          .firstWhere(
+            (b) => b.id == event.blockId,
+          )
+          .type;
       final sort = state.blocks
           .firstWhere(
             (b) => b.id == event.blockId,
@@ -149,6 +192,9 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
       if (state.selectedBlockId == event.blockId) {
         emit(CanvasState(
           pageLayout: newPageLayout,
+          waterfallItems: blockTypeDeleted == PageBlockType.waterfall
+              ? []
+              : state.waterfallItems,
           selectedBlockId: null,
           saving: false,
           status: FetchStatus.success,
@@ -156,6 +202,9 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
       } else {
         emit(state.copyWith(
           pageLayout: newPageLayout,
+          waterfallItems: blockTypeDeleted == PageBlockType.waterfall
+              ? []
+              : state.waterfallItems,
           saving: false,
         ));
       }
@@ -254,10 +303,24 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
           else
             block,
       ];
+      final newPageLayout = state.pageLayout?.copyWith(
+        blocks: newBlocks,
+      );
+      if (blockData.content is Category) {
+        final category = blockData.content as Category;
+        final waterfallItems = await loadProductsByCategory(
+          category: category,
+          pageLayout: state.pageLayout!,
+        );
+        emit(state.copyWith(
+          pageLayout: newPageLayout,
+          waterfallItems: waterfallItems,
+          saving: false,
+        ));
+        return;
+      }
       emit(state.copyWith(
-        pageLayout: state.pageLayout?.copyWith(
-          blocks: newBlocks,
-        ),
+        pageLayout: newPageLayout,
         saving: false,
       ));
     } catch (e) {
@@ -282,18 +345,32 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
         state.selectedBlockId!,
         event.blockData,
       );
+      final newPageLayout = state.pageLayout?.copyWith(
+        blocks: [
+          for (final block in state.blocks)
+            if (block.id == state.selectedBlockId)
+              block.copyWith(
+                data: [...state.selectedBlockData, blockData],
+              )
+            else
+              block,
+        ],
+      );
+      if (blockData.content is Category) {
+        final category = blockData.content as Category;
+        final waterfallItems = await loadProductsByCategory(
+          category: category,
+          pageLayout: state.pageLayout!,
+        );
+        emit(state.copyWith(
+          pageLayout: newPageLayout,
+          waterfallItems: waterfallItems,
+          saving: false,
+        ));
+        return;
+      }
       emit(state.copyWith(
-        pageLayout: state.pageLayout?.copyWith(
-          blocks: [
-            for (final block in state.blocks)
-              if (block.id == state.selectedBlockId)
-                block.copyWith(
-                  data: [...state.selectedBlockData, blockData],
-                )
-              else
-                block,
-          ],
-        ),
+        pageLayout: newPageLayout,
         saving: false,
       ));
     } catch (e) {

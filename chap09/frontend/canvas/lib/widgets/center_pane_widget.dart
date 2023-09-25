@@ -5,6 +5,7 @@ import 'package:page_block_widgets/page_block_widgets.dart';
 
 class CenterPaneWidget extends StatelessWidget {
   final List<PageBlock> blocks;
+  final List<Product> waterfallItems;
   final double baselineScreenWidth;
   final Function(PageBlock)? onBlockAdded;
   final Function(PageBlock, PageBlock)? onBlockMoved;
@@ -14,6 +15,7 @@ class CenterPaneWidget extends StatelessWidget {
   const CenterPaneWidget({
     super.key,
     required this.blocks,
+    this.waterfallItems = const [],
     this.onBlockAdded,
     this.onBlockMoved,
     this.onBlockDeleted,
@@ -88,6 +90,12 @@ class CenterPaneWidget extends StatelessWidget {
             } else if (e.type == PageBlockType.productRow) {
               return ProductRowWidget(
                 items: e.data.map((e) => e.content as Product).toList(),
+                config: e.config.withRatio(1, baselineScreenWidth),
+              ).parent(page(e));
+            } else if (e.type == PageBlockType.waterfall) {
+              return WaterfallWidget(
+                designMode: true,
+                items: waterfallItems,
                 config: e.config.withRatio(1, baselineScreenWidth),
               ).parent(page(e));
             } else {

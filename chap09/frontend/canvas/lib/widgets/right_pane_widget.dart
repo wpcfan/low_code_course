@@ -12,6 +12,7 @@ class RightPaneWidget extends StatelessWidget {
   final Function(PageBlockData, PageBlockData)? onMoveData;
   final Function(PageBlockData)? onUpdateData;
   final Function(PageBlockData)? onDeleteData;
+  final Function(PageBlockData)? onCreateData;
   final Function(PageBlock)? onUpdateBlock;
   const RightPaneWidget({
     super.key,
@@ -21,6 +22,7 @@ class RightPaneWidget extends StatelessWidget {
     this.onMoveData,
     this.onUpdateData,
     this.onDeleteData,
+    this.onCreateData,
     this.onUpdateBlock,
   });
 
@@ -80,6 +82,9 @@ class RightPaneWidget extends StatelessWidget {
         );
       case PageBlockType.waterfall:
         return WaterfallDataForm(
+          onMove: onMoveData,
+          onUpdate: onUpdateData,
+          onCreate: onCreateData,
           items: block!.data,
         );
       default:

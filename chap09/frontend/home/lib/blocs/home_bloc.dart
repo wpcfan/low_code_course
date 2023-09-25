@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:models/category.dart';
 import 'package:models/models.dart';
 import 'package:repositories/repositories.dart';
 
@@ -51,8 +50,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             emit: emit,
             failureStatus: FetchStatus.failure,
           );
+
+          return;
         }
-        return;
       }
       emit(state.copyWith(status: FetchStatus.success, layout: pageLayout));
     } catch (e) {
