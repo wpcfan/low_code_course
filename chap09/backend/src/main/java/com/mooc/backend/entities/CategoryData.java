@@ -23,7 +23,8 @@ public record CategoryData(
             category.getName(),
             category.getCode(),
             category.getChildren().stream()
-                    .map(CategoryData::from).toList()
+                .map(CategoryData::from)
+                .toList()
         );
     }
 }
