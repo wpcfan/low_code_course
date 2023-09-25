@@ -40,6 +40,14 @@ class LeftPaneWidget extends StatelessWidget {
       title: Text('轮播图区块'),
       subtitle: Text('此组件一般用于特别活动推荐位'),
     );
+    const oneRowOneProduct = ListTile(
+      title: Text('一行一商品区块'),
+      subtitle: Text('此组件一般用于特别活动推荐位'),
+    );
+    const oneRowTwoProduct = ListTile(
+      title: Text('一行两商品区块'),
+      subtitle: Text('此组件一般用于特别活动推荐位'),
+    );
     return ListView(
       children: [
         _buildDraggableItem(
@@ -75,6 +83,20 @@ class LeftPaneWidget extends StatelessWidget {
           child: banner,
           type: PageBlockType.banner,
           count: Constants.defaultBannerImageCount,
+        ),
+        const Divider(),
+        _buildDraggableItem(
+          config: defaultBlockConfig,
+          child: oneRowOneProduct,
+          type: PageBlockType.productRow,
+          count: 1,
+        ),
+        const Divider(),
+        _buildDraggableItem(
+          config: defaultBlockConfig,
+          child: oneRowTwoProduct,
+          type: PageBlockType.productRow,
+          count: 2,
         ),
       ],
     );
@@ -166,6 +188,18 @@ class LeftPaneWidget extends StatelessWidget {
             height: _buildImageHeight(count, type),
           ),
         );
+      case PageBlockType.productRow:
+        return PageBlock(
+          sort: blocksCount + 1,
+          title: title,
+          type: type,
+          config: defaultConfig,
+          data: _buildProductBlockDataList(
+            count: count ?? 1,
+            width: _buildImageWidth(count, type),
+            height: _buildImageHeight(count, type),
+          ),
+        );
       default:
         return PageBlock(
           sort: 1,
@@ -198,7 +232,11 @@ class LeftPaneWidget extends StatelessWidget {
       case PageBlockType.productRow:
         switch (count) {
           case 1:
+            return config.copyWith(
+                blockHeight: Constants.defaultOneRowOneProductBlockHeight);
           case 2:
+            return config.copyWith(
+                blockHeight: Constants.defaultOneRowTwoProductBlockHeight);
           default:
             return config;
         }
@@ -222,6 +260,14 @@ class LeftPaneWidget extends StatelessWidget {
         }
       case PageBlockType.banner:
         return Constants.defaultBannerImageWidth;
+      case PageBlockType.productRow:
+        switch (count) {
+          case 1:
+            return Constants.defaultOneRowOneProductImageWidth;
+          case 2:
+          default:
+            return Constants.defaultOneRowTwoProductImageWidth;
+        }
       default:
         return Constants.defaultOneRowOneImageWidth;
     }
@@ -241,9 +287,33 @@ class LeftPaneWidget extends StatelessWidget {
         }
       case PageBlockType.banner:
         return Constants.defaultBannerImageHeight;
+      case PageBlockType.productRow:
+        switch (count) {
+          case 1:
+            return Constants.defaultOneRowOneProductImageHeight;
+          case 2:
+          default:
+            return Constants.defaultOneRowTwoProductImageHeight;
+        }
       default:
         return Constants.defaultOneRowOneImageHeight;
     }
+  }
+
+  List<PageBlockData> _buildProductBlockDataList({
+    required int count,
+    required int width,
+    required int height,
+  }) {
+    final List<PageBlockData> list = [];
+    for (var i = 0; i < count; i++) {
+      list.add(_buildProductBlockData(
+        sort: i + 1,
+        width: width,
+        height: height,
+      ));
+    }
+    return list;
   }
 
   List<PageBlockData> _buildImageBlockDataList({
@@ -261,6 +331,27 @@ class LeftPaneWidget extends StatelessWidget {
     }
     return list;
   }
+
+  PageBlockData<Product> _buildProductBlockData({
+    required int sort,
+    required int width,
+    required int height,
+  }) =>
+      PageBlockData<Product>(
+        sort: sort,
+        content: Product(
+          sku: 'sku_$sort',
+          name: '商品名称',
+          description: '商品描述',
+          price: "¥100.01",
+          images: [
+            _buildImagePath(
+              width,
+              height,
+            ),
+          ],
+        ),
+      );
 
   PageBlockData<ImageData> _buildImageBlockData({
     required int sort,

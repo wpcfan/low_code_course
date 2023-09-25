@@ -74,6 +74,8 @@ class RightPaneWidget extends StatelessWidget {
         );
       case PageBlockType.productRow:
         return ProductDataForm(
+          onMove: onMoveData,
+          onUpdate: onUpdateData,
           items: block!.data,
         );
       case PageBlockType.waterfall:

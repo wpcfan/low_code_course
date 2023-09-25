@@ -22,4 +22,10 @@ class Constants {
   static const int defaultBannerImageCount = 5;
   static const int defaultBannerImageMaxCount = 6;
   static const int defaultBannerImageMinCount = 2;
+  static const int defaultOneRowOneProductImageWidth = 100;
+  static const int defaultOneRowOneProductImageHeight = 100;
+  static const int defaultOneRowTwoProductImageWidth = 100;
+  static const int defaultOneRowTwoProductImageHeight = 100;
+  static const double defaultOneRowOneProductBlockHeight = 140;
+  static const double defaultOneRowTwoProductBlockHeight = 340;
 }

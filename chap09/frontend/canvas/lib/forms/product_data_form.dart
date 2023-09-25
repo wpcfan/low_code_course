@@ -30,6 +30,15 @@ class ProductDataForm extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           trailing: [
+            Text(
+              content.price ?? '',
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(width: 12),
             Text(item.sort.toString()),
             [
               if (item.sort > 1)
