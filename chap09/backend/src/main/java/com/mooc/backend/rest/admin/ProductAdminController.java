@@ -1,14 +1,17 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.Product;
+import com.mooc.backend.entities.ProductData;
 import com.mooc.backend.rest.vm.CreateOrUpdateProductImageVM;
 import com.mooc.backend.rest.vm.CreateOrUpdateProductVM;
+import com.mooc.backend.rest.vm.PageWrapper;
 import com.mooc.backend.services.ProductService;
 import com.mooc.backend.utils.FileUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +29,21 @@ import java.util.stream.Stream;
 public class ProductAdminController {
 
     private final ProductService productService;
+
+    @Operation(summary = "分页搜索商品")
+    @GetMapping("/search")
+    public PageWrapper<ProductData> searchProducts(
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @ParameterObject Pageable pageable) {
+        var result = productService.search(keyword, pageable).map(ProductData::from);
+        return new PageWrapper<>(
+                result.getPageable().getPageNumber(),
+                result.getPageable().getPageSize(),
+                result.getTotalPages(),
+                result.getTotalElements(),
+                result.getContent()
+        );
+    }
 
     @Operation(summary = "分页获取商品列表")
     @GetMapping("")

@@ -4,10 +4,13 @@ import com.mooc.backend.config.QiniuProperties;
 import com.mooc.backend.entities.Product;
 import com.mooc.backend.entities.ProductData;
 import com.mooc.backend.entities.ProductImage;
+import com.mooc.backend.examples.SearchProductExample;
 import com.mooc.backend.repositories.CategoryRepository;
 import com.mooc.backend.repositories.PageBlockDataRepository;
 import com.mooc.backend.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,12 @@ public class ProductService {
     private final PageBlockDataRepository pageBlockDataRepository;
     private final QiniuService qiniuService;
     private final QiniuProperties properties;
+
+    public Page<Product> search(String keyword, Pageable pageable) {
+        var example = SearchProductExample.searchProductExample.apply(keyword);
+//        return productRepository.findByKeyword(keyword, pageable);
+        return productRepository.findAll(example, pageable);
+    }
 
     public Page<Product> findAll(Pageable pageable) {
         return productRepository.findAll(pageable);
