@@ -1,7 +1,6 @@
 package com.mooc.backend.rest.admin;
 
 import com.mooc.backend.entities.PageBlock;
-import com.mooc.backend.entities.PageBlockData;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.BlockType;
 import com.mooc.backend.errors.CustomException;
@@ -10,6 +9,7 @@ import com.mooc.backend.rest.vm.CreatePageBlockVM;
 import com.mooc.backend.rest.vm.UpdatePageBlockVM;
 import com.mooc.backend.services.PageBlockService;
 import com.mooc.backend.services.PageLayoutService;
+import com.mooc.backend.services.ValidationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class PageBlockAdminController {
     private final PageLayoutService pageLayoutService;
     private final PageBlockService pageBlockService;
+    private final ValidationService validationService;
 
     @Operation(summary = "添加页面区块", description = """
             添加页面区块会同时添加页面区块数据
@@ -54,10 +55,7 @@ public class PageBlockAdminController {
     @Operation(summary = "更新页面区块")
     @PutMapping("/{id}/blocks/{blockId}")
     public PageBlock updatePageBlock(@PathVariable Long id, @PathVariable Long blockId, @RequestBody @Valid UpdatePageBlockVM pageBlockVM) {
-        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
-            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
-        }
+        validationService.checkPageBlockNotExist(id, blockId);
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
         pageBlock.setTitle(pageBlockVM.title());
         pageBlock.setConfig(pageBlockVM.config());
@@ -78,12 +76,8 @@ public class PageBlockAdminController {
     public void movePageBlock(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long targetBlockId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         var blocks = pageLayout.getPageBlocks();
-        if (blocks.stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
-            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
-        }
-        if (blocks.stream().noneMatch(pageBlock -> pageBlock.getId().equals(targetBlockId))) {
-            throw new CustomException("目标页面区块不存在", "TargetPageBlockNotFound", ErrorType.ResourcesNotFoundException);
-        }
+        validationService.checkPageBlockNotExist(id, blockId);
+        validationService.checkPageBlockNotExist(id, targetBlockId);
         var waterfallBlockId = blocks.stream()
                 .filter(pageBlock -> pageBlock.getType() == BlockType.Waterfall)
                 .findFirst()
@@ -104,10 +98,8 @@ public class PageBlockAdminController {
             """)
     @DeleteMapping("/{id}/blocks/{blockId}")
     public void deletePageBlock(@PathVariable Long id, @PathVariable Long blockId) {
+        validationService.checkPageBlockNotExist(id, blockId);
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
-            throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
-        }
         pageBlockService.deletePageBlock(pageLayout, blockId);
     }
 }

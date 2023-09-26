@@ -4,7 +4,6 @@ import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageBlockData;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.BlockType;
-import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.repositories.PageBlockRepository;
 import com.mooc.backend.rest.vm.CreatePageBlockVM;
 import lombok.RequiredArgsConstructor;

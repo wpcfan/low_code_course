@@ -9,8 +9,6 @@ import com.mooc.backend.repositories.CategoryRepository;
 import com.mooc.backend.repositories.PageBlockDataRepository;
 import com.mooc.backend.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
