@@ -114,7 +114,16 @@ public class PageLayoutAdminController {
     public PageLayoutAdminVM publishPageLayout(
             @PathVariable Long id,
             @RequestBody @Valid PublishPageLayoutVM publishPageLayoutVM) {
+        // 对于同一平台，同一页面类型，同一时间范围只能有一个页面布局是发布状态
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        validationService.checkPublishTimeConflict(
+                publishPageLayoutVM.startTime(),
+                pageLayout.getPlatform(),
+                pageLayout.getPageType());
+        validationService.checkPublishTimeConflict(
+                publishPageLayoutVM.endTime(),
+                pageLayout.getPlatform(),
+                pageLayout.getPageType());
         pageLayout.setStatus(PageStatus.PUBLISHED);
         pageLayout.setStartTime(publishPageLayoutVM.startTime());
         pageLayout.setEndTime(publishPageLayoutVM.endTime());

@@ -40,4 +40,14 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
             PageStatus status,
             LocalDateTime time1,
             LocalDateTime time2);
+
+    @Query("""
+            select count(pl) from PageLayout pl
+                where pl.platform = :platform
+                and pl.pageType = :pageType
+                and pl.status = com.mooc.backend.enumerations.PageStatus.PUBLISHED
+                and pl.startTime <= :time
+                and pl.endTime >= :time
+            """)
+    long findByPublishTimeConflict(LocalDateTime time, Platform platform, PageType pageType);
 }

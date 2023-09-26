@@ -59,4 +59,8 @@ public class PageLayoutService {
         }
         return pageLayoutList.stream().findFirst().orElseThrow();
     }
+
+    public boolean checkPublishTimeConflict(LocalDateTime time, Platform platform, PageType pageType) {
+        return pageLayoutRepository.findByPublishTimeConflict(time, platform, pageType) > 0;
+    }
 }

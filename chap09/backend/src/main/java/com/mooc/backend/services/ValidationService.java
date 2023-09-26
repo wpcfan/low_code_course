@@ -3,10 +3,14 @@ package com.mooc.backend.services;
 import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
+import com.mooc.backend.enumerations.PageType;
+import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.errors.CustomException;
 import com.mooc.backend.errors.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -33,6 +37,12 @@ public class ValidationService {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         if (pageLayout.getStatus() != PageStatus.DRAFT) {
             throw new CustomException("页面不是草稿状态", "PageNotDraft", ErrorType.ConstraintViolationException);
+        }
+    }
+
+    public void checkPublishTimeConflict(LocalDateTime time, Platform platform, PageType pageType) {
+        if (pageLayoutService.checkPublishTimeConflict(time, platform, pageType)) {
+            throw new CustomException("发布时间冲突", "PublishTimeConflict", ErrorType.ConstraintViolationException);
         }
     }
 }
