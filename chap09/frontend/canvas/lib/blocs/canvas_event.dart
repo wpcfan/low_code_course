@@ -104,3 +104,5 @@ class CanvasEventMoveBlockData extends CanvasEvent {
   @override
   List<Object> get props => [fromId, toId];
 }
+
+class CanvasEventClearError extends CanvasEvent {}

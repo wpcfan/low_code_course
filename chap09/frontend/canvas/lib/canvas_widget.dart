@@ -41,7 +41,18 @@ class CanvasWidget extends StatelessWidget {
           pageBlockDataAdminRepository:
               context.read<PageBlockDataAdminRepository>(),
         )..add(CanvasEventLoaded(pageLayoutId)),
-        child: BlocBuilder<CanvasBloc, CanvasState>(
+        child: BlocConsumer<CanvasBloc, CanvasState>(
+          listener: (context, state) {
+            if (state.error.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              context.read<CanvasBloc>().add(CanvasEventClearError());
+            }
+          },
           builder: (context, state) {
             final bloc = context.read<CanvasBloc>();
             if (state.isFailure) {

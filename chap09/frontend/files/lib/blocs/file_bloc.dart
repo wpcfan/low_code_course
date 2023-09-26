@@ -19,6 +19,13 @@ class FileBloc extends Bloc<FileEvent, FileState> {
     on<FileEventDelete>(_onFileEventDelete);
     on<FileEventToggleEditable>(_onFileEventToggleEditable);
     on<FileEventToggleSelected>(_onFileEventToggleSelected);
+    on<FileEventClearError>(_onFileEventClearError);
+  }
+
+  /// 清除错误
+  void _onFileEventClearError(
+      FileEventClearError event, Emitter<FileState> emit) {
+    emit(state.copyWith(error: ''));
   }
 
   /// 选择文件

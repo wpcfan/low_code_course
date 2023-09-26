@@ -2,6 +2,8 @@ package com.mooc.backend.services;
 
 import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.BlockType;
+import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.repositories.PageBlockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,9 @@ public class PageBlockService {
         }
         pageBlock.setSort(targetSort);
         pageLayoutService.savePageLayout(pageLayout);
+    }
+
+    public long countByTypeAndPageLayoutId(BlockType blockType, Long pageLayoutId) {
+        return pageBlockRepository.countByTypeAndPageLayoutId(blockType, pageLayoutId);
     }
 }

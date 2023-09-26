@@ -26,6 +26,16 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
     on<CanvasEventCreateBlockData>(_onCanvasEventCreateBlockData);
     on<CanvasEventDeleteBlockData>(_onCanvasEventDeleteBlockData);
     on<CanvasEventMoveBlockData>(_onCanvasEventMoveBlockData);
+    on<CanvasEventClearError>(_onCanvasEventClearError);
+  }
+
+  Future<void> _onCanvasEventClearError(
+    CanvasEventClearError event,
+    Emitter<CanvasState> emit,
+  ) async {
+    emit(state.copyWith(
+      error: '',
+    ));
   }
 
   Future<void> _onCanvasEventLoad(
@@ -100,6 +110,16 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
     Emitter<CanvasState> emit,
   ) async {
     if (state.pageLayoutId == null) {
+      emit(state.copyWith(
+        error: '页面布局不存在',
+      ));
+      return;
+    }
+    if (state.hasWaterfallBlock &&
+        event.block.type == PageBlockType.waterfall) {
+      emit(state.copyWith(
+        error: '已存在瀑布流模块',
+      ));
       return;
     }
     emit(state.copyWith(saving: true));
@@ -108,9 +128,22 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
         state.pageLayoutId!,
         event.block,
       );
+      List<PageBlock> newBlocks = [];
+      if (state.hasWaterfallBlock) {
+        newBlocks = [
+          ...state.blocks.sublist(0, state.blocks.length - 1),
+          block,
+          state.blocks.last.copyWith(sort: state.blocks.length + 1),
+        ];
+      } else {
+        newBlocks = [
+          ...state.blocks,
+          block,
+        ];
+      }
       emit(state.copyWith(
         pageLayout: state.pageLayout?.copyWith(
-          blocks: [...state.blocks, block],
+          blocks: newBlocks..sort((a, b) => a.sort.compareTo(b.sort)),
         ),
         saving: false,
       ));

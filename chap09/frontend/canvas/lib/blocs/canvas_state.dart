@@ -6,7 +6,7 @@ import '../constants.dart';
 class CanvasState extends Equatable {
   final PageLayout? pageLayout;
   final int? selectedBlockId;
-  final String? error;
+  final String error;
   final bool saving;
   final FetchStatus status;
   final List<Product> waterfallItems;
@@ -45,7 +45,7 @@ class CanvasState extends Equatable {
   const CanvasState({
     this.pageLayout,
     this.selectedBlockId,
-    this.error,
+    this.error = '',
     this.saving = false,
     this.status = FetchStatus.initial,
     this.waterfallItems = const [],

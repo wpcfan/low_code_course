@@ -47,3 +47,10 @@ class FileEventToggleSelected extends FileEvent {
   @override
   List<Object?> get props => [key];
 }
+
+class FileEventClearError extends FileEvent {
+  FileEventClearError() : super();
+
+  @override
+  List<Object?> get props => [];
+}

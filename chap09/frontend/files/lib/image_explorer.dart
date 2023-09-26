@@ -27,7 +27,18 @@ class ImageExplorer extends StatelessWidget {
             fileRepo: FileUploadRepository(),
             fileAdminRepo: FileAdminRepository())
           ..add(FileEventLoad()),
-        child: BlocBuilder<FileBloc, FileState>(
+        child: BlocConsumer<FileBloc, FileState>(
+          listener: (context, state) {
+            if (state.error.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              context.read<FileBloc>().add(FileEventClearError());
+            }
+          },
           builder: (context, state) {
             if (state.loading) {
               return const CircularProgressIndicator().center();

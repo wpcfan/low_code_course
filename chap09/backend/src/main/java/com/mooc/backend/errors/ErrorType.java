@@ -9,7 +9,7 @@ public enum ErrorType {
     QiniuFileDeleteException(40003),
     FileUploadIOException(40004),
     ResourcesNotFoundException(40005),
-    ;
+    ConstraintViolationException(40006);
 
     private final int value;
 

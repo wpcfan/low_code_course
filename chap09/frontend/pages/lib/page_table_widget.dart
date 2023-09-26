@@ -20,7 +20,18 @@ class PageTableWidget extends StatelessWidget {
       create: (context) =>
           PageBloc(PageAdminRepository())..add(PageEventClearAll()),
       child: Builder(builder: (context) {
-        return BlocBuilder<PageBloc, PageState>(
+        return BlocConsumer<PageBloc, PageState>(
+          listener: (context, state) {
+            if (state.error.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              context.read<PageBloc>().add(PageEventClearError());
+            }
+          },
           builder: (context, state) {
             final bloc = context.read<PageBloc>();
             return LayoutBuilder(

@@ -3,6 +3,7 @@ package com.mooc.backend.rest.admin;
 import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageBlockData;
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.BlockType;
 import com.mooc.backend.errors.CustomException;
 import com.mooc.backend.errors.ErrorType;
 import com.mooc.backend.rest.vm.CreatePageBlockVM;
@@ -32,14 +33,33 @@ public class PageBlockAdminController {
     @Operation(summary = "添加页面区块", description = """
             添加页面区块会同时添加页面区块数据
             比如添加一个图片区块，那么就会同时添加一个图片区块数据
-            添加区块时，默认的排序是当前页面布局的区块数量加一
+            添加区块时，默认的排序是当前页面布局的区块数量加一。
+            一个页面布局中只能有一个瀑布流区块，且瀑布流区块需要位于最后
+            这意味着已有瀑布流区块的情况下，新增区块的排序会比瀑布流区块的排序小一，瀑布流还是在最后
             """)
     @PostMapping("/{id}/blocks")
     public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreatePageBlockVM pageBlockVM) {
+        boolean hasWaterfall = pageBlockService.countByTypeAndPageLayoutId(BlockType.Waterfall, id) > 0;
+        // 瀑布流区块只能有一个
+        if (hasWaterfall && pageBlockVM.type() == BlockType.Waterfall) {
+            throw new CustomException(
+                    "瀑布流区块只能有一个",
+                    "WaterfallBlockExisted",
+                    ErrorType.ConstraintViolationException);
+        }
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        var blocks = pageLayout.getPageBlocks();
+        if (hasWaterfall) {
+            var waterfallBlock = blocks.stream()
+                    .filter(block -> block.getType() == BlockType.Waterfall)
+                    .findFirst()
+                    .orElseThrow();
+            waterfallBlock.setSort(blocks.size() + 1);
+        }
+        final int sort = hasWaterfall ? blocks.size() : blocks.size() + 1;
         PageBlock pageBlock = new PageBlock();
         pageBlock.setTitle(pageBlockVM.title());
-        pageBlock.setSort(pageLayout.getPageBlocks().size() + 1);
+        pageBlock.setSort(sort);
         pageBlock.setConfig(pageBlockVM.config());
         pageBlock.setType(pageBlockVM.type());
         pageBlockVM.data().forEach(dataVM -> {
@@ -48,8 +68,11 @@ public class PageBlockAdminController {
             pageBlockData.setSort(pageBlock.getData().size() + 1);
             pageBlock.addData(pageBlockData);
         });
-        pageBlock.setPageLayout(pageLayout);
-        return pageBlockService.savePageBlock(pageBlock);
+        pageLayout.addPageBlock(pageBlock);
+        pageLayoutService.savePageLayout(pageLayout);
+        return pageLayout.getPageBlocks().stream()
+                .filter(block -> block.getSort() == sort)
+                .findFirst().orElseThrow();
     }
 
     @Operation(summary = "更新页面区块")

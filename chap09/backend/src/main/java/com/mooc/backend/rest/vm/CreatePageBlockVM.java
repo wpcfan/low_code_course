@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
+import java.util.List;
 import java.util.Set;
 
 @Schema(description = "创建或更新页面区块的视图模型")
@@ -19,6 +20,6 @@ public record CreatePageBlockVM(
         @Schema(description = "区块类型")
         BlockType type,
         @Schema(description = "区块数据")
-        Set<CreateOrUpdatePageBlockDataVM> data
+        List<CreateOrUpdatePageBlockDataVM> data
         ) {
 }
