@@ -27,6 +27,16 @@ class CanvasBloc extends Bloc<CanvasEvent, CanvasState> {
     on<CanvasEventDeleteBlockData>(_onCanvasEventDeleteBlockData);
     on<CanvasEventMoveBlockData>(_onCanvasEventMoveBlockData);
     on<CanvasEventClearError>(_onCanvasEventClearError);
+    on<CanvasEventError>(_onCanvasEventError);
+  }
+
+  Future<void> _onCanvasEventError(
+    CanvasEventError event,
+    Emitter<CanvasState> emit,
+  ) async {
+    emit(state.copyWith(
+      error: event.message,
+    ));
   }
 
   Future<void> _onCanvasEventClearError(

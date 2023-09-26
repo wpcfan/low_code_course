@@ -11,6 +11,7 @@ class CenterPaneWidget extends StatelessWidget {
   final Function(PageBlock, PageBlock)? onBlockMoved;
   final Function(PageBlock)? onBlockDeleted;
   final Function(PageBlock)? onBlockEdited;
+  final Function(String)? onError;
 
   const CenterPaneWidget({
     super.key,
@@ -20,6 +21,7 @@ class CenterPaneWidget extends StatelessWidget {
     this.onBlockMoved,
     this.onBlockDeleted,
     this.onBlockEdited,
+    this.onError,
     this.baselineScreenWidth = 400.0,
   });
 
@@ -34,7 +36,15 @@ class CenterPaneWidget extends StatelessWidget {
           child: DragTarget(
             onWillAccept: (data) => data is PageBlock && data.id != null,
             onAccept: (data) {
-              onBlockMoved?.call(data as PageBlock, block);
+              if (data is PageBlock) {
+                if (data.type == PageBlockType.waterfall ||
+                    block.type == PageBlockType.waterfall) {
+                  onError?.call('瀑布流区块不可移动');
+                  return;
+                }
+                onBlockMoved?.call(data, block);
+                return;
+              }
             },
             builder: (context, candidateData, rejectedData) {
               final toolbar = [

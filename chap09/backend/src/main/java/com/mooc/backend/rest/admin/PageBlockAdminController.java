@@ -48,31 +48,7 @@ public class PageBlockAdminController {
                     ErrorType.ConstraintViolationException);
         }
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        var blocks = pageLayout.getPageBlocks();
-        if (hasWaterfall) {
-            var waterfallBlock = blocks.stream()
-                    .filter(block -> block.getType() == BlockType.Waterfall)
-                    .findFirst()
-                    .orElseThrow();
-            waterfallBlock.setSort(blocks.size() + 1);
-        }
-        final int sort = hasWaterfall ? blocks.size() : blocks.size() + 1;
-        PageBlock pageBlock = new PageBlock();
-        pageBlock.setTitle(pageBlockVM.title());
-        pageBlock.setSort(sort);
-        pageBlock.setConfig(pageBlockVM.config());
-        pageBlock.setType(pageBlockVM.type());
-        pageBlockVM.data().forEach(dataVM -> {
-            PageBlockData pageBlockData = new PageBlockData();
-            pageBlockData.setContent(dataVM.content());
-            pageBlockData.setSort(pageBlock.getData().size() + 1);
-            pageBlock.addData(pageBlockData);
-        });
-        pageLayout.addPageBlock(pageBlock);
-        pageLayoutService.savePageLayout(pageLayout);
-        return pageLayout.getPageBlocks().stream()
-                .filter(block -> block.getSort() == sort)
-                .findFirst().orElseThrow();
+        return pageBlockService.addBlockToLayout(pageLayout, hasWaterfall, pageBlockVM);
     }
 
     @Operation(summary = "更新页面区块")
@@ -101,11 +77,20 @@ public class PageBlockAdminController {
     @PutMapping("/{id}/blocks/{blockId}/sort/{targetBlockId}")
     public void movePageBlock(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long targetBlockId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
+        var blocks = pageLayout.getPageBlocks();
+        if (blocks.stream().noneMatch(pageBlock -> pageBlock.getId().equals(blockId))) {
             throw new CustomException("页面区块不存在", "PageBlockNotFound", ErrorType.ResourcesNotFoundException);
         }
-        if (pageLayout.getPageBlocks().stream().noneMatch(pageBlock -> pageBlock.getId().equals(targetBlockId))) {
+        if (blocks.stream().noneMatch(pageBlock -> pageBlock.getId().equals(targetBlockId))) {
             throw new CustomException("目标页面区块不存在", "TargetPageBlockNotFound", ErrorType.ResourcesNotFoundException);
+        }
+        var waterfallBlockId = blocks.stream()
+                .filter(pageBlock -> pageBlock.getType() == BlockType.Waterfall)
+                .findFirst()
+                .map(PageBlock::getId)
+                .orElse(null);
+        if (waterfallBlockId.equals(blockId) || waterfallBlockId.equals(targetBlockId)) {
+            throw new CustomException("瀑布流区块不能移动", "WaterfallBlockCannotMove", ErrorType.ConstraintViolationException);
         }
         pageBlockService.movePageBlock(pageLayout, blockId, targetBlockId);
     }

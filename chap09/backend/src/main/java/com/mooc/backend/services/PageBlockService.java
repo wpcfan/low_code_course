@@ -1,10 +1,12 @@
 package com.mooc.backend.services;
 
 import com.mooc.backend.entities.PageBlock;
+import com.mooc.backend.entities.PageBlockData;
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.BlockType;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.repositories.PageBlockRepository;
+import com.mooc.backend.rest.vm.CreatePageBlockVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,5 +65,34 @@ public class PageBlockService {
 
     public long countByTypeAndPageLayoutId(BlockType blockType, Long pageLayoutId) {
         return pageBlockRepository.countByTypeAndPageLayoutId(blockType, pageLayoutId);
+    }
+
+    @Transactional
+    public PageBlock addBlockToLayout(PageLayout pageLayout, boolean hasWaterfall, CreatePageBlockVM pageBlockVM) {
+        var blocks = pageLayout.getPageBlocks();
+        if (hasWaterfall) {
+            var waterfallBlock = blocks.stream()
+                    .filter(block -> block.getType() == BlockType.Waterfall)
+                    .findFirst()
+                    .orElseThrow();
+            waterfallBlock.setSort(blocks.size() + 1);
+        }
+        final int sort = hasWaterfall ? blocks.size() : blocks.size() + 1;
+        PageBlock pageBlock = new PageBlock();
+        pageBlock.setTitle(pageBlockVM.title());
+        pageBlock.setSort(sort);
+        pageBlock.setConfig(pageBlockVM.config());
+        pageBlock.setType(pageBlockVM.type());
+        pageBlockVM.data().forEach(dataVM -> {
+            PageBlockData pageBlockData = new PageBlockData();
+            pageBlockData.setContent(dataVM.content());
+            pageBlockData.setSort(pageBlock.getData().size() + 1);
+            pageBlock.addData(pageBlockData);
+        });
+        pageLayout.addPageBlock(pageBlock);
+        pageLayoutService.savePageLayout(pageLayout);
+        return pageLayout.getPageBlocks().stream()
+                .filter(block -> block.getSort() == sort)
+                .findFirst().orElseThrow();
     }
 }

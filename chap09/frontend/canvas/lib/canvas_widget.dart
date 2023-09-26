@@ -156,6 +156,9 @@ class CanvasWidget extends StatelessWidget {
           }
           bloc.add(CanvasEventSelectBlock(value.id!));
         },
+        onError: (message) {
+          bloc.add(CanvasEventError(message));
+        },
       ).constrained(
         width: state.pageConfig.baselineScreenWidth + 80,
       ),

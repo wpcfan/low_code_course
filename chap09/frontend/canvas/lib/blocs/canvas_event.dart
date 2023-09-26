@@ -106,3 +106,12 @@ class CanvasEventMoveBlockData extends CanvasEvent {
 }
 
 class CanvasEventClearError extends CanvasEvent {}
+
+class CanvasEventError extends CanvasEvent {
+  final String message;
+
+  const CanvasEventError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
