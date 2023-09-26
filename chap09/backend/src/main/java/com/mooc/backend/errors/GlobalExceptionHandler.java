@@ -80,6 +80,12 @@ public class GlobalExceptionHandler {
         String title = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining(";"));
+        if (title.isEmpty()) {
+            title = e.getBindingResult().getGlobalErrors().stream()
+                    .map(globalError -> globalError.getObjectName() + " " + globalError.getDefaultMessage())
+                    .collect(Collectors.joining(";"));
+        }
+
         body.setTitle(title);
         body.setDetail(e.getMessage());
         body.setProperty("hostname", hostname);
