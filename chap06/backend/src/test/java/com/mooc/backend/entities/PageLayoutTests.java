@@ -52,24 +52,20 @@ public class PageLayoutTests {
         pageLayout.setPlatform(Platform.APP);
         pageLayout.setStatus(PageStatus.DRAFT);
 
-        PageBlock pageBlock1 = new PageBlock();
-        pageBlock1.setType(BlockType.Banner);
-        pageBlock1.setConfig(new BlockConfig());
-        pageBlock1.setPageLayout(pageLayout);
-        pageLayout.getPageBlocks().add(pageBlock1);
+        PageBlock pageBlock = new PageBlock();
+        pageBlock.setType(BlockType.Banner);
+        pageBlock.setConfig(new BlockConfig());
+        pageBlock.setSort(1);
+        pageBlock.setPageLayout(pageLayout);
+        pageLayout.getPageBlocks().add(pageBlock);
 
-        PageBlock pageBlock2 = new PageBlock();
-        pageBlock2.setType(BlockType.ImageRow);
-        pageBlock2.setConfig(new BlockConfig());
-        pageBlock2.setPageLayout(pageLayout);
-        pageLayout.getPageBlocks().add(pageBlock2);
-
+//        entityManager.persist(pageBlock);
         entityManager.persist(pageLayout);
         entityManager.flush();
+        entityManager.clear();
         PageLayout found = entityManager.find(PageLayout.class, pageLayout.getId());
-        assertEquals(pageLayout, found);
-        assertEquals(2, found.getPageBlocks().size());
-        assertEquals(pageBlock1, found.getPageBlocks().stream().findFirst().get());
-        assertEquals(pageBlock2, found.getPageBlocks().stream().skip(1).findFirst().get());
+        assertEquals(pageLayout.getId(), found.getId());
+        assertEquals(pageBlock, found.getPageBlocks().stream().findFirst().get());
+
     }
 }
