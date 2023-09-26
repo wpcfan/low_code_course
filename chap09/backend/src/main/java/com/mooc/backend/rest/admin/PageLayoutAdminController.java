@@ -1,5 +1,6 @@
 package com.mooc.backend.rest.admin;
 
+import com.mooc.backend.services.ValidationService;
 import com.mooc.backend.specs.PageLayoutFilter;
 import com.mooc.backend.specs.PageLayoutSpec;
 import org.springdoc.core.annotations.ParameterObject;
@@ -43,6 +44,7 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class PageLayoutAdminController {
     private final PageLayoutService pageLayoutService;
+    private final ValidationService validationService;
 
     @Operation(summary = "获取页面布局列表")
     @GetMapping("")
@@ -98,6 +100,7 @@ public class PageLayoutAdminController {
     @PutMapping("/{id}")
     public PageLayoutAdminVM updatePageLayout(@PathVariable Long id,
             @RequestBody @Valid CreateOrUpdatePageLayoutVM pageLayoutVM) {
+        validationService.checkPageStatusIsDraft(id);
         PageLayout oldPageLayout = pageLayoutService.getPageLayout(id);
         oldPageLayout.setTitle(pageLayoutVM.title());
         oldPageLayout.setConfig(pageLayoutVM.config());
@@ -131,6 +134,7 @@ public class PageLayoutAdminController {
     @Operation(summary = "删除页面布局")
     @DeleteMapping("/{id}")
     public void deletePageLayout(@PathVariable Long id) {
+        validationService.checkPageStatusIsDraft(id);
         pageLayoutService.deletePageLayout(id);
     }
 

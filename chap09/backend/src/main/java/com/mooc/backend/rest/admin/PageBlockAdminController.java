@@ -40,6 +40,7 @@ public class PageBlockAdminController {
             """)
     @PostMapping("/{id}/blocks")
     public PageBlock addPageBlock(@PathVariable Long id, @RequestBody @Valid CreatePageBlockVM pageBlockVM) {
+        validationService.checkPageStatusIsDraft(id);
         boolean hasWaterfall = pageBlockService.countByTypeAndPageLayoutId(BlockType.Waterfall, id) > 0;
         // 瀑布流区块只能有一个
         if (hasWaterfall && pageBlockVM.type() == BlockType.Waterfall) {
@@ -55,6 +56,7 @@ public class PageBlockAdminController {
     @Operation(summary = "更新页面区块")
     @PutMapping("/{id}/blocks/{blockId}")
     public PageBlock updatePageBlock(@PathVariable Long id, @PathVariable Long blockId, @RequestBody @Valid UpdatePageBlockVM pageBlockVM) {
+        validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
         pageBlock.setTitle(pageBlockVM.title());
@@ -74,6 +76,7 @@ public class PageBlockAdminController {
             """)
     @PutMapping("/{id}/blocks/{blockId}/sort/{targetBlockId}")
     public void movePageBlock(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long targetBlockId) {
+        validationService.checkPageStatusIsDraft(id);
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         var blocks = pageLayout.getPageBlocks();
         validationService.checkPageBlockNotExist(id, blockId);
@@ -98,6 +101,7 @@ public class PageBlockAdminController {
             """)
     @DeleteMapping("/{id}/blocks/{blockId}")
     public void deletePageBlock(@PathVariable Long id, @PathVariable Long blockId) {
+        validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         pageBlockService.deletePageBlock(pageLayout, blockId);

@@ -2,6 +2,7 @@ package com.mooc.backend.services;
 
 import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.errors.CustomException;
 import com.mooc.backend.errors.ErrorType;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,13 @@ public class ValidationService {
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
         if (pageBlock.getData().stream().noneMatch(pageBlockData -> pageBlockData.getId().equals(dataId))) {
             throw new CustomException("页面区块数据不存在", "PageBlockDataNotFound", ErrorType.ResourcesNotFoundException);
+        }
+    }
+
+    public void checkPageStatusIsDraft(Long id) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        if (pageLayout.getStatus() != PageStatus.DRAFT) {
+            throw new CustomException("页面不是草稿状态", "PageNotDraft", ErrorType.ConstraintViolationException);
         }
     }
 }

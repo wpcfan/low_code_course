@@ -98,6 +98,7 @@ public class PageBlockDataAdminController {
             @PathVariable Long id,
             @PathVariable Long blockId,
             @RequestBody @Valid CreateOrUpdatePageBlockDataVM pageBlockDataVM) {
+        validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
         PageBlockData pageBlockData = new PageBlockData();
@@ -111,6 +112,7 @@ public class PageBlockDataAdminController {
     @Operation(summary = "更新页面区块数据")
     @PutMapping("/{id}/blocks/{blockId}/data/{dataId}")
     public PageBlockData updatePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId, @RequestBody @Valid CreateOrUpdatePageBlockDataVM pageBlockDataVM) {
+        validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         validationService.checkPageBlockDataNotExist(blockId, dataId);
         PageBlockData pageBlockData = pageBlockDataService.getPageBlockData(dataId);
@@ -130,6 +132,7 @@ public class PageBlockDataAdminController {
             """)
     @PutMapping("/{id}/blocks/{blockId}/data/{dataId}/sort/{targetDataId}")
     public void movePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId, @PathVariable Long targetDataId) {
+        validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         validationService.checkPageBlockDataNotExist(blockId, dataId);
         validationService.checkPageBlockDataNotExist(blockId, targetDataId);
@@ -145,6 +148,7 @@ public class PageBlockDataAdminController {
             """)
     @DeleteMapping("/{id}/blocks/{blockId}/data/{dataId}")
     public void deletePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId) {
+        validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         validationService.checkPageBlockDataNotExist(blockId, dataId);
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
