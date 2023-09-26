@@ -85,7 +85,7 @@ public class PageBlockAdminController {
                 .filter(pageBlock -> pageBlock.getType() == BlockType.Waterfall)
                 .findFirst()
                 .map(PageBlock::getId)
-                .orElse(null);
+                .orElseThrow();
         if (waterfallBlockId.equals(blockId) || waterfallBlockId.equals(targetBlockId)) {
             throw new CustomException("瀑布流区块不能移动", "WaterfallBlockCannotMove", ErrorType.ConstraintViolationException);
         }

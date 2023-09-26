@@ -7,7 +7,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import java.util.function.Function;
 
 public class SearchProductExample {
-    public static Function<String, Example<Product>> searchProductExample = keyword -> {
+    public static final Function<String, Example<Product>> searchProductExample = keyword -> {
         ExampleMatcher matcher = ExampleMatcher.matchingAny()
                 .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
                 .withMatcher("description", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
@@ -16,7 +16,6 @@ public class SearchProductExample {
         product.setName(keyword);
         product.setDescription(keyword);
         product.setSku(keyword);
-        Example<Product> example = Example.of(product, matcher);
-        return example;
+        return Example.of(product, matcher);
     };
 }

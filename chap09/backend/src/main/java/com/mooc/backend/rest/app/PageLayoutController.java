@@ -3,7 +3,6 @@ package com.mooc.backend.rest.app;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.rest.vm.PageLayoutAppVM;
-import com.mooc.backend.rest.vm.PageLayoutDetailVM;
 import com.mooc.backend.services.PageLayoutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

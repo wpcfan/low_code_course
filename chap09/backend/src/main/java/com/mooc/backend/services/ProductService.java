@@ -77,11 +77,11 @@ public class ProductService {
     }
 
     @Transactional
-    public Product removeFromCategory(Long productId, Long categoryId) {
+    public void removeFromCategory(Long productId, Long categoryId) {
         var product = productRepository.findById(productId).orElseThrow();
         var category = categoryRepository.findById(categoryId).orElseThrow();
         product.removeCategory(category);
-        return productRepository.save(product);
+        productRepository.save(product);
     }
 
     @Transactional
@@ -94,14 +94,14 @@ public class ProductService {
     }
 
     @Transactional
-    public Product removeProductImage(Long productId, Long productImageId) {
+    public void removeProductImage(Long productId, Long productImageId) {
         var product = productRepository.findById(productId).orElseThrow();
         var productImage = product.getProductImages().stream()
                 .filter(image -> image.getId().equals(productImageId))
                 .findFirst()
                 .orElseThrow();
         product.removeProductImage(productImage);
-        return save(product);
+        save(product);
     }
 
     @Transactional

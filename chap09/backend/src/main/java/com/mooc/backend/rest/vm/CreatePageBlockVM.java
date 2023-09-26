@@ -4,11 +4,8 @@ import com.mooc.backend.entities.BlockConfig;
 import com.mooc.backend.enumerations.BlockType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 import java.util.List;
-import java.util.Set;
 
 @Schema(description = "创建或更新页面区块的视图模型")
 public record CreatePageBlockVM(

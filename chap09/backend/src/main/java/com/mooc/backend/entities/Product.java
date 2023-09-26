@@ -33,9 +33,11 @@ public class Product {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal originalPrice;
 
+    @Builder.Default
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ProductImage> productImages = new LinkedHashSet<>();
 
+    @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "mooc_products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
