@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +23,10 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
     Optional<PageLayout> findFirstByStatus(PageStatus status);
 
     boolean existsByTitleContainingAllIgnoreCase(String title);
+
+    @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
+    @Override
+    Page<PageLayout> findAll(Pageable pageable);
 
     @Query("""
             select pl from PageLayout pl
