@@ -2,6 +2,7 @@ package com.mooc.backend.services;
 
 import com.mooc.backend.entities.PageBlock;
 import com.mooc.backend.entities.PageLayout;
+import com.mooc.backend.enumerations.BlockType;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
@@ -43,6 +44,18 @@ public class ValidationService {
     public void checkPublishTimeConflict(LocalDateTime time, Platform platform, PageType pageType) {
         if (pageLayoutService.checkPublishTimeConflict(time, platform, pageType)) {
             throw new CustomException("发布时间冲突", "PublishTimeConflict", ErrorType.ConstraintViolationException);
+        }
+    }
+
+    public void checkWaterfallBlockCannotMove(Long id, Long blockId) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        var blocks = pageLayout.getPageBlocks();
+        var waterfallBlockId = blocks.stream()
+                .filter(pageBlock -> pageBlock.getType() == BlockType.Waterfall)
+                .findFirst()
+                .map(PageBlock::getId);
+        if (waterfallBlockId.isPresent() && waterfallBlockId.get().equals(blockId) ) {
+            throw new CustomException("瀑布流区块不能移动", "WaterfallBlockCannotMove", ErrorType.ConstraintViolationException);
         }
     }
 }

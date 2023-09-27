@@ -77,19 +77,20 @@ public class PageBlockAdminController {
     @PutMapping("/{id}/blocks/{blockId}/sort/{targetBlockId}")
     public void movePageBlock(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long targetBlockId) {
         validationService.checkPageStatusIsDraft(id);
-        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        var blocks = pageLayout.getPageBlocks();
         validationService.checkPageBlockNotExist(id, blockId);
         validationService.checkPageBlockNotExist(id, targetBlockId);
-        var waterfallBlockId = blocks.stream()
-                .filter(pageBlock -> pageBlock.getType() == BlockType.Waterfall)
+        validationService.checkWaterfallBlockCannotMove(id, blockId);
+        validationService.checkWaterfallBlockCannotMove(id, targetBlockId);
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
+        PageBlock pageBlock = pageLayout.getPageBlocks().stream()
+                .filter(block -> block.getId().equals(blockId))
                 .findFirst()
-                .map(PageBlock::getId)
                 .orElseThrow();
-        if (waterfallBlockId.equals(blockId) || waterfallBlockId.equals(targetBlockId)) {
-            throw new CustomException("瀑布流区块不能移动", "WaterfallBlockCannotMove", ErrorType.ConstraintViolationException);
-        }
-        pageBlockService.movePageBlock(pageLayout, blockId, targetBlockId);
+        PageBlock targetPageBlock = pageLayout.getPageBlocks().stream()
+                .filter(block -> block.getId().equals(targetBlockId))
+                .findFirst()
+                .orElseThrow();
+        pageBlockService.movePageBlock(blockId, pageBlock.getSort(), targetPageBlock.getSort());
     }
 
     @Operation(summary = "删除页面区块", description = """
