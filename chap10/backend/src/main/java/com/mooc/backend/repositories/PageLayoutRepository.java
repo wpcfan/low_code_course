@@ -26,7 +26,7 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
 
     @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
     @Override
-    Page<PageLayout> findAll(Pageable pageable);
+    Optional<PageLayout> findById(Long id);
 
     @Query("""
             select pl from PageLayout pl

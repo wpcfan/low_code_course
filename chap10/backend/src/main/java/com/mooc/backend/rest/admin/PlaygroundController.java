@@ -5,6 +5,8 @@ import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
 import com.mooc.backend.repositories.PageLayoutRepository;
+import com.mooc.backend.rest.vm.PageLayoutAdminVM;
+import com.mooc.backend.rest.vm.PageLayoutAppVM;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -61,7 +63,12 @@ public class PlaygroundController {
     }
 
     @GetMapping("/all")
-    public Page<PageLayout> all(Pageable pageable) {
-        return pageLayoutRepository.findAll(pageable);
+    public List<PageLayoutAdminVM> all(Pageable pageable) {
+        var result = pageLayoutRepository.findAll(pageable)
+                .filter(item -> item.getPageBlocks().size() > 0)
+                .map(PageLayoutAdminVM::toVM)
+                .stream().toList();
+
+        return result;
     }
 }
