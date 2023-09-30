@@ -9,6 +9,8 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.SortedSet;
@@ -19,9 +21,14 @@ import java.util.TreeSet;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
+@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "mooc_page_layouts")
-public class PageLayout extends Auditable {
+public class PageLayout extends Auditable implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -69,6 +76,7 @@ public class PageLayout extends Auditable {
      * orphanRemoval = true 是指删除父对象的时候，同时删除子对象，而且子对象也会从数据库中删除。
      * <p>
      */
+    @org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
     @Builder.Default
     @OneToMany(mappedBy = "pageLayout", orphanRemoval = true, cascade = {CascadeType.ALL})
     private SortedSet<PageBlock> pageBlocks = new TreeSet<>();

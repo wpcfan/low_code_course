@@ -7,7 +7,7 @@ import java.util.List;
 
 @Schema(description = "分类区块数据")
 @JsonDeserialize(as = CategoryData.class)
-public record CategoryData(
+public record CategoryData (
     @Schema(description = "分类 ID", example = "1")
     Long id,
     @Schema(description = "分类名称", example = "手机")

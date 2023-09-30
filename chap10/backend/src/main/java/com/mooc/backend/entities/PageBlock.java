@@ -8,6 +8,8 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -19,7 +21,10 @@ import java.util.TreeSet;
 @AllArgsConstructor
 @Entity
 @Table(name = "mooc_page_blocks")
-public class PageBlock implements Comparable<PageBlock> {
+public class PageBlock implements Comparable<PageBlock>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,6 +49,7 @@ public class PageBlock implements Comparable<PageBlock> {
     @JsonIgnore
     private PageLayout pageLayout;
 
+    @org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
     @Builder.Default
     @OneToMany(mappedBy = "pageBlock", orphanRemoval = true, cascade = {CascadeType.ALL})
     private SortedSet<PageBlockData> data = new TreeSet<>();

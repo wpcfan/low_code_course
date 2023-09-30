@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,7 +17,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "mooc_categories")
-public class Category {
+public class Category implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
