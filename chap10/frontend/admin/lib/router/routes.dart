@@ -1,8 +1,10 @@
+import 'package:auth/auth.dart';
 import 'package:canvas/canvas.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pages/pages.dart';
+import 'package:session_storage/session_storage.dart';
 
 import '../widgets/widgets.dart';
 
@@ -10,7 +12,32 @@ final GoRouter goRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      redirect: (context, state) => '/layouts',
+      redirect: (context, state) {
+        final session = SessionStorage();
+        final token = session['token'];
+        if (token != null) {
+          return '/layouts';
+        } else {
+          return '/login';
+        }
+      },
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => LoginPage(
+        onLoginSuccess: (token) {
+          final session = SessionStorage();
+          session['token'] = token;
+          context.go('/layouts');
+        },
+        onLoginFailure: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+            ),
+          );
+        },
+      ),
     ),
     ShellRoute(
       builder: (context, state, child) => Scaffold(
@@ -37,6 +64,15 @@ final GoRouter goRouter = GoRouter(
       routes: [
         GoRoute(
           path: '/layouts',
+          redirect: (context, state) {
+            final session = SessionStorage();
+            final token = session['token'];
+            if (token != null) {
+              return null;
+            } else {
+              return '/login';
+            }
+          },
           builder: (context, state) => PageTableWidget(
             onSelect: (id) => context.go('/layouts/$id'),
           ),

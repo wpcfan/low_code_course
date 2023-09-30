@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   go_router: ^10.1.2
   flutter_bloc: ^8.1.3
+  session_storage: ^0.0.1
 
   # local package
   common:
@@ -50,6 +51,8 @@ dependencies:
     path: ../pages
   files:
     path: ../files
+  auth:
+    path: ../auth
 
 dev_dependencies:
   flutter_test:

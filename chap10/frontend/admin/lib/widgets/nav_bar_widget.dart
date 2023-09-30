@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:session_storage/session_storage.dart';
 
 class NavBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -48,6 +49,8 @@ class NavBarWidget extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.logout),
           onPressed: () {
+            final session = SessionStorage();
+            session.remove('token');
             context.go('/login');
           },
         ),
