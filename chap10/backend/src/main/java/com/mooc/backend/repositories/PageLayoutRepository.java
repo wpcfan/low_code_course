@@ -7,10 +7,7 @@ import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
@@ -57,4 +54,14 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
                 and pl.endTime >= :time
             """)
     long findByPublishTimeConflict(LocalDateTime time, Platform platform, PageType pageType);
+
+    @Modifying
+    @Query("""
+            update PageLayout pl
+                set pl.status = com.mooc.backend.enumerations.PageStatus.ARCHIVED
+                where pl.status = com.mooc.backend.enumerations.PageStatus.PUBLISHED
+                and pl.endTime is not null
+                and pl.endTime < :time
+            """)
+    int updatePageStatusToArchived(LocalDateTime time);
 }
