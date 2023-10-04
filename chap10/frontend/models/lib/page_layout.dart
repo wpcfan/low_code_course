@@ -6,7 +6,7 @@ import 'page_config.dart';
 
 class PageLayout extends Equatable {
   final int? id;
-  final String title;
+  final String? title;
   final Platform platform;
   final PageType pageType;
   final PageStatus status;
@@ -17,7 +17,7 @@ class PageLayout extends Equatable {
 
   const PageLayout({
     this.id,
-    required this.title,
+    this.title = '',
     required this.platform,
     required this.pageType,
     required this.config,
@@ -30,7 +30,7 @@ class PageLayout extends Equatable {
   factory PageLayout.fromJson(Map<String, dynamic> json) {
     return PageLayout(
       id: json['id'] as int?,
-      title: json['title'] as String,
+      title: json['title'] as String?,
       platform: Platform.values.firstWhere(
         (e) => e.value == json['platform'],
         orElse: () => Platform.app,
