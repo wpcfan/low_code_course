@@ -24,7 +24,13 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
 
     boolean existsByTitleContainingAllIgnoreCase(String title);
 
-    @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
+    @Query("""
+            select pl from PageLayout pl
+                left join fetch pl.pageBlocks pb
+                left join fetch pb.data pbd
+                where pl.id = :id
+                """)
+//    @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
     @Override
     Optional<PageLayout> findById(Long id);
 
