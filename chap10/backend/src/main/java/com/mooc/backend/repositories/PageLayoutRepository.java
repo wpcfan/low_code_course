@@ -41,6 +41,7 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
 
     List<PageLayout> findTop2ByPlatform(Platform platform);
 
+    @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
     List<PageLayout> findByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(
             Platform platform,
             PageType pageType,
