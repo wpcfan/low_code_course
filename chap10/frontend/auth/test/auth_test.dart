@@ -1,12 +1,12 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:auth/blocs/blocs.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:repositories/repositories.dart';
 
-import 'package:auth/auth.dart';
+class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
 
-void main() {
-  test('adds one to input values', () {
-    final calculator = Calculator();
-    expect(calculator.addOne(2), 3);
-    expect(calculator.addOne(-7), -6);
-    expect(calculator.addOne(0), 1);
-  });
-}
+class MockAuthState extends Fake implements AuthState {}
+
+class MockAuthRepository extends Mock implements AuthRepository {}
+
+void main() {}

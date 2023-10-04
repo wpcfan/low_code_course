@@ -1,4 +1,6 @@
-class BlockConfig {
+import 'package:equatable/equatable.dart';
+
+class BlockConfig extends Equatable {
   final double? horizontalPadding;
   final double? verticalPadding;
   final double? blockHeight;
@@ -61,6 +63,16 @@ class BlockConfig {
       'blockWidth': blockWidth,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        horizontalPadding,
+        verticalPadding,
+        blockHeight,
+        horizontalSpacing,
+        verticalSpacing,
+        blockWidth,
+      ];
 
   @override
   String toString() {

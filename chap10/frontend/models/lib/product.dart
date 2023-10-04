@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import 'block_data.dart';
 
-class Product implements BlockData {
+class Product extends Equatable implements BlockData {
   final int? id;
   final String? sku;
   final String? name;
@@ -44,6 +46,17 @@ class Product implements BlockData {
       'originalPrice': originalPrice,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        sku,
+        name,
+        description,
+        images,
+        price,
+        originalPrice,
+      ];
 
   @override
   String toString() {

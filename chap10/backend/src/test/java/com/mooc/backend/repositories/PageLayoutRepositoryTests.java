@@ -215,6 +215,7 @@ public class PageLayoutRepositoryTests {
         var pageLayout = PageLayout.builder()
                 .pageType(PageType.Home)
                 .platform(Platform.APP)
+                .status(PageStatus.DRAFT)
                 .config(new PageConfig())
                 .title("Test Page 5")
                 .build();

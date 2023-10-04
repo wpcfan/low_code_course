@@ -1,8 +1,10 @@
+import 'package:equatable/equatable.dart';
+
 import 'enums/enums.dart';
 import 'page_block.dart';
 import 'page_config.dart';
 
-class PageLayout {
+class PageLayout extends Equatable {
   final int? id;
   final String title;
   final Platform platform;
@@ -68,6 +70,21 @@ class PageLayout {
       'blocks': blocks.map((e) => e.toJson()).toList(),
       'config': config.toJson(),
     };
+  }
+
+  @override
+  List<Object?> get props {
+    return [
+      id,
+      title,
+      platform,
+      pageType,
+      status,
+      startTime,
+      endTime,
+      blocks,
+      config,
+    ];
   }
 
   @override

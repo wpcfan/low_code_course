@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:models/page_block_data.dart';
 
 import 'block_config.dart';
@@ -7,7 +8,7 @@ import 'enums/enums.dart';
 import 'image_data.dart';
 import 'product.dart';
 
-class PageBlock {
+class PageBlock extends Equatable {
   final int? id;
   final String? title;
   final int sort;
@@ -25,34 +26,41 @@ class PageBlock {
   });
 
   factory PageBlock.fromJson(Map<String, dynamic> json) {
+    final type = json['type'] as String;
+    final data = (json['data'] as List<dynamic>)
+        .map((e) {
+          switch (type) {
+            case 'ImageRow':
+            case 'Banner':
+              return PageBlockData<ImageData>.fromJson(
+                e as Map<String, dynamic>,
+                (json) => ImageData.fromJson(json),
+              );
+            case 'ProductRow':
+              return PageBlockData<Product>.fromJson(
+                e as Map<String, dynamic>,
+                (json) => Product.fromJson(json),
+              );
+            case 'Waterfall':
+              return PageBlockData<Category>.fromJson(
+                e as Map<String, dynamic>,
+                (json) => Category.fromJson(json),
+              );
+            default:
+              return null;
+          }
+        })
+        .whereType<PageBlockData>()
+        .toList();
+
     return PageBlock(
       id: json['id'] as int?,
       title: json['title'] as String?,
       sort: json['sort'] as int,
       config: BlockConfig.fromJson(json['config'] as Map<String, dynamic>),
-      data: (json['data'] as List<dynamic>).map((e) {
-        if (json['type'] == 'ImageRow' || json['type'] == 'Banner') {
-          return PageBlockData<ImageData>.fromJson(
-            e as Map<String, dynamic>,
-            (json) => ImageData.fromJson(json),
-          );
-        }
-        if (json['type'] == 'ProductRow') {
-          return PageBlockData<Product>.fromJson(
-            e as Map<String, dynamic>,
-            (json) => Product.fromJson(json),
-          );
-        }
-        if (json['type'] == 'Waterfall') {
-          return PageBlockData<Category>.fromJson(
-            e as Map<String, dynamic>,
-            (json) => Category.fromJson(json),
-          );
-        }
-        throw Exception('Unknown block type: ${json['type']}');
-      }).toList(),
+      data: data,
       type: PageBlockType.values.firstWhere(
-        (e) => e.value == json['type'],
+        (e) => e.value == type,
         orElse: () => PageBlockType.unknown,
       ),
     );
@@ -68,6 +76,9 @@ class PageBlock {
       'type': type.value,
     };
   }
+
+  @override
+  List<Object?> get props => [id, title, sort, config, data, type];
 
   @override
   String toString() {

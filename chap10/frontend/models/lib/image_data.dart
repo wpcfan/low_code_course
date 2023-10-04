@@ -1,7 +1,9 @@
+import 'package:equatable/equatable.dart';
+
 import 'block_data.dart';
 import 'my_link.dart';
 
-class ImageData implements BlockData {
+class ImageData extends Equatable implements BlockData {
   final String image;
   final MyLink link;
 
@@ -24,6 +26,9 @@ class ImageData implements BlockData {
       'link': link.toJson(),
     };
   }
+
+  @override
+  List<Object?> get props => [image, link];
 
   @override
   String toString() {

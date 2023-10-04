@@ -1,4 +1,6 @@
-class PageConfig {
+import 'package:equatable/equatable.dart';
+
+class PageConfig extends Equatable {
   final double? baselineScreenWidth;
 
   const PageConfig({
@@ -18,6 +20,11 @@ class PageConfig {
       'baselineScreenWidth': baselineScreenWidth,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        baselineScreenWidth,
+      ];
 
   @override
   String toString() {

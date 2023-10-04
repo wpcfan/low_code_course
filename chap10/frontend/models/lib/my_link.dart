@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 enum LinkType {
   url('url'),
   route('route'),
@@ -7,7 +9,7 @@ enum LinkType {
   const LinkType(this.value);
 }
 
-class MyLink {
+class MyLink extends Equatable {
   final LinkType type;
   final String value;
 
@@ -29,6 +31,9 @@ class MyLink {
       'value': value,
     };
   }
+
+  @override
+  List<Object?> get props => [type, value];
 
   @override
   String toString() {

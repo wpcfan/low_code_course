@@ -1,11 +1,13 @@
+import 'package:equatable/equatable.dart';
+
 import 'block_data.dart';
 
-class PageBlockData<T extends BlockData> {
+class PageBlockData<T extends BlockData> extends Equatable {
   final int? id;
   final int sort;
   final T content;
 
-  PageBlockData({
+  const PageBlockData({
     this.id,
     required this.sort,
     required this.content,
@@ -27,6 +29,9 @@ class PageBlockData<T extends BlockData> {
       'content': content.toJson(),
     };
   }
+
+  @override
+  List<Object?> get props => [id, sort, content];
 
   @override
   String toString() {

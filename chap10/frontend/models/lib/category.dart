@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import 'block_data.dart';
 
-class Category implements BlockData {
+class Category extends Equatable implements BlockData {
   final int? id;
   final String? name;
   final String? code;
@@ -34,6 +36,9 @@ class Category implements BlockData {
       'children': children.map((e) => e.toJson()).toList(),
     };
   }
+
+  @override
+  List<Object?> get props => [id, name, code, children];
 
   @override
   String toString() {
