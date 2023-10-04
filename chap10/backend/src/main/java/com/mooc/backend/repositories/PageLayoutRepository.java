@@ -4,10 +4,7 @@ import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +41,7 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
 
     List<PageLayout> findTop2ByPlatform(Platform platform);
 
+    @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
     List<PageLayout> findByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(
             Platform platform,
             PageType pageType,
