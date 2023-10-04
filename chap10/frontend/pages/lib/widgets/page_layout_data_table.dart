@@ -140,7 +140,7 @@ class PageLayoutDataTable extends StatelessWidget {
           onPressed: () => onSelect?.call(pageLayout.id!),
           child: Text('${pageLayout.id}'),
         )),
-        DataCell(Text(pageLayout.title)),
+        DataCell(Text(pageLayout.title ?? '')),
         DataCell(Text(pageLayout.platform.value)),
         DataCell(Text(pageLayout.status.value)),
         DataCell(Text(pageLayout.pageType.value)),
