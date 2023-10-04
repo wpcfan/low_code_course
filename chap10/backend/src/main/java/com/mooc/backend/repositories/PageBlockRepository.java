@@ -22,7 +22,7 @@ public interface PageBlockRepository extends JpaRepository<PageBlock, Long> {
             update PageBlock pb set pb.sort = pb.sort + 1
                 where pb.sort >= :start and pb.sort < :end
             """)
-    void batchUpdateSortFromBottomToTop(int start, int end);
+    int batchUpdateSortFromBottomToTop(int start, int end);
 
     @Modifying
     @Query("""

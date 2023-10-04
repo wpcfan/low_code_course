@@ -1,24 +1,27 @@
 package com.mooc.backend.repositories;
 
 import com.mooc.backend.entities.*;
-import com.mooc.backend.enumerations.BlockType;
-import com.mooc.backend.enumerations.ImageLinkType;
-import com.mooc.backend.enumerations.PageType;
-import com.mooc.backend.enumerations.Platform;
+import com.mooc.backend.enumerations.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DataJpaTest
-public class PageLayoutRepositoryTest {
+public class PageLayoutRepositoryTests {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -69,6 +72,7 @@ public class PageLayoutRepositoryTest {
                 .build();
         entityManager.persist(bannerBlockData2);
         var pinnedHeader = PageBlock.builder()
+                .title("Test Pinned Header")
                 .sort(1)
                 .type(BlockType.Banner)
                 .config(blockConfig)
@@ -93,6 +97,7 @@ public class PageLayoutRepositoryTest {
                 .build();
         entityManager.persist(rowBlockData3);
         var imageRow = PageBlock.builder()
+                .title("Test Image Row")
                 .sort(2)
                 .type(BlockType.ImageRow)
                 .config(blockConfig)
@@ -131,6 +136,7 @@ public class PageLayoutRepositoryTest {
                 .build();
         entityManager.persist(productData2);
         var productRow = PageBlock.builder()
+                .title("Test Product Row")
                 .sort(3)
                 .type(BlockType.ProductRow)
                 .config(blockConfig)
@@ -218,4 +224,78 @@ public class PageLayoutRepositoryTest {
         assert found.get().equals(pageLayout);
     }
 
+    @Test
+    public void givenStatus_whenCountByStatus_thenGetOk() {
+        var count = pageLayoutRepository.countByStatus(PageStatus.DRAFT);
+        assertEquals(4, count);
+    }
+
+    @Test
+    public void givenStatus_whenFindFirstByStatus_thenGetOk() {
+        var found = pageLayoutRepository.findFirstByStatus(PageStatus.DRAFT);
+        assertTrue(found.isPresent());
+        assertEquals(page1, found.get());
+    }
+
+    @Test
+    public void givenTitle_whenExistsByTitleContainingAllIgnoreCase_thenGetOk() {
+        var exists = pageLayoutRepository.existsByTitleContainingAllIgnoreCase("test page 1");
+        assertTrue(exists);
+    }
+
+    @Test
+    public void givenId_whenFindById_thenGetOk() {
+        var found = pageLayoutRepository.findById(page1.getId());
+        assertTrue(found.isPresent());
+        assertEquals(page1, found.get());
+    }
+
+    @Test
+    public void givenPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter_whenFindByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter_thenGetOk() {
+        var now = LocalDateTime.now();
+        page1.setStartTime(now.minusDays(1));
+        page1.setEndTime(now.plusDays(1));
+        entityManager.persist(page1);
+        entityManager.flush();
+
+        var found = pageLayoutRepository.findByPlatformAndPageTypeAndStatusAndStartTimeBeforeAndEndTimeAfter(
+                Platform.APP,
+                PageType.Home,
+                PageStatus.DRAFT,
+                now,
+                now
+        );
+        assertTrue(found.contains(page1));
+        assertEquals(1, found.size());
+    }
+
+    @Test
+    public void givenPage1StatusPublished_whenFindByPublishTimeConflict_thenGetOk() {
+        var now = LocalDateTime.now();
+        page1.setStartTime(now.minusDays(1));
+        page1.setEndTime(now.plusDays(1));
+        page1.setStatus(PageStatus.PUBLISHED);
+        entityManager.persist(page1);
+        entityManager.flush();
+
+        var count = pageLayoutRepository.findByPublishTimeConflict(
+                now,
+                Platform.APP,
+                PageType.Home
+        );
+        assertEquals(1, count);
+    }
+
+    @Test
+    public void givenPage1StatusPublished_whenUpdatePageStatusToArchived_thenGetOk() {
+        var now = LocalDateTime.now();
+        page1.setStartTime(now.minusDays(2));
+        page1.setEndTime(now.minusDays(1));
+        page1.setStatus(PageStatus.PUBLISHED);
+        entityManager.persist(page1);
+        entityManager.flush();
+
+        var count = pageLayoutRepository.updatePageStatusToArchived(now);
+        assertEquals(1, count);
+    }
 }

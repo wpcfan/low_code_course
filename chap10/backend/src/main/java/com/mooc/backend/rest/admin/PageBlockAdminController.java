@@ -49,13 +49,15 @@ public class PageBlockAdminController {
                     "WaterfallBlockExisted",
                     ErrorType.ConstraintViolationException);
         }
-        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        return pageBlockService.addBlockToLayout(pageLayout, hasWaterfall, pageBlockVM);
+        return pageBlockService.addBlockToLayout(id, hasWaterfall, pageBlockVM);
     }
 
     @Operation(summary = "更新页面区块")
     @PutMapping("/{id}/blocks/{blockId}")
-    public PageBlock updatePageBlock(@PathVariable Long id, @PathVariable Long blockId, @RequestBody @Valid UpdatePageBlockVM pageBlockVM) {
+    public PageBlock updatePageBlock(
+            @PathVariable Long id,
+            @PathVariable Long blockId,
+            @RequestBody @Valid UpdatePageBlockVM pageBlockVM) {
         validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
@@ -104,7 +106,6 @@ public class PageBlockAdminController {
     public void deletePageBlock(@PathVariable Long id, @PathVariable Long blockId) {
         validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
-        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
-        pageBlockService.deletePageBlock(pageLayout, blockId);
+        pageBlockService.deletePageBlock(id, blockId);
     }
 }

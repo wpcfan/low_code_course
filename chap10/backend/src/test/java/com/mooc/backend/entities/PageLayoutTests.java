@@ -25,6 +25,7 @@ public class PageLayoutTests {
     @Test
     public void givenPageLayout_whenPersist_thenGetIsOk() {
         PageLayout pageLayout = new PageLayout();
+        pageLayout.setTitle("Test PageLayout");
         pageLayout.setConfig(new PageConfig());
         pageLayout.setPageType(PageType.Home);
         pageLayout.setPlatform(Platform.APP);
@@ -48,12 +49,14 @@ public class PageLayoutTests {
     @Test
     public void givenPageLayoutAndPageBlocks_whenPersist_thenGetIsOk() {
         PageLayout pageLayout = new PageLayout();
+        pageLayout.setTitle("Test PageLayout");
         pageLayout.setConfig(new PageConfig());
         pageLayout.setPageType(PageType.Home);
         pageLayout.setPlatform(Platform.APP);
         pageLayout.setStatus(PageStatus.DRAFT);
 
         PageBlock pageBlock1 = new PageBlock();
+        pageBlock1.setTitle("Test Banner");
         pageBlock1.setType(BlockType.Banner);
         pageBlock1.setConfig(new BlockConfig());
         pageBlock1.setPageLayout(pageLayout);
@@ -61,6 +64,7 @@ public class PageLayoutTests {
         pageLayout.addPageBlock(pageBlock1);
 
         PageBlock pageBlock2 = new PageBlock();
+        pageBlock2.setTitle("Test ImageRow");
         pageBlock2.setType(BlockType.ImageRow);
         pageBlock2.setConfig(new BlockConfig());
         pageBlock2.setPageLayout(pageLayout);
@@ -80,12 +84,14 @@ public class PageLayoutTests {
     @Test
     public void givenPageBlocksWithDifferentSort_whenPersist_thenGetIsOk() {
         PageLayout pageLayout = new PageLayout();
+        pageLayout.setTitle("Test PageLayout");
         pageLayout.setConfig(new PageConfig());
         pageLayout.setPageType(PageType.Home);
         pageLayout.setPlatform(Platform.APP);
         pageLayout.setStatus(PageStatus.DRAFT);
 
         PageBlock pageBlock1 = new PageBlock();
+        pageBlock1.setTitle("Test Banner");
         pageBlock1.setType(BlockType.Banner);
         pageBlock1.setConfig(new BlockConfig());
         pageBlock1.setSort(2);
@@ -93,6 +99,7 @@ public class PageLayoutTests {
         pageLayout.addPageBlock(pageBlock1);
 
         PageBlock pageBlock2 = new PageBlock();
+        pageBlock2.setTitle("Test ImageRow");
         pageBlock2.setType(BlockType.ImageRow);
         pageBlock2.setConfig(new BlockConfig());
         pageBlock2.setSort(1);

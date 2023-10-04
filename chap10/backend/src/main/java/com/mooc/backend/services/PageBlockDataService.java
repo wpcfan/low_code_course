@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PageBlockDataService {
     private final PageBlockDataRepository pageBlockDataRepository;
-
+    private final PageBlockService pageBlockService;
     public PageBlockData getPageBlockData(Long id) {
         return pageBlockDataRepository.findById(id).orElseThrow();
     }
@@ -21,9 +21,11 @@ public class PageBlockDataService {
         return pageBlockDataRepository.save(pageBlockData);
     }
 
-    public void deletePageBlockData(PageBlock pageBlock, Long id) {
+    @Transactional
+    public PageBlock deletePageBlockData(Long blockId, Long blockDataId) {
+        PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
         PageBlockData pageBlockData = pageBlock.getData().stream()
-                .filter(data -> data.getId().equals(id))
+                .filter(data -> data.getId().equals(blockDataId))
                 .findFirst()
                 .orElseThrow();
         final int sort = pageBlockData.getSort();
@@ -31,10 +33,12 @@ public class PageBlockDataService {
         pageBlock.getData().stream()
                 .filter(data -> data.getSort() > sort)
                 .forEach(data -> data.setSort(data.getSort() - 1));
-        pageBlockDataRepository.deleteById(id);
+        return pageBlockService.savePageBlock(pageBlock);
     }
 
-    public void movePageBlockData(PageBlock pageBlock, Long dataId, Long targetDataId) {
+    @Transactional
+    public void movePageBlockData(Long blockId, Long dataId, Long targetDataId) {
+        PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
         PageBlockData pageBlockData = pageBlock.getData().stream()
                 .filter(data -> data.getId().equals(dataId))
                 .findFirst()
@@ -45,16 +49,20 @@ public class PageBlockDataService {
                 .orElseThrow();
 
         final int targetSort = targetPageBlockData.getSort();
-        if (targetPageBlockData.getSort() > pageBlockData.getSort()) {
+        final int sort = pageBlockData.getSort();
+        if (targetSort == sort) {
+            return;
+        }
+        if (targetSort > sort) {
             pageBlock.getData().stream()
-                    .filter(data -> data.getSort() > pageBlockData.getSort() && data.getSort() <= targetPageBlockData.getSort())
+                    .filter(data -> data.getSort() > sort && data.getSort() <= targetSort)
                     .forEach(data -> data.setSort(data.getSort() - 1));
         } else {
             pageBlock.getData().stream()
-                    .filter(data -> data.getSort() < pageBlockData.getSort() && data.getSort() >= targetPageBlockData.getSort())
+                    .filter(data -> data.getSort() < sort && data.getSort() >= targetSort)
                     .forEach(data -> data.setSort(data.getSort() + 1));
         }
         pageBlockData.setSort(targetSort);
-        pageBlockDataRepository.save(pageBlockData);
+        pageBlockService.savePageBlock(pageBlock);
     }
 }

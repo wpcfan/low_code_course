@@ -1,9 +1,7 @@
 package com.mooc.backend.services;
 
-import com.mooc.backend.entities.PageLayout;
-import com.mooc.backend.enumerations.PageStatus;
-import com.mooc.backend.enumerations.PageType;
-import com.mooc.backend.enumerations.Platform;
+import com.mooc.backend.entities.*;
+import com.mooc.backend.enumerations.*;
 import com.mooc.backend.repositories.PageLayoutRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +31,7 @@ public class PageLayoutService {
         return pageLayoutRepository.save(pageLayout);
     }
 
+    @Transactional
     public void deletePageLayout(Long id) {
         pageLayoutRepository.deleteById(id);
     }
@@ -54,10 +53,56 @@ public class PageLayoutService {
                         now);
         if (pageLayoutList.isEmpty()) {
             // 如果是空的，我们需要提供一个兜底的布局
-            return PageLayout.builder()
-                    .build();
+            return buildDefaultPageLayout(platform, pageType);
         }
         return pageLayoutList.stream().findFirst().orElseThrow();
+    }
+
+    private static PageLayout buildDefaultPageLayout(Platform platform, PageType pageType) {
+        var bannerBlockData1 = PageBlockData.builder()
+                .id(-1L)
+                .sort(1)
+                .content(new ImageData(
+                        "http://localhost:8080/1.png",
+                        new ImageLink(ImageLinkType.Url, "http://localhost:8080/1/target"),
+                        "title 1"
+                ))
+                .build();
+        var bannerBlockData2 = PageBlockData.builder()
+                .id(-2L)
+                .sort(2)
+                .content(new ImageData(
+                        "http://localhost:8080/2.png",
+                        new ImageLink(ImageLinkType.Url, "http://localhost:8080/2/target"),
+                        "title 2"
+                ))
+                .build();
+        var bannerBlockData3 = PageBlockData.builder()
+                .id(-3L)
+                .sort(3)
+                .content(new ImageData(
+                        "http://localhost:8080/3.png",
+                        new ImageLink(ImageLinkType.Url, "http://localhost:8080/3/target"),
+                        "title 3"
+                ))
+                .build();
+        var bannerBlock = PageBlock.builder()
+                .id(-1L)
+                .title("默认 Banner 区块")
+                .type(BlockType.Banner)
+                .sort(1)
+                .build();
+        bannerBlock.addData(bannerBlockData1);
+        bannerBlock.addData(bannerBlockData2);
+        bannerBlock.addData(bannerBlockData3);
+        var defaultPageLayout = PageLayout.builder()
+                .title("默认布局")
+                .platform(platform)
+                .pageType(pageType)
+                .status(PageStatus.PUBLISHED)
+                .build();
+        defaultPageLayout.addPageBlock(bannerBlock);
+        return defaultPageLayout;
     }
 
     public boolean checkPublishTimeConflict(LocalDateTime time, Platform platform, PageType pageType) {

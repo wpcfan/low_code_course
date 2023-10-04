@@ -21,6 +21,7 @@ public class PageBlockTests {
     @Test
     public void givenPageBlock_whenPersist_thenGetIsOk() {
         PageBlock pageBlock = new PageBlock();
+        pageBlock.setTitle("Test Banner");
         pageBlock.setType(BlockType.Banner);
         pageBlock.setConfig(new BlockConfig());
         pageBlock.setSort(1);

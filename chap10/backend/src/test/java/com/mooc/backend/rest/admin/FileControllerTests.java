@@ -1,24 +1,26 @@
 package com.mooc.backend.rest.admin;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import com.mooc.backend.config.QiniuProperties;
 import com.mooc.backend.services.QiniuService;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.List;
 
 @Import(QiniuProperties.class)
 @WebMvcTest(FileController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class FileControllerTests {
 
     @Autowired
@@ -53,6 +55,7 @@ public class FileControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @WithMockUser(username = "admin", authorities = {"SCOPE_ADMIN"})
     @Test
     public void givenPath_whenDeleteFiles_thenStatus200() throws Exception {
         Mockito.doNothing().when(qiniuService).delete(Mockito.anyList());

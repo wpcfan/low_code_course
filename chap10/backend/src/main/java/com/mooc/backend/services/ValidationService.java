@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class ValidationService {
     private final PageLayoutService pageLayoutService;
     private final PageBlockService pageBlockService;
-    private final PageBlockDataService pageBlockDataService;
 
     public void checkPageBlockNotExist(Long id, Long blockId) {
         PageLayout pageLayout = pageLayoutService.getPageLayout(id);

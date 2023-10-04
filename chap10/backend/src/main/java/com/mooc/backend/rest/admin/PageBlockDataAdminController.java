@@ -108,7 +108,6 @@ public class PageBlockDataAdminController {
         return pageBlockDataService.savePageBlockData(pageBlockData);
     }
 
-
     @Operation(summary = "更新页面区块数据")
     @PutMapping("/{id}/blocks/{blockId}/data/{dataId}")
     public PageBlockData updatePageBlockData(@PathVariable Long id, @PathVariable Long blockId, @PathVariable Long dataId, @RequestBody @Valid CreateOrUpdatePageBlockDataVM pageBlockDataVM) {
@@ -119,8 +118,6 @@ public class PageBlockDataAdminController {
         pageBlockData.setContent(pageBlockDataVM.content());
         return pageBlockDataService.savePageBlockData(pageBlockData);
     }
-
-
 
     @Operation(summary = "移动页面区块数据", description = """
             此 API 的目的是为了改变页面区块数据的排序
@@ -136,8 +133,7 @@ public class PageBlockDataAdminController {
         validationService.checkPageBlockNotExist(id, blockId);
         validationService.checkPageBlockDataNotExist(blockId, dataId);
         validationService.checkPageBlockDataNotExist(blockId, targetDataId);
-        PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
-        pageBlockDataService.movePageBlockData(pageBlock, dataId, targetDataId);
+        pageBlockDataService.movePageBlockData(blockId, dataId, targetDataId);
     }
 
     @Operation(summary = "删除页面区块数据", description = """
@@ -151,8 +147,7 @@ public class PageBlockDataAdminController {
         validationService.checkPageStatusIsDraft(id);
         validationService.checkPageBlockNotExist(id, blockId);
         validationService.checkPageBlockDataNotExist(blockId, dataId);
-        PageBlock pageBlock = pageBlockService.getPageBlock(blockId);
-        pageBlockDataService.deletePageBlockData(pageBlock, dataId);
+        pageBlockDataService.deletePageBlockData(blockId, dataId);
     }
 
 }

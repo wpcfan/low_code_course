@@ -31,7 +31,7 @@ ext {
     qiNiuVersion = '7.13.+'
     springdocVersion = '2.1.+'
     hypersistenceVersion = '3.5.+'
-    testcontainersVersion = '1.17.+'
+    testcontainersVersion = '1.19.+'
     logbackGelfVersion = '4.0.+'
     redissionVersion = '3.23.4'
 }
@@ -57,9 +57,11 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.hamcrest:hamcrest-library'
     testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
     testImplementation "org.testcontainers:mysql:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
 }
 
 tasks.named('test') {

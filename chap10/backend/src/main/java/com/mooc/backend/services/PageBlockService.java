@@ -25,9 +25,11 @@ public class PageBlockService {
         return pageBlockRepository.save(pageBlock);
     }
 
-    public void deletePageBlock(PageLayout pageLayout, Long id) {
+    @Transactional
+    public void deletePageBlock(Long id, Long blockId) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         PageBlock pageBlock = pageLayout.getPageBlocks().stream()
-                .filter(block -> block.getId().equals(id))
+                .filter(block -> block.getId().equals(blockId))
                 .findFirst()
                 .orElseThrow();
         final int sort = pageBlock.getSort();
@@ -40,6 +42,9 @@ public class PageBlockService {
 
     @Transactional
     public void movePageBlock(Long blockId, int sort, int targetSort) {
+        if (sort == targetSort) {
+            return;
+        }
         if (targetSort > sort) {
             pageBlockRepository.batchUpdateSortFromTopToBottom(sort, targetSort);
         } else {
@@ -53,7 +58,11 @@ public class PageBlockService {
     }
 
     @Transactional
-    public PageBlock addBlockToLayout(PageLayout pageLayout, boolean hasWaterfall, CreatePageBlockVM pageBlockVM) {
+    public PageBlock addBlockToLayout(
+            Long id,
+            boolean hasWaterfall,
+            CreatePageBlockVM pageBlockVM) {
+        PageLayout pageLayout = pageLayoutService.getPageLayout(id);
         var blocks = pageLayout.getPageBlocks();
         if (hasWaterfall) {
             var waterfallBlock = blocks.stream()
