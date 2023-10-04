@@ -17,7 +17,7 @@ public class ScheduledTasksService {
 
     private final PageLayoutRepository pageLayoutRepository;
 
-    @Scheduled(fixedDelay = 1000 * 5)
+//    @Scheduled(fixedDelay = 1000 * 5)
     public void reportCurrentTime() {
         log.debug("The time is now {}", LocalDateTime.now());
     }
