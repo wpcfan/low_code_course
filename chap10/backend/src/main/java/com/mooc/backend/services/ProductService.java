@@ -26,9 +26,9 @@ public class ProductService {
     private final QiniuProperties properties;
 
     public Page<Product> search(String keyword, Pageable pageable) {
-        var example = SearchProductExample.searchProductExample.apply(keyword);
-//        return productRepository.findByKeyword(keyword, pageable);
-        return productRepository.findAll(example, pageable);
+//        var example = SearchProductExample.searchProductExample.apply(keyword);
+        return productRepository.findByKeyword(keyword, pageable);
+//        return productRepository.findAll(example, pageable);
     }
 
     public Page<Product> findAll(Pageable pageable) {
