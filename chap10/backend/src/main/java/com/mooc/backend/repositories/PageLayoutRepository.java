@@ -1,18 +1,18 @@
 package com.mooc.backend.repositories;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.*;
-
 import com.mooc.backend.entities.PageLayout;
 import com.mooc.backend.enumerations.PageStatus;
 import com.mooc.backend.enumerations.PageType;
 import com.mooc.backend.enumerations.Platform;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, JpaSpecificationExecutor<PageLayout> {
     long countByStatus(PageStatus status);
@@ -27,6 +27,7 @@ public interface PageLayoutRepository extends JpaRepository<PageLayout, Long>, J
                 left join fetch pb.data pbd
                 where pl.id = :id
                 """)
+//    @EntityGraph(attributePaths = {"pageBlocks", "pageBlocks.data"})
     @Override
     Optional<PageLayout> findById(Long id);
 
